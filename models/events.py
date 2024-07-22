@@ -12,6 +12,7 @@ class EventsModel(BaseModel):
             raise ValueError('name cannot be empty')
         return v
 
+
 class Events:
     @staticmethod
     def create(name: str) -> None:
