@@ -1,6 +1,7 @@
 from app import db
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, ValidationError, validator
+import re
 
 class UserModel(BaseModel):
     id: Optional[int] = None
@@ -12,6 +13,8 @@ class UserModel(BaseModel):
     def username_must_be_non_empty(cls, v: str) -> str:
         if not v:
             raise ValueError('Username cannot be empty')
+        elif not re.match(r'[A-Za-z0-9]+', v):
+            raise ValueError('Username must contain only characters and numbers !')
         return v
 
     @validator('password')
@@ -24,6 +27,8 @@ class UserModel(BaseModel):
     def email_must_be_non_empty(cls, v: str) -> str:
         if not v:
             raise ValueError('Email cannot be empty')
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', v):
+            raise ValueError('Invalid email address !')
         return v
 
 class User:

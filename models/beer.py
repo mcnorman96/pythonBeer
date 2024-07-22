@@ -36,16 +36,16 @@ class Beer:
 
     @staticmethod
     def search_by_name(name: str) -> Optional[Dict[str, Any]]:
-        cur = db.connection.cursor()
-        cur.execute("SELECT * FROM beer WHERE name = %s", [name])
-        rows = cur.fetchall()
-        column_names = [desc[0] for desc in cur.description]
-        cur.close()
-        beers = [dict(zip(column_names, row)) for row in rows]
-        if beers:
-          return beers
-        return None
-
+      query = "SELECT * FROM beer WHERE name LIKE %s"
+      like_pattern = f"%{name}%"
+      with db.connection.cursor() as cur:
+          cur.execute(query, (like_pattern,))
+          rows = cur.fetchall()
+          column_names = [desc[0] for desc in cur.description]
+      
+      beers = [dict(zip(column_names, row)) for row in rows]
+      return beers
+      
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
         cur = db.connection.cursor()
