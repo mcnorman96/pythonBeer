@@ -1,5 +1,6 @@
 from flask import Flask 
 from flask_mysqldb import MySQL
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.secret_key = 'secretkey'
@@ -7,6 +8,8 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_DB'] = 'beer_db'
 db = MySQL(app)
+
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Import routes
 from routes.auth import register, logout, login
@@ -37,7 +40,6 @@ app.register_blueprint(allRatings, url_prefix='/ratings/')
 app.register_blueprint(toplistRatings, url_prefix='/ratings/')
 app.register_blueprint(toplistRatingsByEvent, url_prefix='/ratings/')
 
-
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='localhost', port=5000)
+
