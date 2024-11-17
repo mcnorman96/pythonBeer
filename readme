@@ -1,0 +1,32 @@
+
+# Installation Guide
+
+## Steps to Install Dependencies
+
+1. **Ensure Python and pip are installed:**
+   - Check Python installation:
+     ```bash
+     python --version
+     ```
+   - Check pip installation:
+     ```bash
+     python -m pip --version
+     ```
+   - If pip is not installed, install it by downloading [get-pip.py](https://bootstrap.pypa.io/get-pip.py) and running:
+     ```bash
+     python get-pip.py
+     ```
+
+2. **Install dependencies from the requirements file:**
+   - Use the following command:
+     ```bash
+     python -m pip install -r requirements.txt
+     ```
+
+3. **Verify installation:**
+   - After installation, verify the packages by running:
+     ```bash
+     python -m pip list
+     ```
+
+4. **Run your Flask app!**
