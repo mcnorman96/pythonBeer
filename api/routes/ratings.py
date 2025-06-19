@@ -1,6 +1,6 @@
 from flask import Blueprint, request, redirect, url_for, session, flash, jsonify
 from app import db
-from models.ratings import Ratings
+from schemas.ratings import Ratings
 
 newRatings = Blueprint('new_ratings', __name__)
 @newRatings.route('/new', methods=['GET', 'POST'])

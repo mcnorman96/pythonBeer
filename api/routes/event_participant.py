@@ -1,6 +1,6 @@
 from flask import Blueprint, request, redirect, url_for, session, flash, jsonify
 from app import db
-from models.event_participants import EventParticipant
+from schemas.event_participant import EventParticipant
 
 # TODO: Check for participant already registred
 newEventParticipant = Blueprint('new_event_participant', __name__)

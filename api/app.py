@@ -1,21 +1,38 @@
-from flask import Flask 
-from flask_mysqldb import MySQL
+import os
+from flask import Flask
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from dotenv import load_dotenv
+load_dotenv()  # load variables from .env
+import pymysql
+pymysql.install_as_MySQLdb()
 
+# Initialize Flask app
 app = Flask(__name__)
-app.secret_key = 'secretkey'
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_DB'] = 'beer_db'
-db = MySQL(app)
+
+# Configure database URI from environment variables
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    f"mysql+pymysql://{os.getenv('MYSQL_USER', 'root')}:"
+    f"{os.getenv('MYSQL_PASSWORD', '')}@"
+    f"{os.getenv('MYSQL_HOST', 'localhost')}/"
+    f"{os.getenv('MYSQL_DB', 'beer_db')}"
+)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize database and migration objects
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+
+from models import *
 
 # Import routes
 from routes.auth import register, logout, login
 from routes.beer import newBeer, allBeers, searchBeers
 from routes.events import newEvents, allEvents
-from routes.event_participants import newEventParticipant, allEventParticipant
+from routes.event_participant import newEventParticipant, allEventParticipant
 from routes.event_beer import newEventBeer, allEventBeer
 from routes.ratings import newRatings, allRatings, toplistRatings, toplistRatingsByEvent
 
@@ -40,6 +57,9 @@ app.register_blueprint(allRatings, url_prefix='/ratings/')
 app.register_blueprint(toplistRatings, url_prefix='/ratings/')
 app.register_blueprint(toplistRatingsByEvent, url_prefix='/ratings/')
 
-if __name__ == '__main__':
-    app.run(host='localhost', port=5000)
+@app.route('/')
+def index():
+    return "Beer event rating API is running!"
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

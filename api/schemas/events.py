@@ -22,14 +22,14 @@ class Events:
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("INSERT INTO events (name) VALUES (%s)", (events.name, ))
         db.connection.commit()
         cur.close()
 
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("SELECT * FROM events")
         rows = cur.fetchall()
         column_names = [desc[0] for desc in cur.description]
@@ -39,7 +39,7 @@ class Events:
 
     @staticmethod
     def delete(id: int) -> None:
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("DELETE FROM events WHERE id = %s", [id])
         db.connection.commit()
         cur.close()

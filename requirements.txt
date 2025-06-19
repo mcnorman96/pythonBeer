@@ -1,5 +1,0 @@
-mysql
-pkg-config
-flask
-flask_mysqldb
-flask_cors

@@ -69,14 +69,14 @@ class Ratings:
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("INSERT INTO ratings (event_id, user_id, beer_id, taste, aftertaste, smell, design, score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (ratings.event_id, ratings.user_id, ratings.beer_id, ratings.taste, ratings.aftertaste, ratings.smell, ratings.design, ratings.score))
         db.connection.commit()
         cur.close()
 
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("SELECT * FROM ratings")
         rows = cur.fetchall()
         column_names = [desc[0] for desc in cur.description]
@@ -86,7 +86,7 @@ class Ratings:
 
     @staticmethod
     def get_toplist() -> List[Dict[str, Any]]:
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("SELECT b.id AS beer_id, b.name AS beer_name, b.description, b.brewery, b.type, AVG(r.score) AS average_score FROM beer b JOIN ratings r ON b.id = r.beer_id GROUP BY b.id ORDER BY average_score DESC")
         rows = cur.fetchall()
         column_names = [desc[0] for desc in cur.description]
@@ -96,7 +96,7 @@ class Ratings:
     
     @staticmethod
     def get_toplist_by_event(event_id) -> List[Dict[str, Any]]:
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("SELECT b.id AS beer_id, b.name AS beer_name, b.description, b.brewery, b.type, AVG(r.score) AS average_score FROM beer b JOIN ratings r ON b.id = r.beer_id WHERE r.event_id = (%s) GROUP BY b.id ORDER BY average_score DESC", (event_id, ))
         rows = cur.fetchall()
         column_names = [desc[0] for desc in cur.description]
@@ -106,7 +106,7 @@ class Ratings:
     
     @staticmethod
     def delete(id: int) -> None:
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("DELETE FROM ratings WHERE id = %s", [id])
         db.connection.commit()
         cur.close()

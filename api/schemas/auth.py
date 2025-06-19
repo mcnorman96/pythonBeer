@@ -39,14 +39,14 @@ class User:
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("INSERT INTO user (username, password, email) VALUES (%s, %s, %s)", (user.username, user.password, user.email))
         db.connection.commit()
         cur.close()
 
     @staticmethod
     def get_by_username(username: str) -> Optional[Dict[str, Any]]:
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("SELECT * FROM user WHERE username = %s", [username])
         user = cur.fetchone()
         cur.close()
@@ -56,7 +56,7 @@ class User:
 
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("SELECT * FROM user")
         users = cur.fetchall()
         cur.close()
@@ -64,7 +64,7 @@ class User:
 
     @staticmethod
     def delete(username: str) -> None:
-        cur = db.connection.cursor()
+        cur = db.engine.connect()
         cur.execute("DELETE FROM user WHERE username = %s", [username])
         db.connection.commit()
         cur.close()

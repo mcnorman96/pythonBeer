@@ -1,6 +1,6 @@
 from flask import Blueprint, request, redirect, url_for, session, flash, jsonify
 from app import db
-from models.events import Events
+from schemas.events import Events
 
 newEvents = Blueprint('new_events', __name__)
 @newEvents.route('/new', methods=['GET', 'POST'])

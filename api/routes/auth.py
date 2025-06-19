@@ -2,7 +2,7 @@ from flask import Blueprint, request, redirect, url_for, session, flash, jsonify
 from app import db
 import MySQLdb.cursors
 import re
-from models.auth import User
+from schemas.auth import User
 
 register = Blueprint('register', __name__)
 @register.route('/register', methods=['GET', 'POST'])
@@ -44,7 +44,7 @@ def login_user():
 		username = request.form['username']
 		password = request.form['password']
 
-		cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+		cursor = db.engine.connect(MySQLdb.cursors.DictCursor)
 		cursor.execute('SELECT * FROM user WHERE username = % s AND password = % s', (username, password))
 		account = cursor.fetchone()
 		if account:
