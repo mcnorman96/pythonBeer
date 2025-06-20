@@ -10,6 +10,7 @@ pymysql.install_as_MySQLdb()
 
 # Initialize Flask app
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY', '')
 
 # Configure database URI from environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = (
