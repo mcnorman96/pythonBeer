@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -7,6 +8,11 @@ from dotenv import load_dotenv
 load_dotenv()  # load variables from .env
 import pymysql
 pymysql.install_as_MySQLdb()
+
+logging.basicConfig(
+    level=os.environ.get("LOGLEVEL", "DEBUG"),
+    format="%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s"
+)
 
 # Initialize Flask app
 app = Flask(__name__)

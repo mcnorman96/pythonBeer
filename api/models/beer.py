@@ -7,3 +7,12 @@ class Beer(db.Model):
     description = db.Column(db.String(255), nullable=False)
     brewery = db.Column(db.String(255), nullable=True)
     type = db.Column(db.String(255), nullable=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'brewery': self.brewery,
+            'type': self.type
+        }
