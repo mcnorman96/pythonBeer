@@ -39,8 +39,8 @@ def seed():
     db.session.add_all([beer1, beer2])
     db.session.commit()
 
-    event_beer1 = EventBeer(event_id=event1.id, beer_id=beer1.id, added_by_user_id=user1.id, added_at=datetime.utcnow())
-    event_beer2 = EventBeer(event_id=event1.id, beer_id=beer2.id, added_by_user_id=user2.id, added_at=datetime.utcnow())
+    event_beer1 = EventBeer(event_id=event1.id, beer_id=beer1.id, added_at=datetime.utcnow())
+    event_beer2 = EventBeer(event_id=event1.id, beer_id=beer2.id, added_at=datetime.utcnow())
     db.session.add_all([event_beer1, event_beer2])
     db.session.commit()
 

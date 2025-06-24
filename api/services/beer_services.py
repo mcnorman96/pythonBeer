@@ -1,5 +1,6 @@
 # services/user_service.py
 
+from flask import jsonify
 from models.beer import Beer as BeerORM
 from app import db
 from typing import Optional, List
@@ -44,7 +45,7 @@ class BeerService:
   def delete(id: int) -> None:
       if not id:
           raise ValueError("ID must be provided")
-      if id < 1:
+      if id < 0:
           raise ValueError("ID must be a positive integer")
       
       beer = BeerORM.query.filter_by(id=id).first()
@@ -54,3 +55,4 @@ class BeerService:
       if beer:
           db.session.delete(beer)
           db.session.commit()
+          return jsonify({'message': 'Beer deleted successfully'}), 200
