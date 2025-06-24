@@ -1,16 +1,20 @@
-from flask import Blueprint, request, redirect, url_for, session, flash, jsonify
-from app import db
-from schemas.events import Events
+from flask import Blueprint, request, jsonify
+from services.event_services import EventService
+
+import logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 newEvents = Blueprint('new_events', __name__)
 @newEvents.route('/new', methods=['GET', 'POST'])
 def new_events():
-  if request.method == 'POST' and all(k in request.form for k in ('name',)):
-    name = request.form['name']
-
+  if request.method == 'POST' and all(k in request.form for k in ('name', 'description')):
+    name = request.form.get('name', '')
+    description = request.form.get('description', '')
+    
     try:
-      if name:
-        Events.create(name)
+      if name and description:
+        EventService.create(name, description)
         return jsonify({'message': 'Events created succesfully'}), 201
       else:
         return jsonify({'error': 'Please fill out all fields.'}), 400
@@ -25,7 +29,7 @@ allEvents = Blueprint('all_events', __name__)
 def all_events():
   if request.method == 'GET':
     try:
-      events = Events.get_all()
+      events = EventService.get_all()
       if (events):
         return jsonify({'response': events}), 200
       else: 

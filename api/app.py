@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
-load_dotenv()  # load variables from .env
+load_dotenv()
 import pymysql
 pymysql.install_as_MySQLdb()
 
@@ -38,7 +38,7 @@ from models import *
 # Import routes
 from routes.auth import register, logout, login
 from routes.beer import newBeer, allBeers, searchBeers
-from routes.events import newEvents, allEvents
+from routes.event import newEvents, allEvents
 from routes.event_participant import newEventParticipant, allEventParticipant
 from routes.event_beer import newEventBeer, allEventBeer
 from routes.ratings import newRatings, allRatings, toplistRatings, toplistRatingsByEvent
