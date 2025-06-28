@@ -7,7 +7,10 @@ from services.user_services import UserService
 register = Blueprint('register', __name__)
 @register.route('/register', methods=['GET', 'POST'])
 def register_user():
-    data = request.get_json()
+    data = request.get_json(silent=True)
+    if not data: 
+        data = request.form.to_dict()
+
     try:
         user = UserService.create(
             username=data.get('username'),
