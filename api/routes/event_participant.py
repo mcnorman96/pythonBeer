@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from schemas.event_participant import EventParticipant
+from services.event_participant_service import EventParticipantService
 
 # TODO: Check for participant already registred
 newEventParticipant = Blueprint('new_event_participant', __name__)
@@ -10,7 +10,7 @@ def new_event_participant(event_id):
 
     try:
       if event_id and user_id :
-        EventParticipant.create(event_id, user_id)
+        EventParticipantService.create(event_id, user_id)
         return jsonify({'message': 'Event participant created succesfully'}), 201
       else:
         return jsonify({'error': 'Please fill out all fieldsss.'}), 400
@@ -25,7 +25,7 @@ allEventParticipant = Blueprint('all_event_participant', __name__)
 def all_event_participant(event_id):
   if request.method == 'GET':
     try:
-      events = EventParticipant.get_all_users_in_event(event_id)
+      events = EventParticipantService.get_all_users_in_event(event_id)
       if (events):
         return jsonify({'response': events}), 200
       else: 

@@ -29,8 +29,8 @@ def seed():
     db.session.add(event1)
     db.session.commit()
 
-    participant1 = EventParticipant(event_id=event1.id, user_id=user1.id, joined_at=datetime.utcnow())
-    participant2 = EventParticipant(event_id=event1.id, user_id=user2.id, joined_at=datetime.utcnow())
+    participant1 = EventParticipant(event_id=event1.id, user_id=user1.id)
+    participant2 = EventParticipant(event_id=event1.id, user_id=user2.id)
     db.session.add_all([participant1, participant2])
     db.session.commit()
 
