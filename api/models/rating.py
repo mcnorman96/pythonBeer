@@ -12,4 +12,16 @@ class Rating(db.Model):
     smell = db.Column(db.Integer, nullable=False)
     design = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=False)
-    rated_at = db.Column(db.DateTime, nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'event_id': self.event_id,
+            'beer_id': self.beer_id,
+            'user_id': self.user_id,
+            'taste': self.taste,
+            'aftertaste': self.aftertaste,
+            'smell': self.smell,
+            'design': self.design,
+            'score': self.score
+        }
