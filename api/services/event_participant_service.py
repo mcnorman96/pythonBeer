@@ -1,6 +1,6 @@
 from sqlalchemy import text
 from models.event_participant import EventParticipant as EventParticipantORM
-from schemas.event_participant import EventParticipantModel
+from schemas.event_participant import EventParticipantSchema
 from app import db
 from typing import List, Dict, Any
 from pydantic import ValidationError
@@ -13,7 +13,7 @@ class EventParticipantService:
             raise ValueError("Event ID and User ID must be provided")
         
         try:
-            validated_event_participant = EventParticipantModel(event_id=event_id, user_id=user_id)
+            validated_event_participant = EventParticipantSchema(event_id=event_id, user_id=user_id)
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 

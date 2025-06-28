@@ -3,13 +3,13 @@ from app import db
 from typing import List,Dict, Any
 from pydantic import ValidationError
 from models.event import Event as EventORM
-from schemas.event import EventsModel
+from schemas.event import EventsSchema
 
 class EventService:
     @staticmethod
     def create(name: str, description: str) -> None:
         try:
-            validated_event = EventsModel(
+            validated_event = EventsSchema(
                 name=name,
                 description=description
             )

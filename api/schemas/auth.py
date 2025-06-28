@@ -2,7 +2,7 @@ from pydantic import BaseModel, validator
 from typing import Optional
 import re
 
-class UserModel(BaseModel):
+class UserSchema(BaseModel):
     id: Optional[int]
     username: str
     password: str

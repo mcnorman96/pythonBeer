@@ -1,5 +1,5 @@
 from models.rating import Rating as RatingORM
-from schemas.ratings import RatingsModel
+from schemas.ratings import RatingsSchema
 from app import db
 from typing import List, Dict, Any
 from pydantic import ValidationError
@@ -10,7 +10,7 @@ class RatingsService:
     @staticmethod
     def create(event_id: int, user_id: int, beer_id: int, taste: int, aftertaste: int, smell: int, design: int,  score: int) -> None:
         try:
-            validated_rating = RatingsModel(event_id=event_id, user_id=user_id, beer_id=beer_id, taste=taste, aftertaste=aftertaste, smell=smell, design=design,  score=score)
+            validated_rating = RatingsSchema(event_id=event_id, user_id=user_id, beer_id=beer_id, taste=taste, aftertaste=aftertaste, smell=smell, design=design,  score=score)
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 

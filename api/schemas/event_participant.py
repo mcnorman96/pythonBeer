@@ -1,6 +1,6 @@
 from pydantic import BaseModel, validator
 
-class EventParticipantModel(BaseModel):
+class EventParticipantSchema(BaseModel):
   event_id: int
   user_id: int
 

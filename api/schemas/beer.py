@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, validator
-class BeerModel(BaseModel):
+class BeerSchema(BaseModel):
     id: Optional[int] = None
     name: str
     description: str

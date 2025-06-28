@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, validator
 
-class EventsModel(BaseModel):
+class EventsSchema(BaseModel):
     id: Optional[int] = None
     name: str
     description: str

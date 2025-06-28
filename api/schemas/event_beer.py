@@ -1,6 +1,6 @@
 from pydantic import BaseModel, validator
 
-class EventBeersModel(BaseModel):
+class EventBeersSchema(BaseModel):
   event_id: int
   beer_id: int
 

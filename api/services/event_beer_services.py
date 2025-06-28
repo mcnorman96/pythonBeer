@@ -1,8 +1,7 @@
-
 from typing import List, Dict, Any
 from pydantic import ValidationError
 from app import db
-from schemas.event_beer import EventBeersModel
+from schemas.event_beer import EventBeersSchema
 from models.event_beer import EventBeer as EventBeerORM
 from sqlalchemy import text
 from datetime import datetime
@@ -15,7 +14,7 @@ class EventBeersService:
     @staticmethod
     def create(event_id: int, beer_id: int) -> None:
         try:
-            validated_event_beers = EventBeersModel(event_id=event_id, beer_id=beer_id)
+            validated_event_beers = EventBeersSchema(event_id=event_id, beer_id=beer_id)
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 

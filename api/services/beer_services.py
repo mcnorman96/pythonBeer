@@ -3,7 +3,7 @@ from models.beer import Beer as BeerORM
 from app import db
 from typing import List
 from pydantic import ValidationError
-from schemas.beer import BeerModel
+from schemas.beer import BeerSchema
 from typing import List,  Dict, Any
 
 
@@ -11,7 +11,7 @@ class BeerService:
   @staticmethod
   def create(name: str, description: str, brewery: str, type: str) -> None:
       try:
-        validated_beer = BeerModel(name=name, description=description, brewery=brewery, type=type)
+        validated_beer = BeerSchema(name=name, description=description, brewery=brewery, type=type)
       except ValidationError as e:
           raise ValueError(f"Invalid data: {e}")
 
