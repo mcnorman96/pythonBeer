@@ -1,7 +1,6 @@
-from flask import Blueprint, request, redirect, url_for, session, flash, jsonify
+from flask import Blueprint, request, session, jsonify
 from app import db
 from werkzeug.security import check_password_hash
-import re
 from models.user import User
 from services.user_services import UserService
 

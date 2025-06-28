@@ -1,5 +1,3 @@
-# schemas/auth.py
-
 from pydantic import BaseModel, validator
 from typing import Optional
 import re

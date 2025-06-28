@@ -1,4 +1,3 @@
-from unittest import result
 from models.rating import Rating as RatingORM
 from schemas.ratings import RatingsModel
 from app import db

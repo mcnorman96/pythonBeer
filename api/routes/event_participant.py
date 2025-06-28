@@ -1,5 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, session, flash, jsonify
-from app import db
+from flask import Blueprint, request, jsonify
 from schemas.event_participant import EventParticipant
 
 # TODO: Check for participant already registred

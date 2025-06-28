@@ -1,4 +1,3 @@
-from app import db
 from pydantic import BaseModel, validator
 
 class EventBeersModel(BaseModel):

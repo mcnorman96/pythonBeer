@@ -1,6 +1,5 @@
-from app import db
-from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, ValidationError, validator
+from typing import Optional
+from pydantic import BaseModel, validator
 
 class RatingsModel(BaseModel):
     id: Optional[int] = None

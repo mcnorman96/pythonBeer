@@ -1,13 +1,10 @@
-# services/user_service.py
-
 from flask import jsonify
 from models.beer import Beer as BeerORM
 from app import db
-from typing import Optional, List
+from typing import List
 from pydantic import ValidationError
 from schemas.beer import BeerModel
-from typing import List, Optional, Dict, Any
-from sqlalchemy import or_
+from typing import List,  Dict, Any
 
 
 class BeerService:

@@ -1,5 +1,3 @@
-# services/user_service.py
-
 from models.user import User as UserORM
 from schemas.auth import UserModel
 from app import db

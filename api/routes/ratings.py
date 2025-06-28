@@ -1,5 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, session, flash, jsonify
-from app import db
+from flask import Blueprint, request, jsonify
 from services.ratings_service import RatingsService
 
 newRatings = Blueprint('new_ratings', __name__)

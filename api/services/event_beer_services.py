@@ -1,11 +1,11 @@
 
-from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, ValidationError
+from typing import List, Dict, Any
+from pydantic import ValidationError
 from app import db
 from schemas.event_beer import EventBeersModel
 from models.event_beer import EventBeer as EventBeerORM
 from sqlalchemy import text
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
