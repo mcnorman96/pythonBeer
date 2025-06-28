@@ -1,6 +1,6 @@
 from models.user import User as UserORM
 from schemas.auth import UserSchema
-from app import db
+from db import db
 from typing import Optional, List
 from pydantic import ValidationError
 from werkzeug.security import generate_password_hash

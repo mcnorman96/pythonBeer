@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import pymysql
 pymysql.install_as_MySQLdb()
+from db import db, migrate
 
 logging.basicConfig(
     level=os.environ.get("LOGLEVEL", "DEBUG"),
@@ -28,12 +29,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database and migration objects
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+db.init_app(app)
+migrate.init_app(app, db)
 
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-
-from models import *
 
 # Import routes
 from routes.auth import register, logout, login

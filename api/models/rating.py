@@ -1,4 +1,4 @@
-from app import db
+from db import db
 
 class Rating(db.Model):
     __tablename__ = 'rating'

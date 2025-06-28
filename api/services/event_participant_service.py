@@ -1,7 +1,7 @@
 from sqlalchemy import text
 from models.event_participant import EventParticipant as EventParticipantORM
 from schemas.event_participant import EventParticipantSchema
-from app import db
+from db import db
 from typing import List, Dict, Any
 from pydantic import ValidationError
 

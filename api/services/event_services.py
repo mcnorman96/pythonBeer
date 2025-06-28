@@ -1,5 +1,5 @@
 from datetime import datetime
-from app import db
+from db import db
 from typing import List,Dict, Any
 from pydantic import ValidationError
 from models.event import Event as EventORM

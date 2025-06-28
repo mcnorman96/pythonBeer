@@ -1,5 +1,5 @@
 from flask import Blueprint, request, session, jsonify
-from app import db
+from db import db
 from werkzeug.security import check_password_hash
 from models.user import User
 from services.user_services import UserService

@@ -1,4 +1,4 @@
-from app import db
+from db import db
 
 class EventBeer(db.Model):
     __tablename__ = 'event_beer'

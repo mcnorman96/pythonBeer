@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 from pydantic import ValidationError
-from app import db
+from db import db
 from schemas.event_beer import EventBeersSchema
 from models.event_beer import EventBeer as EventBeerORM
 from sqlalchemy import text

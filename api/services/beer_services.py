@@ -1,6 +1,6 @@
 from flask import jsonify
 from models.beer import Beer as BeerORM
-from app import db
+from db import db
 from typing import List
 from pydantic import ValidationError
 from schemas.beer import BeerSchema

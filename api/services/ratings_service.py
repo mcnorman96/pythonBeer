@@ -1,6 +1,6 @@
 from models.rating import Rating as RatingORM
 from schemas.ratings import RatingsSchema
-from app import db
+from db import db
 from typing import List, Dict, Any
 from pydantic import ValidationError
 from sqlalchemy import text
