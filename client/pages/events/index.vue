@@ -1,8 +1,9 @@
 <script setup>
 import { useFetch } from '#app';
 import events from '~/components/events.vue';
+import beerService from '~/services/BeerService/beerService';
 
-const { data, error, pending } = await useFetch('http://127.0.0.1:5000/events');
+const { data, error, pending } = await beerService.events.getEvents();
 console.log(data.response);
 </script>
 

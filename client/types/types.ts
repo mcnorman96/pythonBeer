@@ -22,3 +22,9 @@ export interface User {
   password: String,
   email: String 
 }
+export interface ResponseTypeBeers {
+  response: Array<Beer>;
+}
+export interface ResponseTypeParticipants {
+  response: Array<Participants>;
+}
