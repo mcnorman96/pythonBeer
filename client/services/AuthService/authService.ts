@@ -1,15 +1,18 @@
 import { API_URL } from '../vars';
 
 export const authService = {
-  registerUser: async (userData: { username: string; password: string; email: string }) => {  
+  registerUser: async (userData: { username: string; password: string; email: string }) => {
+    const form = new FormData();
+    form.append('username', userData.username);
+    form.append('password', userData.password);
+    form.append('email', userData.email);
+    
     const response = await fetch(`${API_URL}/auth/register`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
+      body: form
     });
-    return response.json();
+    
+    return response;
   },
 
   login: async (credentials: { username: string; password: string }) => {
@@ -20,13 +23,13 @@ export const authService = {
       },
       body: JSON.stringify(credentials),
     });
-    return response.json();
+    return response;
   },
 
   logout: async () => {
     const response = await fetch(`${API_URL}/auth/logout`, {
       method: 'POST',
     });
-    return response.json();
+    return response;
   },
 };

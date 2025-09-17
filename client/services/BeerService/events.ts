@@ -1,13 +1,15 @@
 import { API_URL } from "../vars";
 
 export const events = {
-  createEvent: async (eventData: { name: string; date: string; location: string }) => {
+  createEvent: async (eventData: { name: string; description: string }) => {
+
+    const formData = new FormData();
+    formData.append('name', eventData.name);
+    formData.append('description', eventData.description);
+
     const response = await fetch(`${API_URL}/events/new`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(eventData),
+      body: formData,
     });
     return response.json();
   },

@@ -1,5 +1,11 @@
 <script lang="ts" setup>
+import { useAuth } from '~/composables/useAuth';
   const menuItemsClass = "px-5";
+  const isLoggedIn = useAuth().isAuthenticated;
+
+  const logout = () => {
+    useAuth().logout();
+  };
 </script>
 
 <template>
@@ -13,9 +19,13 @@
         <NuxtLink :class=menuItemsClass to="/events">Events</NuxtLink>
         <NuxtLink :class=menuItemsClass to="/toplist">Toplist</NuxtLink>
       </div>
-      <div class="right-menu absolute right-0 top-1/2  -translate-y-1/2 flex">
+      <div class="right-menu absolute right-0 top-1/2  -translate-y-1/2 flex" v-if="!isLoggedIn">
         <NuxtLink :class=menuItemsClass to="/login">Log ind</NuxtLink>
         <NuxtLink :class=menuItemsClass to="/register">Register</NuxtLink>
+      </div>
+      <div class="right-menu absolute right-0 top-1/2  -translate-y-1/2 flex" v-if="isLoggedIn">
+        <NuxtLink :class=menuItemsClass to="/profile">Profile</NuxtLink>
+        <Button @click="logout" :class=menuItemsClass>Log out</Button>
       </div>
     </nav>
   </header>

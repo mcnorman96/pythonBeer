@@ -6,7 +6,12 @@ const props = defineProps<{
 }>();
 
 const beer = props.beer || '';
-const currentRating = 7.5;
+
+const taste = props.beer.average_taste || 0;
+const aftertaste = props.beer.average_aftertaste || 0;
+const smell = props.beer.average_smell || 0;
+const bottle_design = props.beer.average_design || 0;
+const average_score = props.beer.average_score || 0;
 </script>
 
 <template>
@@ -15,11 +20,11 @@ const currentRating = 7.5;
     {{ beer.name }}
    </div>
    <div class="rigthside flex">
-    <RatingCircle :rating="currentRating" name="Smag"/>
-    <RatingCircle :rating="currentRating" name="Eftersmag"/>
-    <RatingCircle :rating="currentRating" name="Duft"/>
-    <RatingCircle :rating="currentRating" name="Flaskedesign"/>
-    <RatingCircle :rating="currentRating" name="Score"/>
+    <RatingCircle :rating="taste" name="Smag"/>
+    <RatingCircle :rating="aftertaste" name="Eftersmag"/>
+    <RatingCircle :rating="smell" name="Duft"/>
+    <RatingCircle :rating="bottle_design" name="Flaskedesign"/>
+    <RatingCircle :rating="average_score" name="Score"/>
    </div>
   </div>
 </template>

@@ -11,8 +11,48 @@ export const eventBeer = {
       pending: fetchPending
     };
   },
-  addBeerToEvent: async (eventId: string, beerData: { name: string; type: string }) => {
-    // Placeholder for adding a beer to a specific event
+  addBeerToEvent: async (eventId: string, beerId: string) => {
+    const formData = new FormData();
+    formData.append('beer_id', beerId);
+
+    const { data, error } = await useFetch(`${API_URL}/events/${eventId}/beers/add`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (error.value) {
+      return { success: false, error: error.value };
+    }
+
     return { success: true };
+  },
+  searchBeer: async (query: string) => {
+    const { data: fetchedBeers, error: fetchError, pending: fetchPending } = await useFetch<ResponseTypeBeers>(`${API_URL}/beer/search`, {
+      params: { s: query }
+    });
+    
+    return {
+      data: fetchedBeers,
+      error: fetchError,
+      pending: fetchPending
+    };
+  },
+  toplistBeersInEvent: async (eventId: string) => {
+    const { data: fetchedBeers, error: fetchError, pending: fetchPending } = await useFetch<ResponseTypeBeers>(`${API_URL}/ratings/toplist/${eventId}`);
+
+    return {
+      data: fetchedBeers,
+      error: fetchError,
+      pending: fetchPending
+    };
+  },
+  toplist: async () => {
+    const { data: fetchedBeers, error: fetchError, pending: fetchPending } = await useFetch<ResponseTypeBeers>(`${API_URL}/ratings/toplist`);
+
+    return {
+      data: fetchedBeers,
+      error: fetchError,
+      pending: fetchPending
+    };
   },
 };
