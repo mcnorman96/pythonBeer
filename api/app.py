@@ -39,7 +39,7 @@ from routes.auth import register, logout, login
 from routes.beer import newBeer, allBeers, searchBeers
 from routes.event import newEvents, allEvents
 from routes.event_participant import newEventParticipant, allEventParticipant
-from routes.event_beer import newEventBeer, allEventBeer
+from routes.event_beer import newEventBeer, allEventBeer, singleEventBeer
 from routes.ratings import newRatings, allRatings, toplistRatings, toplistRatingsByEvent
 
 # Register blueprints
@@ -57,6 +57,7 @@ app.register_blueprint(newEventParticipant, url_prefix='/events/')
 app.register_blueprint(allEventParticipant, url_prefix='/events/')
 app.register_blueprint(newEventBeer, url_prefix='/events/')
 app.register_blueprint(allEventBeer, url_prefix='/events/')
+app.register_blueprint(singleEventBeer, url_prefix='/events/')
 
 app.register_blueprint(newRatings, url_prefix='/ratings/')
 app.register_blueprint(allRatings, url_prefix='/ratings/')

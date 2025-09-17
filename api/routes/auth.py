@@ -3,6 +3,8 @@ from db import db
 from werkzeug.security import check_password_hash
 from models.user import User
 from services.user_services import UserService
+import jwt
+import datetime
 
 register = Blueprint('register', __name__)
 @register.route('/register', methods=['GET', 'POST'])
@@ -33,6 +35,7 @@ def logout_user():
 login = Blueprint('login', __name__)
 @login.route('/login', methods=['POST'])
 def login_user():
+
     data = request.get_json()
 
     username = data.get('username')
@@ -47,6 +50,11 @@ def login_user():
         session['loggedin'] = True
         session['id'] = user.id
         session['username'] = user.username
-        return jsonify({'message': 'Logged in successfully!'}), 200
+        # Generate JWT token
+        token = jwt.encode({
+            'user_id': user.id,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+        }, 'your_secret_key', algorithm='HS256')
+        return jsonify({'token': token}), 200
     else:
         return jsonify({'error': 'Incorrect username or password'}), 401

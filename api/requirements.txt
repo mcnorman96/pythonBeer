@@ -8,3 +8,4 @@ flask-migrate
 python-dotenv
 cryptography>=41.0.0
 pytest
+PyJWT

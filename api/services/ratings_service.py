@@ -36,7 +36,17 @@ class RatingsService:
         """Get the top beers based on average ratings."""
 
         query = text("""
-            SELECT b.id AS beer_id, b.name AS beer_name, b.description, b.brewery, b.type, AVG(r.score) AS average_score
+            SELECT 
+                b.id AS id, 
+                b.name AS name, 
+                b.description AS description, 
+                b.brewery AS brewery, 
+                b.type AS type,
+                ROUND(AVG(r.score), 1) AS average_score,
+                ROUND(AVG(r.smell), 1) AS average_smell,
+                ROUND(AVG(r.aftertaste), 1) AS average_aftertaste,
+                ROUND(AVG(r.taste), 1) AS average_taste,
+                ROUND(AVG(r.design), 1) AS average_design
             FROM beer b
             JOIN rating r ON b.id = r.beer_id
             GROUP BY b.id
@@ -52,10 +62,21 @@ class RatingsService:
             raise ValueError("Event ID must be provided")
 
         query = text("""
-            SELECT b.id AS beer_id, b.name AS beer_name, b.description, b.brewery, b.type, AVG(r.score) AS average_score
-            FROM beer b
-            JOIN rating r ON b.id = r.beer_id
-            WHERE r.event_id = :event_id
+            SELECT 
+                b.id AS id, 
+                b.name AS name, 
+                b.description AS description, 
+                b.brewery AS brewery, 
+                b.type AS type,
+                ROUND(AVG(r.score), 1) AS average_score,
+                ROUND(AVG(r.smell), 1) AS average_smell,
+                ROUND(AVG(r.aftertaste), 1) AS average_aftertaste,
+                ROUND(AVG(r.taste), 1) AS average_taste,
+                ROUND(AVG(r.design), 1) AS average_design
+            FROM beer AS b
+            INNER JOIN event_beer AS e ON b.id = e.beer_id
+            LEFT JOIN rating AS r ON b.id = r.beer_id AND r.event_id = e.event_id
+            WHERE e.event_id = :event_id
             GROUP BY b.id
             ORDER BY average_score DESC
         """)

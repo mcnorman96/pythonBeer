@@ -35,3 +35,16 @@ def all_event_beer(event_id):
         return jsonify({'error': 'No event beer found'}), 400
     except ValueError as e:
       return jsonify({'error': str(e)}), 400
+
+singleEventBeer = Blueprint('single_event_beer', __name__)
+@singleEventBeer.route('/<int:event_id>/beers/<int:beer_id>', methods=['GET'])
+def single_event_beer(event_id, beer_id):
+  if request.method == 'GET':
+    try:
+      event_beers = EventBeersService.get_single_beer_in_event(event_id, beer_id)
+      if (event_beers):
+        return jsonify({'response': event_beers}), 200
+      else: 
+        return jsonify({'error': 'No event beer found'}), 400
+    except ValueError as e:
+      return jsonify({'error': str(e)}), 400
