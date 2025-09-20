@@ -12,16 +12,12 @@ const props = defineProps({
     required: true
   }
 });
-
-const rating = ref(props.rating);
-const name = ref(props.name);
-
 </script>
 
 <template>
   <div class="text-center w-20">
     <div class="name text-xs mb-1">
-      {{ name }}
+      {{ props.name }}
     </div>
     <div class="rating-circle m-auto">
       <svg viewBox="0 0 36 36">
@@ -33,12 +29,12 @@ const name = ref(props.name);
         />
         <path
           class="circle"
-          :stroke-dasharray="`${rating * 10}, 100`"
+          :stroke-dasharray="`${props.rating * 10}, 100`"
           d="M18 2.0845
             a 15.9155 15.9155 0 0 1 0 31.831
             a 15.9155 15.9155 0 0 1 0 -31.831"
         />
-        <text x="18" y="20.35" class="percentage">{{ rating }}</text>
+        <text x="18" y="20.35" class="percentage">{{ props.rating }}</text>
       </svg>
     </div>
   </div>

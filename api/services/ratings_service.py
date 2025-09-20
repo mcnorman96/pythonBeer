@@ -4,9 +4,12 @@ from db import db
 from typing import List, Dict, Any
 from pydantic import ValidationError
 from sqlalchemy import text
-
-
+from app import socketio
 class RatingsService:
+    @staticmethod
+    def rating_update(event_id):
+        socketio.emit('rating_updated', {'event_id': event_id})
+
     @staticmethod
     def create(event_id: int, user_id: int, beer_id: int, taste: int, aftertaste: int, smell: int, design: int,  score: int) -> None:
         try:
@@ -24,6 +27,7 @@ class RatingsService:
             existing_rating.design = validated_rating.design
             existing_rating.score = validated_rating.score
             db.session.commit()
+            RatingsService.rating_update(event_id)
         else:
             # Create new rating
             rating = RatingORM(
@@ -38,6 +42,7 @@ class RatingsService:
             )
             db.session.add(rating)
             db.session.commit()
+            RatingsService.rating_update(event_id)
 
     @staticmethod
     def getRating(event_id: int, user_id: int, beer_id: int) -> Dict[str, Any]:

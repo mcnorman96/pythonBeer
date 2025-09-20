@@ -7,20 +7,39 @@ import RatingModal from '~/components/modals/RatingModal.vue';
 import AddBeerModal from '~/components/modals/AddBeerModal.vue';
 import type { Beer, Participants, ResponseTypeBeers, ResponseTypeParticipants } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
+import { onMounted, onUnmounted } from 'vue';
+import { io } from 'socket.io-client';
 
 const route = useRoute();
 const eventId = route.params.id;
+const event_beers = ref<Beer[]>([]);
 
-const { 
-  data: event_beers, 
-  pending: beersPending, 
-  error: beersError 
-} = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
-const { 
-  data: event_participants, 
-  pending: participantsPending, 
-  error: participantsError 
-} = await beerService.eventParticipants.getEventParticipants(eventId as string);
+const socket = io('http://localhost:8000'); // Flask-SocketIO default port
+
+onMounted(async () => {
+  const beerData = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
+  if (beerData.success && beerData.response) {
+      event_beers.value = beerData.response;
+  }
+
+  const { 
+    data: event_participants, 
+    pending: participantsPending, 
+    error: participantsError 
+  } = await beerService.eventParticipants.getEventParticipants(eventId as string);
+
+  socket.on('rating_updated', async (data) => {
+    if (data.event_id === eventId) {
+      const newBeerData = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
+      event_beers.value = newBeerData.response || [];
+    }
+  });
+});
+
+onUnmounted(() => {
+  socket.off('rating_updated');
+});
+
 
 // Modal state
 const showModal = ref(false);
@@ -55,7 +74,7 @@ const closeRatingModal = () => {
     </div>
     <div v-if="beersPending">Loading beers...</div>
     <div v-if="event_beers">
-      <div v-for="beer in event_beers.response" :key="beer.id">
+      <div v-for="beer in event_beers" :key="beer.id">
         <BeerCard :beer="beer" @add-rating="openRatingModal" />
       </div>
     </div>
