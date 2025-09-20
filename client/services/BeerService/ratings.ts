@@ -10,9 +10,22 @@ export const ratings = {
     design: number;
     score: number;
   }) => {
+    const formdata = new FormData();
+    Object.entries(ratingData).forEach(([key, value]) => {
+      formdata.append(key, value.toString());
+    });
     const { data, error, pending } = await useFetch(`${API_URL}/ratings/new`, {
       method: 'POST',
-      body: ratingData,
+      body: formdata,
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return { data, error, pending };
+  },
+  getRating: async (eventId: string, beerId: string) => {
+    const { data, error, pending } = await useFetch(`${API_URL}/ratings/getRating?event_id=${eventId}&beer_id=${beerId}`, {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }

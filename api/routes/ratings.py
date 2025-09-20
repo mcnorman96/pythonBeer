@@ -35,6 +35,29 @@ def new_ratings():
   else:
     return jsonify({'error': 'Please fill out all fields.'}), 400
 
+getRating = Blueprint('get_ratings', __name__)
+@getRating.route('/getRating', methods=['GET'])
+def get_ratings():
+    if request.method == 'GET' and all(request.args.get(k) for k in ('event_id', 'beer_id')):
+        user_id = get_user_id_from_token()
+        if not isinstance(user_id, int):
+            logger.error(f"Invalid user_id extracted: {user_id} (type: {type(user_id)})")
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        event_id = request.args.get('event_id')
+        beer_id = request.args.get('beer_id')
+
+        try:
+            if event_id and user_id and beer_id:
+                getRating = RatingsService.getRating(event_id, user_id, beer_id)
+                return jsonify({'response': getRating}), 200
+            else:
+                return jsonify({'error': 'Please fill out all fields.'}), 400
+        except ValueError as e:
+            return jsonify({'error': str(e), 'user_id': user_id}), 400
+    else:
+        return jsonify({'error': 'Please fill out all fields.'}), 400
+
 
 allRatings = Blueprint('all_ratings', __name__)
 @allRatings.route('/', methods=['GET', 'POST'])

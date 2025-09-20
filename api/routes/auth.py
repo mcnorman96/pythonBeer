@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 def get_user_id_from_token():
     auth_header = request.headers.get('Authorization')
     if not auth_header or not auth_header.startswith('Bearer '):
+        logger.warning("Authorization header missing or invalid")
         return None  # Or raise an error
 
     token = auth_header.split(' ')[1]
@@ -21,8 +22,10 @@ def get_user_id_from_token():
         user_id = int(user_id)
         return user_id
     except jwt.ExpiredSignatureError:
+        logger.warning("Token has expired")
         return None  # Or handle expired token
     except jwt.InvalidTokenError:
+        logger.warning("Invalid token")
         return None  # Or handle invalid token
 
 register = Blueprint('register', __name__)

@@ -40,6 +40,16 @@ class RatingsService:
             db.session.commit()
 
     @staticmethod
+    def getRating(event_id: int, user_id: int, beer_id: int) -> Dict[str, Any]:
+        # Check if rating already exists for this user, event, and beer
+        existing_rating = RatingORM.query.filter_by(event_id=event_id, user_id=user_id, beer_id=beer_id).first()
+        if existing_rating:
+            return existing_rating.to_dict()
+        else:
+            return None
+
+
+    @staticmethod
     def get_all() -> List[Dict[str, Any]]:
         return [rating.to_dict() for rating in RatingORM.query.all()]
 

@@ -1,9 +1,9 @@
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const isAuthenticated = ref(false);
 
 export function useAuth() {
- function login(token: string) {
+  function login(token: string) {
     if (process.client) {
       localStorage.setItem('token', token);
     }
@@ -11,7 +11,8 @@ export function useAuth() {
   }
   function checkAuth() {
     if (process.client) {
-      isAuthenticated.value = !!localStorage.getItem('token');
+      const token = localStorage.getItem('token');
+      isAuthenticated.value = !!token;
     }
   }
   function logout() {
@@ -19,6 +20,12 @@ export function useAuth() {
       localStorage.removeItem('token');
     }
     isAuthenticated.value = false;
+  }
+  // Ensure auth state is synced on page load
+  if (process.client) {
+    onMounted(() => {
+      checkAuth();
+    });
   }
   return { isAuthenticated, login, logout, checkAuth };
 }
