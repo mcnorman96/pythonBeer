@@ -5,6 +5,25 @@ from models.user import User
 from services.user_services import UserService
 import jwt
 import datetime
+import logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+def get_user_id_from_token():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return None  # Or raise an error
+
+    token = auth_header.split(' ')[1]
+    try:
+        payload = jwt.decode(token, 'your_secret_key', algorithms=['HS256'])
+        user_id = payload.get('user_id')
+        user_id = int(user_id)
+        return user_id
+    except jwt.ExpiredSignatureError:
+        return None  # Or handle expired token
+    except jwt.InvalidTokenError:
+        return None  # Or handle invalid token
 
 register = Blueprint('register', __name__)
 @register.route('/register', methods=['GET', 'POST'])

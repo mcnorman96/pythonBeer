@@ -16,6 +16,7 @@ export const events = {
 
   getEvents: async () => {
     const { data, error, pending } = await useFetch(`${API_URL}/events`);
+    
     return { data, error, pending };
   },
 

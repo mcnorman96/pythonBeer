@@ -1,7 +1,33 @@
 import type { ResponseTypeBeers } from "~/types/types";
 import { API_URL } from "../vars";
 
+type beerData = {
+  name: string,
+  description: string,
+  brewery: string,
+  type: string
+}
+
 export const eventBeer = {
+  newBeer: async (beer: beerData) => {
+    const formData = new FormData();
+    formData.append('name', beer.name);
+    formData.append('description', beer.description);
+    formData.append('brewery', beer.brewery);
+    formData.append('type', beer.type);
+
+    const { data, error } = await useFetch(`${API_URL}/beer/new`, {
+      method: 'POST',
+      body: formData
+    });
+    
+    if (error.value) {
+      return { success: false, error: error.value };
+    }
+    
+    return { success: true, data: data.value };
+  },
+
   allBeersInEvent: async (eventId: string) => {
     const { data: fetchedBeers, error: fetchError, pending: fetchPending } = await useFetch<ResponseTypeBeers>(`${API_URL}/events/${eventId}/beers`);
 

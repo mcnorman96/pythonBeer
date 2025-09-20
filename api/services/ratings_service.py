@@ -14,18 +14,30 @@ class RatingsService:
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 
-        rating = RatingORM(
-            event_id=validated_rating.event_id,
-            user_id=validated_rating.user_id,
-            beer_id=validated_rating.beer_id,
-            taste=validated_rating.taste,
-            aftertaste=validated_rating.aftertaste,
-            smell=validated_rating.smell,
-            design=validated_rating.design,
-            score=validated_rating.score
-        )
-        db.session.add(rating)
-        db.session.commit()
+        # Check if rating already exists for this user, event, and beer
+        existing_rating = RatingORM.query.filter_by(event_id=event_id, user_id=user_id, beer_id=beer_id).first()
+        if existing_rating:
+            # Update existing rating
+            existing_rating.taste = validated_rating.taste
+            existing_rating.aftertaste = validated_rating.aftertaste
+            existing_rating.smell = validated_rating.smell
+            existing_rating.design = validated_rating.design
+            existing_rating.score = validated_rating.score
+            db.session.commit()
+        else:
+            # Create new rating
+            rating = RatingORM(
+                event_id=validated_rating.event_id,
+                user_id=validated_rating.user_id,
+                beer_id=validated_rating.beer_id,
+                taste=validated_rating.taste,
+                aftertaste=validated_rating.aftertaste,
+                smell=validated_rating.smell,
+                design=validated_rating.design,
+                score=validated_rating.score
+            )
+            db.session.add(rating)
+            db.session.commit()
 
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:

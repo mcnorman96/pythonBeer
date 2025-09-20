@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { EventInterface } from '~/types/types';
+import beerService from '~/services/BeerService/beerService';
 
 interface ResponseType {
   response: Array<EventInterface>;
@@ -13,17 +14,9 @@ const event = props.event || '';
 const newDate = new Date(event.start_date);
 const eventDate = newDate.toLocaleDateString();
 
-// Define refs to store the data, error, and pending state
-const event_beers = ref<ResponseType | null>(null);
-const error = ref<Error | null>(null);
-const pending = ref<boolean>(true);
+  // Use useFetch for SSR and immediate data loading
+const { data: event_beers, pending: beersPending, error: beersError } = await beerService.eventBeer.toplistBeersInEvent(event.id as string);
 
-onMounted(async () => {
-  const { data: fetchedData, error: fetchError, pending: fetchPending } = await useFetch<ResponseType>(`http://127.0.0.1:5000/events/${event.id}/beers`);
-  event_beers.value = fetchedData.value;
-  error.value = fetchError.value;
-  pending.value = fetchPending.value;
-});
 </script>
 
 <template>
@@ -36,8 +29,10 @@ onMounted(async () => {
         {{ event.name }}
       </div>
     </div>
-    <div class="rightside" v-if="event_beers" v-for="beers in event_beers.response">
-      1. {{ beers.name }}
+    <div class="rightside" v-if="event_beers">
+      <div class="col" v-for="(beers, index) in event_beers.response.slice(0, 3)" :key="index">
+        {{ index + 1 }}. {{ beers.name }}
+      </div>
     </div>
   </NuxtLink>
 </template>

@@ -15,13 +15,17 @@ def new_beer():
 
           try:
             if name and description:
-                BeerService.create(
+                beer = BeerService.create(
                    name, 
                    description, 
                    brewery, 
                    beer_type
                 )
-                return jsonify({'message': 'Beer created successfully'}), 201
+
+                return jsonify({
+                   'message': 'Beer created successfully', 
+                   'beer': beer.to_dict()
+                   }), 201
             else:
                 return jsonify({'error': 'Please fill out all fields.'}), 400
           except ValueError as e:
