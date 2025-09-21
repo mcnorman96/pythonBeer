@@ -101,10 +101,10 @@ const addExistingBeerToEvent = async (beerId: number) => {
         <input v-model="beerBrewery" class="border p-2 w-full mb-2" placeholder="Brewery" />
         <label class="block mb-2">Type</label>
         <input v-model="beerType" class="border p-2 w-full mb-4" placeholder="Type" />
-        <button @click="saveBeer" class="px-4 py-2 bg-blue-500 text-white rounded w-full mb-2">Save New Beer</button>
+        <button @click="saveBeer" class="px-4 py-2 rounded w-full mb-2 yellow">Save New Beer</button>
       </div>
       <div class="flex justify-end mt-4">
-        <button @click="closeModal" class="px-4 py-2 bg-gray-300 rounded">Close</button>
+        <button @click="handleClose" class="px-4 py-2 bg-black rounded text-white">Close</button>
       </div>
     </div>
   </div>

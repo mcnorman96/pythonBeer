@@ -14,19 +14,20 @@ const event = props.event || '';
 const newDate = new Date(event.start_date);
 const eventDate = newDate.toLocaleDateString();
 
-  // Use useFetch for SSR and immediate data loading
 const { data: event_beers, pending: beersPending, error: beersError } = await beerService.eventBeer.toplistBeersInEvent(event.id as string);
-
 </script>
 
 <template>
-  <NuxtLink :to="{ name: 'events-id', params: { id: event.id } }" class="flex justify-between pt-5 pb-5 border-t border-t-black">
+  <NuxtLink :to="{ name: 'events-id', params: { id: event.id } }" class="mt-5 flex justify-between bg-white border-gray-400 border-solid shadow-md rounded-2xl p-6 hover:shadow-lg transition" style="border-width: 0.5px;">
     <div class="leftside">
       <div class="date">
         {{ eventDate }}
       </div>
-      <div class="name font-bold">
+      <div class="name font-bold">    
         {{ event.name }}
+      </div>
+      <div class="description text-sm">
+        {{ event.description }}
       </div>
     </div>
     <div class="rightside" v-if="event_beers">

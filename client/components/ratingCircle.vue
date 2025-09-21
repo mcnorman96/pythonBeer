@@ -16,7 +16,7 @@ const props = defineProps({
 
 <template>
   <div class="text-center w-20">
-    <div class="name text-xs mb-1">
+    <div class="name text-sm mb-2">
       {{ props.name }}
     </div>
     <div class="rating-circle m-auto">
@@ -29,7 +29,7 @@ const props = defineProps({
         />
         <path
           class="circle"
-          :stroke-dasharray="`${props.rating * 10}, 100`"
+          :stroke-dasharray="`${props.rating * 20}, 100`"
           d="M18 2.0845
             a 15.9155 15.9155 0 0 1 0 31.831
             a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -43,8 +43,8 @@ const props = defineProps({
 
 <style scoped>
 .rating-circle {
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   position: relative;
 }
 

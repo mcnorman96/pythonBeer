@@ -28,20 +28,11 @@ export const eventBeer = {
     return { success: true, data: data.value };
   },
 
-  allBeersInEvent: async (eventId: string) => {
-    const { data: fetchedBeers, error: fetchError, pending: fetchPending } = await useFetch<ResponseTypeBeers>(`${API_URL}/events/${eventId}/beers`);
-
-    return {
-      data: fetchedBeers,
-      error: fetchError,
-      pending: fetchPending
-    };
-  },
   addBeerToEvent: async (eventId: string, beerId: string) => {
     const formData = new FormData();
     formData.append('beer_id', beerId);
 
-    const { data, error } = await useFetch(`${API_URL}/events/${eventId}/beers/add`, {
+    const { error } = await useFetch(`${API_URL}/events/${eventId}/beers`, {
       method: 'POST',
       body: formData
     });
@@ -49,9 +40,9 @@ export const eventBeer = {
     if (error.value) {
       return { success: false, error: error.value };
     }
-
     return { success: true };
   },
+
   searchBeer: async (query: string) => {
     const { data: fetchedBeers, error: fetchError, pending: fetchPending } = await useFetch<ResponseTypeBeers>(`${API_URL}/beer/search`, {
       params: { s: query }
@@ -63,6 +54,7 @@ export const eventBeer = {
       pending: fetchPending
     };
   },
+
   toplistBeersInEvent: async (eventId: string) => {
     const response = await fetch(`${API_URL}/ratings/toplist/${eventId}`);
     if (!response.ok) {

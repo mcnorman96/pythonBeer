@@ -60,8 +60,8 @@ const handleClose = () => {
         <input v-model="total_score" type="number" min="0" max="5" class="border p-2 w-full mb-2" placeholder="Total Score" />
       </div>
       <div class="flex justify-end space-x-2">
-        <button @click="handleClose" class="px-4 py-2 bg-gray-300 rounded">Close</button>
-        <button @click="handleSave" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+        <button @click="handleClose" class="px-4 py-2 bg-black text-white rounded">Close</button>
+        <button @click="handleSave" class="px-4 py-2 yellow rounded">Save</button>
       </div>
     </div>
   </div>

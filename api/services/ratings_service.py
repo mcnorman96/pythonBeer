@@ -53,6 +53,21 @@ class RatingsService:
         else:
             return None
 
+    @staticmethod
+    def getAllRatingsForBeer(event_id: int,  beer_id: int) -> Dict[str, Any]:
+        # Retrieve ratings for a beer in an event, including username
+        query = text("""
+            SELECT r.*, u.username
+            FROM rating AS r
+            JOIN `user` AS u ON r.user_id = u.id
+            WHERE r.event_id = :event_id AND r.beer_id = :beer_id
+        """)
+        result = db.session.execute(query, {"event_id": event_id, "beer_id": beer_id})
+        ratings = []
+        for row in result:
+            rating_dict = dict(row._mapping)
+            ratings.append(rating_dict)
+        return ratings
 
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
@@ -84,11 +99,17 @@ class RatingsService:
         return [dict(row._mapping) for row in result]
 
     @staticmethod
-    def get_toplist_by_event(event_id) -> List[Dict[str, Any]]:
+    def get_toplist_by_event(event_id, sortby='average_score', order='desc') -> List[Dict[str, Any]]:
         if not event_id:
             raise ValueError("Event ID must be provided")
 
-        query = text("""
+        # Validate sortby and order
+        allowed_sort_fields = ['average_score', 'average_smell', 'average_aftertaste', 'average_taste', 'average_design', 'name', 'brewery', 'type']
+        if sortby not in allowed_sort_fields:
+            sortby = 'average_score'
+        order = 'DESC' if order.lower() == 'desc' else 'ASC'
+
+        query = text(f"""
             SELECT 
                 b.id AS id, 
                 b.name AS name, 
@@ -105,7 +126,7 @@ class RatingsService:
             LEFT JOIN rating AS r ON b.id = r.beer_id AND r.event_id = e.event_id
             WHERE e.event_id = :event_id
             GROUP BY b.id
-            ORDER BY average_score DESC
+            ORDER BY {sortby} {order}
         """)
 
         result = db.session.execute(query, {"event_id": event_id})

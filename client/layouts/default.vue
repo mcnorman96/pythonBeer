@@ -36,7 +36,7 @@ watch(isAuthenticated, (val) => {
         </div>
         <div class="right-menu absolute right-0 top-1/2  -translate-y-1/2 flex" v-if="isLoggedIn">
           <NuxtLink :class=menuItemsClass to="/">Profile</NuxtLink>
-          <button @click="logout" :class=menuItemsClass>Log out</button>
+          <a @click="logout" :class=menuItemsClass>Log out</a>
         </div>
       </client-only>
     </nav>

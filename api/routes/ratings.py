@@ -35,6 +35,7 @@ def new_ratings():
   else:
     return jsonify({'error': 'Please fill out all fields.'}), 400
 
+
 getRating = Blueprint('get_ratings', __name__)
 @getRating.route('/getRating', methods=['GET'])
 def get_ratings():
@@ -58,6 +59,23 @@ def get_ratings():
     else:
         return jsonify({'error': 'Please fill out all fields.'}), 400
 
+getAllRatingsForBeer = Blueprint('get_all_ratings_for_beer', __name__)
+@getAllRatingsForBeer.route('/all', methods=['GET'])
+def get_all_ratings_for_beer():
+    if request.method == 'GET' and all(request.args.get(k) for k in ('event_id', 'beer_id')):
+        event_id = request.args.get('event_id')
+        beer_id = request.args.get('beer_id')
+
+        try:
+            if event_id and beer_id:
+                getRating = RatingsService.getAllRatingsForBeer(event_id, beer_id)
+                return jsonify({'response': getRating}), 200
+            else:
+                return jsonify({'error': 'Please fill out all fields.'}), 400
+        except ValueError as e:
+            return jsonify({'error': str(e)}), 400
+    else:
+        return jsonify({'error': 'Please fill out all fields.'}), 400
 
 allRatings = Blueprint('all_ratings', __name__)
 @allRatings.route('/', methods=['GET', 'POST'])
@@ -72,6 +90,7 @@ def all_ratings():
     except ValueError as e:
       return jsonify({'error': str(e)}), 400
     
+
 toplistRatings = Blueprint('toplist', __name__)
 @toplistRatings.route('/toplist', methods=['GET', 'POST'])
 def toplist():
@@ -85,16 +104,19 @@ def toplist():
     except ValueError as e:
       return jsonify({'error': str(e)}), 400
     
+
 toplistRatingsByEvent = Blueprint('toplist_by_event', __name__)
 @toplistRatingsByEvent.route('/toplist/<int:event_id>', methods=['GET', 'POST'])
 def toplist_by_event(event_id):
   if request.method == 'GET':
+    sortby = request.args.get('sortby', 'average_score')
+    order = request.args.get('order', 'desc').lower()
     try:
       if event_id:
-        ratings = RatingsService.get_toplist_by_event(event_id)
-        if (ratings):
+        ratings = RatingsService.get_toplist_by_event(event_id, sortby=sortby, order=order)
+        if ratings:
           return jsonify({'response': ratings}), 200
-        else: 
+        else:
           return jsonify({'error': 'No ratings found'}), 400
     except ValueError as e:
       return jsonify({'error': str(e)}), 400
