@@ -22,13 +22,20 @@ class EventService:
             end_date=None,
             description=validated_event.description
         )
-
         db.session.add(events)
         db.session.commit()
 
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
         return [event.to_dict() for event in EventORM.query.all()]
+    
+    @staticmethod
+    def get_by_id(id: int) -> Dict[str, Any]:
+        event = EventORM.query.get(id)
+        if event:
+            return event.to_dict()
+        else:
+            return None
 
     @staticmethod
     def delete(id: int) -> None:

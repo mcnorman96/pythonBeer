@@ -109,8 +109,8 @@ toplistRatingsByEvent = Blueprint('toplist_by_event', __name__)
 @toplistRatingsByEvent.route('/toplist/<int:event_id>', methods=['GET', 'POST'])
 def toplist_by_event(event_id):
   if request.method == 'GET':
-    sortby = request.args.get('sortby', 'average_score')
-    order = request.args.get('order', 'desc').lower()
+    sortby = request.args.get('sortby', 'event_beer_id').lower()
+    order = request.args.get('order', 'asc').lower()
     try:
       if event_id:
         ratings = RatingsService.get_toplist_by_event(event_id, sortby=sortby, order=order)

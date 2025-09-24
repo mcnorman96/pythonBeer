@@ -18,9 +18,6 @@ const beerSearch = ref('');
 <template>
   <h1 class="text-center">Toplist</h1>
   <div class="beerContainer max-w-3xl m-auto">
-    <div class="flex justify-between pb-5">
-      <p>Beers</p>
-    </div>
     <div v-if="beersPending">Loading beers...</div>
     <div v-if="event_beers" v-for="beer in event_beers.response">
       <BeerCard :beer="beer" :toplist="true"/>

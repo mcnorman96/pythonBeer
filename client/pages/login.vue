@@ -47,7 +47,7 @@ const handleLogin = async () => {
           <input v-model="password" type="password" class="border p-2 w-full" placeholder="Password" />
         </div>
         <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
-        <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white rounded">Login</button>
+        <button type="submit" class="w-full px-4 py-2 yellow rounded">Login</button>
       </form>
     </div>
   </div>

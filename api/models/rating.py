@@ -7,11 +7,11 @@ class Rating(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     beer_id = db.Column(db.Integer, db.ForeignKey('beer.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    taste = db.Column(db.Integer, nullable=False)
-    aftertaste = db.Column(db.Integer, nullable=False)
-    smell = db.Column(db.Integer, nullable=False)
-    design = db.Column(db.Integer, nullable=False)
-    score = db.Column(db.Integer, nullable=False)
+    taste = db.Column(db.Float, nullable=False)
+    aftertaste = db.Column(db.Float, nullable=False)
+    smell = db.Column(db.Float, nullable=False)
+    design = db.Column(db.Float, nullable=False)
+    score = db.Column(db.Float, nullable=False)
 
     def to_dict(self):
         return {

@@ -15,12 +15,12 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="text-center w-20">
-    <div class="name text-sm mb-2">
+  <div class="text-center w-12 md:w-20">
+    <div class="name text-xs md:text-sm mb-2">
       {{ props.name }}
     </div>
-    <div class="rating-circle m-auto">
-      <svg viewBox="0 0 36 36">
+    <div class="rating-circle m-auto relative w-7 h-7 md:w-10 md:h-10">
+      <svg viewBox="0 0 36 36" class="w-full h-full">
         <path
           class="circle-bg"
           d="M18 2.0845
@@ -38,21 +38,9 @@ const props = defineProps({
       </svg>
     </div>
   </div>
-
 </template>
 
 <style scoped>
-.rating-circle {
-  width: 45px;
-  height: 45px;
-  position: relative;
-}
-
-.rating-circle svg {
-  width: 100%;
-  height: 100%;
-}
-
 .circle-bg {
   fill: none;
   stroke: #eee;

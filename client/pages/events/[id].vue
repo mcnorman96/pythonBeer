@@ -14,32 +14,52 @@ import { io } from 'socket.io-client';
 const route = useRoute();
 const eventId = route.params.id;
 const event_beers = ref<Beer[]>([]);
-
+const event_data = ref<any>(null);
+const sortOption = ref('new');
 const socket = io('http://localhost:8000'); // Flask-SocketIO default port
 
-onMounted(async () => {
+const fetchBeersinEvent = async () => {
   const beerData = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
   if (beerData.success && beerData.response) {
       event_beers.value = beerData.response;
   }
+}
 
-  // const { 
-  //   data: event_participants, 
-  //   pending: participantsPending, 
-  //   error: participantsError 
-  // } = await beerService.eventParticipants.getEventParticipants(eventId as string);
+const sortBeers = () => {
+  if (Array.isArray(event_beers.value)) {
+    let sorted = [...event_beers.value];
+    if (sortOption.value === 'new') {
+      sorted.sort((a, b) => a.event_beer_id - b.event_beer_id);
+    } else if (sortOption.value === 'top') {
+      sorted.sort((a, b) => Number(b.average_score) - Number(a.average_score));
+    }
+    event_beers.value = sorted;
+  }
+};
 
+watch(sortOption, (newVal) => {
+  sortBeers();
+});
+
+onMounted(async () => {
+  await fetchBeersinEvent();
+
+  const eventData = await beerService.events.getEventById(eventId as string);
+  if (eventData?.data?.value?.response) {
+    event_data.value = eventData.data.value.response;
+  }
+  
   socket.on('rating_updated', async (data) => {
     if (String(data.event_id) === String(eventId)) {
-      const newBeerData = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
-      event_beers.value = newBeerData.response || [];
+      await fetchBeersinEvent();
+      sortBeers();
     }
   });
 
   socket.on('beer_added', async (data) => {
     if (String(data.event_id) === String(eventId)) {
-      const newBeerData = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
-      event_beers.value = newBeerData.response || [];
+      await fetchBeersinEvent();
+      sortBeers();
     }
   });
 });
@@ -84,18 +104,20 @@ const closeViewRatingsModal = () => {
 </script>
 
 <template>
-  <h1 class="text-center">Event page</h1>
+  <h1 class="text-center">{{ event_data?.name }}</h1>
+  <p class="text-center mb-5">{{ event_data?.description }}</p>
   <div class="beerContainer max-w-3xl m-auto mb-5">
-    <div class="flex justify-between pb-5 items-center">
-      <h3 class="text-lg font-semibold">Beers</h3>
-      <button class="yellow" @click="openModal">Add Beer to Event</button>
-    </div>
     <div v-if="beersPending">Loading beers...</div>
     <div v-if="event_beers">
+      <select class="p-2 border border-gray-300 rounded" v-model="sortOption">
+        <option value="new">Newest</option>
+        <option value="top">Top Rated</option>
+      </select>
       <div v-for="beer in event_beers" :key="beer.id">
         <BeerCard :beer="beer" @add-rating="openRatingModal" @view-ratings="openViewRatingModal" />
       </div>
     </div>
+    <button class="yellow mt-5 ml-auto block" @click="openModal">Add Beer to Event</button>
   </div>
 
   <!-- Modals -->

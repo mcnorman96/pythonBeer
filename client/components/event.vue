@@ -18,7 +18,7 @@ const { data: event_beers, pending: beersPending, error: beersError } = await be
 </script>
 
 <template>
-  <NuxtLink :to="{ name: 'events-id', params: { id: event.id } }" class="mt-5 flex justify-between bg-white border-gray-400 border-solid shadow-md rounded-2xl p-6 hover:shadow-lg transition" style="border-width: 0.5px;">
+  <NuxtLink :to="{ name: 'events-id', params: { id: event.id } }" class="mt-5 flex flex-wrap justify-between bg-white border-gray-400 border-solid shadow-md rounded-2xl p-6 hover:shadow-lg transition" style="border-width: 0.5px;">
     <div class="leftside">
       <div class="date">
         {{ eventDate }}

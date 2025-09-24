@@ -81,7 +81,8 @@ const addExistingBeerToEvent = async (beerId: number) => {
 <template>
     <!-- Unified Modal for Adding Beer -->
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="bg-white p-6 rounded shadow-lg w-96">
+    <div class="bg-white p-6 rounded shadow-lg w-96 relative m-2 max-h-[80vh] overflow-y-auto">
+      <button @click="handleClose" class="bg-black text-white rounded absolute top-2 right-2">X</button>
       <h2 class="text-xl mb-4">Add Beer to Event</h2>
       <!-- Add Existing Beer Search with Dropdown -->
       <div class="mb-6 relative">
@@ -102,9 +103,6 @@ const addExistingBeerToEvent = async (beerId: number) => {
         <label class="block mb-2">Type</label>
         <input v-model="beerType" class="border p-2 w-full mb-4" placeholder="Type" />
         <button @click="saveBeer" class="px-4 py-2 rounded w-full mb-2 yellow">Save New Beer</button>
-      </div>
-      <div class="flex justify-end mt-4">
-        <button @click="handleClose" class="px-4 py-2 bg-black rounded text-white">Close</button>
       </div>
     </div>
   </div>

@@ -45,23 +45,23 @@ const handleClose = () => {
 
 <template>
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="bg-white p-6 rounded shadow-lg w-96">
+    <div class="bg-white p-6 rounded shadow-lg w-96 relative m-2 max-h-[80vh] overflow-y-auto">
+      <button @click="handleClose" class="bg-black text-white rounded absolute top-2 right-2">X</button>
       <h2 class="text-xl mb-4">Rate {{ props.beer.name }}</h2>
       <div class="mb-4">
         <label class="block mb-2">Taste</label>
-        <input v-model="taste" type="number" min="0" max="5" class="border p-2 w-full mb-2" placeholder="Taste" />
+        <input v-model="taste" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Taste" />
         <label class="block mb-2">Aftertaste</label>
-        <input v-model="aftertaste" type="number" min="0" max="5" class="border p-2 w-full mb-2" placeholder="Aftertaste" />
+        <input v-model="aftertaste" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Aftertaste" />
         <label class="block mb-2">Smell</label>
-        <input v-model="smell" type="number" min="0" max="5" class="border p-2 w-full mb-2" placeholder="Smell" />
-        <label class="block mb-2">Bottle Design</label>
-        <input v-model="design" type="number" min="0" max="5" class="border p-2 w-full mb-2" placeholder="Bottle Design" />
+        <input v-model="smell" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Smell" />
+        <label class="block mb-2">Design</label>
+        <input v-model="design" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Design" />
         <label class="block mb-2">Total score</label>
-        <input v-model="total_score" type="number" min="0" max="5" class="border p-2 w-full mb-2" placeholder="Total Score" />
+        <input v-model="total_score" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Total Score" />
       </div>
       <div class="flex justify-end space-x-2">
-        <button @click="handleClose" class="px-4 py-2 bg-black text-white rounded">Close</button>
-        <button @click="handleSave" class="px-4 py-2 yellow rounded">Save</button>
+        <button @click="handleSave" class="px-4 py-2 w-full yellow rounded">Save</button>
       </div>
     </div>
   </div>

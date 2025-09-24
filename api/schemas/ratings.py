@@ -6,11 +6,11 @@ class RatingsSchema(BaseModel):
     event_id: int
     user_id: int
     beer_id: int
-    taste: int
-    aftertaste: int
-    smell: int
-    design: int
-    score: int
+    taste: float
+    aftertaste: float
+    smell: float
+    design: float
+    score: float
 
     @validator('event_id')
     def eventid_must_be_non_empty(cls, v: int) -> int:
@@ -31,32 +31,32 @@ class RatingsSchema(BaseModel):
         return v
     
     @validator('taste')
-    def taste_must_be_non_empty(cls, v: int) -> int:
-        if not v:
+    def taste_must_be_non_empty(cls, v: float) -> float:
+        if v is None:
             raise ValueError('taste cannot be empty')
         return v
     
     @validator('aftertaste')
-    def aftertaste_must_be_non_empty(cls, v: int) -> int:
-        if not v:
+    def aftertaste_must_be_non_empty(cls, v: float) -> float:
+        if v is None:
             raise ValueError('aftertaste cannot be empty')
         return v
     
     @validator('smell')
-    def smell_must_be_non_empty(cls, v: int) -> int:
-        if not v:
+    def smell_must_be_non_empty(cls, v: float) -> float:
+        if v is None:
             raise ValueError('smell cannot be empty')
         return v
     
     @validator('design')
-    def design_must_be_non_empty(cls, v: int) -> int:
-        if not v:
+    def design_must_be_non_empty(cls, v: float) -> float:
+        if v is None:
             raise ValueError('design cannot be empty')
         return v
     
     @validator('score')
-    def score_must_be_non_empty(cls, v: int) -> int:
-        if not v:
+    def score_must_be_non_empty(cls, v: float) -> float:
+        if v is None:
             raise ValueError('score cannot be empty')
         return v
 

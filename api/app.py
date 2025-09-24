@@ -39,7 +39,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 # Import routes
 from routes.auth import register, logout, login
 from routes.beer import newBeer, allBeers, searchBeers
-from routes.event import newEvents, allEvents
+from routes.event import newEvents, allEvents, getEventById
 from routes.event_participant import newEventParticipant, allEventParticipant
 from routes.event_beer import newEventBeer
 from routes.ratings import newRatings, getRating, getAllRatingsForBeer, toplistRatings, toplistRatingsByEvent
@@ -55,6 +55,7 @@ app.register_blueprint(searchBeers, url_prefix='/beer/')
 
 app.register_blueprint(newEvents, url_prefix='/events/')
 app.register_blueprint(allEvents, url_prefix='/events/')
+app.register_blueprint(getEventById, url_prefix='/events/')
 
 app.register_blueprint(newEventParticipant, url_prefix='/events/')
 app.register_blueprint(allEventParticipant, url_prefix='/events/')

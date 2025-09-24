@@ -36,3 +36,15 @@ def all_events():
         return jsonify({'error': 'No events found'}), 400
     except ValueError as e:
       return jsonify({'error': str(e)}), 400
+
+getEventById = Blueprint('get_event_by_id', __name__)
+@getEventById.route('/<int:event_id>', methods=['GET'])
+def get_event_by_id(event_id):
+  try:
+    event = EventService.get_by_id(event_id)
+    if event:
+      return jsonify({'response': event}), 200
+    else:
+      return jsonify({'error': 'Event not found'}), 404
+  except ValueError as e:
+    return jsonify({'error': str(e)}), 400

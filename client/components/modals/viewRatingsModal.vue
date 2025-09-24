@@ -16,7 +16,8 @@ const handleClose = () => {
 
 <template>
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="bg-white p-6 rounded shadow-lg w-120">
+    <div class="bg-white p-6 rounded shadow-lg w-[500px] max-w-full max-h-[80vh] overflow-auto relative m-2">
+      <button @click="handleClose" class="bg-black text-white rounded absolute top-2 right-2">X</button>
       <h2 class="text-xl mb-4">Ratings for {{ props.beer.name }}</h2>
       <div v-if="pending" class="mb-4">Loading ratings...</div>
       <div v-else-if="error" class="mb-4 text-red-500">Error loading ratings: {{ error.message }}</div>
@@ -28,21 +29,17 @@ const handleClose = () => {
               {{ rating.username }}
             </div>
             <div class="rightside">
-              <div class="flex -mr-6">
+              <div class="flex -mr-3 md:-mr-6">
                 <RatingCircle :rating="rating.taste" name="Taste"/>
                 <RatingCircle :rating="rating.aftertaste" name="Aftertaste"/>
                 <RatingCircle :rating="rating.smell" name="Smell"/>
-                <RatingCircle :rating="rating.design" name="Bottle Design"/>
+                <RatingCircle :rating="rating.design" name="Design"/>
                 <RatingCircle :rating="rating.score" name="Score"/>
               </div>
             </div>
           </div>
         </div>
-
     </div>
-      <div class="flex justify-end space-x-2">
-        <button @click="handleClose" class="px-4 py-2 bg-black text-white rounded">Close</button>
-      </div>
     </div>
   </div>
 </template>

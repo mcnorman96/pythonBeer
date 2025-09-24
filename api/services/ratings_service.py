@@ -11,7 +11,7 @@ class RatingsService:
         socketio.emit('rating_updated', {'event_id': event_id})
 
     @staticmethod
-    def create(event_id: int, user_id: int, beer_id: int, taste: int, aftertaste: int, smell: int, design: int,  score: int) -> None:
+    def create(event_id: int, user_id: int, beer_id: int, taste: float, aftertaste: float, smell: float, design: float,  score: float) -> None:
         try:
             validated_rating = RatingsSchema(event_id=event_id, user_id=user_id, beer_id=beer_id, taste=taste, aftertaste=aftertaste, smell=smell, design=design,  score=score)
         except ValidationError as e:
@@ -99,12 +99,12 @@ class RatingsService:
         return [dict(row._mapping) for row in result]
 
     @staticmethod
-    def get_toplist_by_event(event_id, sortby='average_score', order='desc') -> List[Dict[str, Any]]:
+    def get_toplist_by_event(event_id, sortby='event_beer_id', order='desc') -> List[Dict[str, Any]]:
         if not event_id:
             raise ValueError("Event ID must be provided")
 
         # Validate sortby and order
-        allowed_sort_fields = ['average_score', 'average_smell', 'average_aftertaste', 'average_taste', 'average_design', 'name', 'brewery', 'type']
+        allowed_sort_fields = ['event_beer_id', 'average_score', 'average_smell', 'average_aftertaste', 'average_taste', 'average_design']
         if sortby not in allowed_sort_fields:
             sortby = 'average_score'
         order = 'DESC' if order.lower() == 'desc' else 'ASC'
@@ -116,6 +116,7 @@ class RatingsService:
                 b.description AS description, 
                 b.brewery AS brewery, 
                 b.type AS type,
+                e.id AS event_beer_id,
                 ROUND(AVG(r.score), 1) AS average_score,
                 ROUND(AVG(r.smell), 1) AS average_smell,
                 ROUND(AVG(r.aftertaste), 1) AS average_aftertaste,
@@ -125,7 +126,7 @@ class RatingsService:
             INNER JOIN event_beer AS e ON b.id = e.beer_id
             LEFT JOIN rating AS r ON b.id = r.beer_id AND r.event_id = e.event_id
             WHERE e.event_id = :event_id
-            GROUP BY b.id
+            GROUP BY b.id, e.id
             ORDER BY {sortby} {order}
         """)
 

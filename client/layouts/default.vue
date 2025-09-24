@@ -4,6 +4,7 @@ import { ref, onMounted, watch } from 'vue';
 
 const menuItemsClass = "px-5";
 const isLoggedIn = ref(false);
+const showMobileMenu = ref(false);
 
 const { isAuthenticated, logout, checkAuth } = useAuth();
 
@@ -16,6 +17,10 @@ onMounted(() => {
 watch(isAuthenticated, (val) => {
   isLoggedIn.value = val;
 });
+
+function toggleMobileMenu() {
+  showMobileMenu.value = !showMobileMenu.value;
+}
 </script>
 
 <template>
@@ -25,22 +30,39 @@ watch(isAuthenticated, (val) => {
         <img src="/img/beer.svg"> 
         <div class="ml-3 text-2xl mt-1">BAJER KLUBBEN</div>
       </div>
-      <div class="middle-menu absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex">
+      <!-- Desktop menu -->
+      <div v-if="isLoggedIn" class="middle-menu absolute right-0 top-1/2 -translate-y-1/2 flex hidden md:block">
         <NuxtLink :class=menuItemsClass to="/events">Events</NuxtLink>
         <NuxtLink :class=menuItemsClass to="/toplist">Toplist</NuxtLink>
+        <NuxtLink :class=menuItemsClass to="/">Profile</NuxtLink>
+        <a @click="logout" :class=menuItemsClass>Log out</a>
       </div>
       <client-only>
-        <div class="right-menu absolute right-0 top-1/2  -translate-y-1/2 flex" v-if="!isLoggedIn">
-          <NuxtLink :class=menuItemsClass to="/login">Log ind</NuxtLink>
+        <div class="right-menu absolute right-0 top-1/2 -translate-y-1/2 flex" v-if="!isLoggedIn">
+          <NuxtLink :class=menuItemsClass to="/login">Login</NuxtLink>
           <NuxtLink :class=menuItemsClass to="/register">Register</NuxtLink>
         </div>
-        <div class="right-menu absolute right-0 top-1/2  -translate-y-1/2 flex" v-if="isLoggedIn">
-          <NuxtLink :class=menuItemsClass to="/">Profile</NuxtLink>
-          <a @click="logout" :class=menuItemsClass>Log out</a>
-        </div>
       </client-only>
+
+      <!-- Mobile hamburger -->
+      <div v-if="isLoggedIn" class="absolute right-0 top-1/2 -translate-y-1/2 md:hidden">
+        <button @click="toggleMobileMenu" class="focus:outline-none">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        <div v-if="showMobileMenu" class="absolute bg-black text-white rounded shadow-lg mt-2 right-0 z-50 w-max">
+          <NuxtLink :class="menuItemsClass + ' block py-2'" to="/events" @click="showMobileMenu = false">Events</NuxtLink>
+          <NuxtLink :class="menuItemsClass + ' block py-2'" to="/toplist" @click="showMobileMenu = false">Toplist</NuxtLink>
+          <NuxtLink :class="menuItemsClass + ' block py-2'" to="/" @click="showMobileMenu = false">Profile</NuxtLink>
+          <NuxtLink :class="menuItemsClass + ' block py-2'" to="/" @click="showMobileMenu = false && logout()">Log out</NuxtLink>
+        </div>
+      </div>
+
     </nav>
   </header>
-  <slot />
+  <div class="mr-2 ml-2">
+    <slot />
+  </div>
 </template>
 
