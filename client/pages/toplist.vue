@@ -20,7 +20,7 @@ const beerSearch = ref('');
   <div class="beerContainer max-w-3xl m-auto">
     <div v-if="beersPending">Loading beers...</div>
     <div v-if="event_beers" v-for="beer in event_beers.response">
-      <BeerCard :beer="beer" :toplist="true"/>
+      <BeerCard :beer="beer" :buttonsAvailable="false"/>
     </div>
   </div>
 </template>

@@ -4,7 +4,7 @@ import { computed } from 'vue';
 
 const props = defineProps<{
   beer: any;
-  toplist?: boolean;
+  buttonsAvailable: boolean | true;
 }>();
 
 const emit = defineEmits(['add-rating', 'view-ratings']);
@@ -44,7 +44,7 @@ const handleAddRating = () => {
       <RatingCircle :rating="bottle_design" name="Design"/>
       <RatingCircle :rating="average_score" name="Score"/>
     </div>
-    <div v-if="!props.toplist" class="flex md:w-max ml-auto mt-5">
+    <div v-if="props.buttonsAvailable" class="flex md:w-max ml-auto mt-5">
       <button @click="$emit('view-ratings', props.beer)" class="w-1/2 md:w-auto">View ratings</button>
       <button @click="handleAddRating" class="ml-5 yellow w-1/2 md:w-auto">Add rating</button>
    </div>

@@ -48,7 +48,7 @@ const handleRegister = async () => {
         </div>
         <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
         <div v-if="success" class="text-green-500 mb-4">{{ success }}</div>
-        <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white rounded">Register</button>
+        <button type="submit" class="w-full px-4 py-2 yellow rounded">Register</button>
       </form>
     </div>
   </div>

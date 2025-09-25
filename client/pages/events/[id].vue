@@ -9,14 +9,15 @@ import ViewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
 import type { Beer, Participants, ResponseTypeBeers, ResponseTypeParticipants } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import { onMounted, onUnmounted } from 'vue';
-import { io } from 'socket.io-client';
+import { socket } from '~/services/vars';
 
 const route = useRoute();
 const eventId = route.params.id;
 const event_beers = ref<Beer[]>([]);
 const event_data = ref<any>(null);
+const event_ended = ref(false);
 const sortOption = ref('new');
-const socket = io('http://localhost:8000'); // Flask-SocketIO default port
+
 
 const fetchBeersinEvent = async () => {
   const beerData = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
@@ -47,6 +48,7 @@ onMounted(async () => {
   const eventData = await beerService.events.getEventById(eventId as string);
   if (eventData?.data?.value?.response) {
     event_data.value = eventData.data.value.response;
+    event_ended.value = eventData.data.value.response.end_date < new Date().toISOString();
   }
   
   socket.on('rating_updated', async (data) => {
@@ -114,10 +116,10 @@ const closeViewRatingsModal = () => {
         <option value="top">Top Rated</option>
       </select>
       <div v-for="beer in event_beers" :key="beer.id">
-        <BeerCard :beer="beer" @add-rating="openRatingModal" @view-ratings="openViewRatingModal" />
+        <BeerCard :buttonsAvailable="event_ended ? false : true"  :beer="beer" @add-rating="openRatingModal" @view-ratings="openViewRatingModal" />
       </div>
     </div>
-    <button class="yellow mt-5 ml-auto block" @click="openModal">Add Beer to Event</button>
+    <button v-if="!event_ended" class="yellow mt-5 ml-auto block" @click="openModal">Add Beer to Event</button>
   </div>
 
   <!-- Modals -->

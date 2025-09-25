@@ -21,10 +21,10 @@ def seed():
     db.session.commit()
 
     event1 = Event(
-        name="Summer Beer Fest",
+        name="Marcus's Beer tasting event",
         start_date=datetime.utcnow(),
         end_date=datetime.utcnow() + timedelta(days=1),
-        description="A fun event to taste summer beers!"
+        description="Tasting event for craft beers",
     )
     db.session.add(event1)
     db.session.commit()
@@ -44,8 +44,8 @@ def seed():
     db.session.add_all([event_beer1, event_beer2])
     db.session.commit()
 
-    rating1 = Rating(event_id=event1.id, beer_id=beer1.id, user_id=user1.id, taste=8, aftertaste=7, smell=8, design=5, score=7)
-    rating2 = Rating(event_id=event1.id, beer_id=beer2.id, user_id=user2.id, taste=9, aftertaste=8, smell=7, design=6, score=8)
+    rating1 = Rating(event_id=event1.id, beer_id=beer1.id, user_id=user1.id, taste=1, aftertaste=2, smell=3, design=4, score=5)
+    rating2 = Rating(event_id=event1.id, beer_id=beer2.id, user_id=user2.id, taste=5, aftertaste=4, smell=3, design=2, score=1)
     db.session.add_all([rating1, rating2])
     db.session.commit()
 
