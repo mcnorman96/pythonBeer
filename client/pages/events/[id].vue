@@ -6,7 +6,7 @@ import BeerCard from '~/components/beerCard.vue';
 import AddRatingModal from '~/components/modals/AddRatingModal.vue';
 import AddBeerModal from '~/components/modals/AddBeerModal.vue';
 import ViewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
-import type { Beer, Participants, ResponseTypeBeers, ResponseTypeParticipants } from '~/types/types';
+import type { Beer, Participants, ResponseTypeBeers, ResponseTypeParticipants, Event } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import { onMounted, onUnmounted } from 'vue';
 import { socket } from '~/services/vars';
@@ -14,10 +14,9 @@ import { socket } from '~/services/vars';
 const route = useRoute();
 const eventId = route.params.id;
 const event_beers = ref<Beer[]>([]);
-const event_data = ref<any>(null);
+const event_data = ref<Event>(null);
 const event_ended = ref(false);
 const sortOption = ref('new');
-
 
 const fetchBeersinEvent = async () => {
   const beerData = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
@@ -30,15 +29,15 @@ const sortBeers = () => {
   if (Array.isArray(event_beers.value)) {
     let sorted = [...event_beers.value];
     if (sortOption.value === 'new') {
-      sorted.sort((a, b) => a.event_beer_id - b.event_beer_id);
+      sorted.sort((a: Beer, b: Beer) => a.event_beer_id - b.event_beer_id);
     } else if (sortOption.value === 'top') {
-      sorted.sort((a, b) => Number(b.average_score) - Number(a.average_score));
+      sorted.sort((a: Beer, b: Beer) => Number(b.average_score) - Number(a.average_score));
     }
     event_beers.value = sorted;
   }
 };
 
-watch(sortOption, (newVal) => {
+watch(sortOption, (newVal: string) => {
   sortBeers();
 });
 
@@ -51,14 +50,14 @@ onMounted(async () => {
     event_ended.value = eventData.data.value.response.end_date < new Date().toISOString();
   }
   
-  socket.on('rating_updated', async (data) => {
+  socket.on('rating_updated', async (data: Event) => {
     if (String(data.event_id) === String(eventId)) {
       await fetchBeersinEvent();
       sortBeers();
     }
   });
 
-  socket.on('beer_added', async (data) => {
+  socket.on('beer_added', async (data: Event) => {
     if (String(data.event_id) === String(eventId)) {
       await fetchBeersinEvent();
       sortBeers();

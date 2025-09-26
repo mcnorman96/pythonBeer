@@ -15,8 +15,6 @@ const handleLogin = async () => {
   try {
     const response = await authService.login({ username: username.value, password: password.value });
 
-    console.log(response);
-    
     if (!response.ok) {
       throw new Error('Login failed');
     }

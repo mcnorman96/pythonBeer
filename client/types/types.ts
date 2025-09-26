@@ -1,7 +1,9 @@
-export interface EventInterface {
+export interface Event {
   id: Number,
   name: String,
   start_date: String
+  end_date: String,
+  description: String,
 }
 
 export interface Beer {

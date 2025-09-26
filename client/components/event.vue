@@ -1,19 +1,15 @@
 <script setup lang="ts">
-import type { EventInterface } from '~/types/types';
+import type { Event, Beer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 
-interface ResponseType {
-  response: Array<EventInterface>;
-}
-
 const props = defineProps<{
-  event: any;
+  event: Event | null;
 }>();
 
 const event = props.event || '';
 const newDate = new Date(event.start_date);
 const eventDate = newDate.toLocaleDateString();
-const event_beers = ref<any>([]);
+const event_beers = ref<Beer[]>([]);
 const event_status = ref('');
 
 if (event) {
@@ -38,8 +34,13 @@ const getTrophy = (position: number) => {
 <template>
   <NuxtLink :to="{ name: 'events-id', params: { id: event.id } }" class="mt-5 flex flex-wrap justify-between bg-white border-gray-400 border-solid shadow-md rounded-2xl p-6 hover:shadow-lg transition" style="border-width: 0.5px;">
     <div class="leftside">
-      <div class="date">
-        {{ eventDate }}
+      <div class="date text-xs flex items-center">
+        <div class="mr-1">
+          {{ eventDate }} →
+        </div>
+        <div :class="'status text-xs ' + (event_status === 'Active' ? 'text-green-600' : 'text-red-600')">
+          {{ event_status }}
+        </div>
       </div>
       <div class="name font-bold">    
         {{ event.name }}
@@ -47,13 +48,10 @@ const getTrophy = (position: number) => {
       <div class="description text-sm">
         {{ event.description }}
       </div>
-      <div :class="'status text-sm mt-2 ' + (event_status === 'Active' ? 'text-green-600' : 'text-red-600')">
-        Status: {{ event_status }}
-      </div>
     </div>
     <div class="rightside flex flex-col justify-center" v-if="event_beers">
-      <div class="col flex" v-for="(beers, index) in event_beers.slice(0, 3)" :key="index">
-        <img class="mr-2" :src="'img/' + getTrophy(index + 1)">
+      <div class="col flex text-sm items-center" v-for="(beers, index) in event_beers.slice(0, 3)" :key="index">
+        <img class="mr-2 h-5" :src="'img/' + getTrophy(index + 1)">
         {{ beers.name }}
       </div>
     </div>

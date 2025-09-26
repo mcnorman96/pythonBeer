@@ -14,7 +14,7 @@ onMounted(() => {
 });
 
 // Watch for changes in authentication state
-watch(isAuthenticated, (val) => {
+watch(isAuthenticated, (val: boolean) => {
   isLoggedIn.value = val;
 });
 
@@ -63,7 +63,7 @@ function toggleMobileMenu() {
 
     </nav>
   </header>
-  <div class="mr-2 ml-2">
+  <div class="mr-2 ml-2 mb-5">
     <slot />
   </div>
 </template>

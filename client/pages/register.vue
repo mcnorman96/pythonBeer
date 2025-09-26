@@ -17,7 +17,6 @@ const handleRegister = async () => {
   try {
     const response = await authService.registerUser({ username: username.value, password: password.value, email: email.value });
 
-    console.log('Registration response:', response);
     if (!response.ok) {
       throw new Error('Registration failed');
     }

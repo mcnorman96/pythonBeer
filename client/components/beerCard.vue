@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import RatingCircle from './ratingCircle.vue';
 import { computed } from 'vue';
+import type { Beer } from '~/types/types';
 
 const props = defineProps<{
-  beer: any;
+  beer: Beer;
   buttonsAvailable: boolean | true;
 }>();
 

@@ -22,7 +22,6 @@ const saveEvent = () => {
 };
 
 const { data, error, pending } = await beerService.events.getEvents();
-console.log(data.value);
 
 </script>
 

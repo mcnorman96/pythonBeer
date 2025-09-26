@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import beerService from '~/services/BeerService/beerService';
+import type { Beer } from '~/types/types';
 
-const props = defineProps<{ beer: any }>();
+const props = defineProps<{ beer: Beer }>();
 const emit = defineEmits(['close']);
 const route = useRoute();
 const eventId = route.params.id;

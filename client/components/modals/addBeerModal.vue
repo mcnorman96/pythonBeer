@@ -79,12 +79,11 @@ const addExistingBeerToEvent = async (beerId: number) => {
 </script>
 
 <template>
-    <!-- Unified Modal for Adding Beer -->
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white p-6 rounded shadow-lg w-96 relative m-2 max-h-[80vh] overflow-y-auto">
       <button @click="handleClose" class="bg-black text-white rounded absolute top-2 right-2">X</button>
       <h2 class="text-xl mb-4">Add Beer to Event</h2>
-      <!-- Add Existing Beer Search with Dropdown -->
+      
       <div class="mb-6 relative">
         <h3 class="font-semibold mb-2">Add Existing Beer</h3>
         <input v-model="beerSearch" class="border p-2 w-full mb-2" placeholder="Search for beer..." @focus="showDropdown = filteredBeers.length > 0" @blur="setTimeout(() => showDropdown = false, 200)" />
@@ -92,6 +91,7 @@ const addExistingBeerToEvent = async (beerId: number) => {
           <li v-for="beer in filteredBeers" :key="beer.id" @mousedown.prevent="addExistingBeerToEvent(beer.id)" class="px-4 py-2 cursor-pointer hover:bg-gray-100">{{ beer.name }}</li>
         </ul>
       </div>
+      
       <div>
         <h3 class="font-semibold mb-2">Add New Beer</h3>
         <label class="block mb-2">Name</label>
