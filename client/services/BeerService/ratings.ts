@@ -10,31 +10,54 @@ export const ratings = {
     design: number;
     score: number;
   }) => {
-    const formdata = new FormData();
-    Object.entries(ratingData).forEach(([key, value]) => {
-      formdata.append(key, value.toString());
-    });
-    const { data, error, pending } = await useFetch(`${API_URL}/ratings/new`, {
+    if (!ratingData.event_id || !ratingData.beer_id || ratingData.taste == null || ratingData.aftertaste == null || ratingData.smell == null || ratingData.design == null || ratingData.score == null) {
+      return { success: false, error: 'All fields are required' };
+    }
+
+    const res = await fetch(`${API_URL}/ratings/new`, {
       method: 'POST',
-      body: formdata,
+      body: JSON.stringify(ratingData),
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'content-type': 'application/json'
       }
     });
-    return { data, error, pending };
+    
+    if (!res.ok) {
+      const error = await res.text();
+      return { success: false, error };
+    }
+
+    return { success: true, 'message': 'Rating added successfully' };
   },
 
   getRating: async (eventId: string, beerId: string) => {
-    const { data, error, pending } = await useFetch(`${API_URL}/ratings/getRating?event_id=${eventId}&beer_id=${beerId}`, {
+    if (!eventId || !beerId) {
+      return { success: false, error: 'Event ID and Beer ID are required' };
+    }
+
+    const res = await fetch(`${API_URL}/ratings/getRating?event_id=${eventId}&beer_id=${beerId}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'content-type': 'application/json'
       }
     });
-    return { data, error, pending };
+
+    if (!res.ok) {
+      const error = await res.text();
+      return { success: false, error };
+    }
+
+    const data = await res.json();
+    return { success: true, response: data };
   },
 
   getAllRatingsForBeer: async (eventId: string, beerId: string) => {
+    if (!eventId || !beerId) {
+      return { success: false, error: 'Event ID and Beer ID are required' };
+    }
+
     const { data, error, pending } = await useFetch(`${API_URL}/ratings/all?event_id=${eventId}&beer_id=${beerId}`, {
       method: 'GET',
       headers: {

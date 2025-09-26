@@ -1,22 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import beerService from '~/services/BeerService/beerService';
-import type { Beer } from '~/types/types';
+import type { Beer, Rating } from '~/types/types';
 
 const props = defineProps<{ beer: Beer }>();
 const emit = defineEmits(['close']);
 const route = useRoute();
 const eventId = route.params.id;
 
+const getRating = ref<Rating | null>(null);
 const taste = ref(0);
 const aftertaste = ref(0);
 const smell = ref(0);
 const design = ref(0);
 const total_score = ref(0);
 
-const { data: beerRating, error, pending } = await beerService.ratings.getRating(eventId as string, props.beer.id);
+onMounted(async () => {
+  const rating: Response<Rating> = await beerService.ratings.getRating(eventId as string, props.beer.id);
+  getRating.value = rating.response;
+});
 
-watch(beerRating, (beerRated) => {
+watch(getRating, (beerRated: Response<Rating>) => {
   if (beerRated && beerRated.response) {
     taste.value = beerRated.response.taste;
     aftertaste.value = beerRated.response.aftertaste;

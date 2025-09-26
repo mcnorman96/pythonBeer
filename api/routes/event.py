@@ -6,22 +6,22 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 newEvents = Blueprint('new_events', __name__)
-@newEvents.route('/new', methods=['GET', 'POST'])
+@newEvents.route('/new', methods=['POST'])
 def new_events():
-  if request.method == 'POST' and all(k in request.form for k in ('name', 'description')):
-    name = request.form.get('name', '')
-    description = request.form.get('description', '')
-    
-    try:
-      if name and description:
-        EventService.create(name, description)
-        return jsonify({'message': 'Events created succesfully'}), 201
-      else:
-        return jsonify({'error': 'Please fill out all fields.'}), 400
-    except ValueError as e:
-      return jsonify({'error': str(e)}), 400
-  else:
-    return jsonify({'error': 'Please fill out all fields.'}), 400
+  data = request.get_json()
+  if not data:
+      data = request.form.to_dict()
+  name = data.get('name')
+  description = data.get('description')
+
+  try:
+    if name and description:
+      EventService.create(name, description)
+      return jsonify({'message': 'Events created successfully'}), 201
+    else:
+      return jsonify({'error': 'Please fill out all fields.'}), 400
+  except ValueError as e:
+    return jsonify({'error': str(e)}), 400
 
 
 allEvents = Blueprint('all_events', __name__)

@@ -7,33 +7,34 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 newRatings = Blueprint('new_ratings', __name__)
-@newRatings.route('/new', methods=['GET', 'POST'])
+@newRatings.route('/new', methods=['POST'])
 def new_ratings():
-  if request.method == 'POST' and all(k in request.form for k in ('event_id', 'beer_id', 'taste', 'aftertaste', 'smell', 'design', 'score')):
-    user_id = get_user_id_from_token()
-    # Ensure user_id is an integer and not a tuple or None
-    if not isinstance(user_id, int):
-        logger.error(f"Invalid user_id extracted: {user_id} (type: {type(user_id)})")
-        return jsonify({'error': 'Unauthorized'}), 401
+  data = request.get_json()
+  if not data:
+      data = request.form.to_dict()
 
-    event_id = request.form['event_id']
-    beer_id = request.form['beer_id']
-    taste = request.form['taste']
-    aftertaste = request.form['aftertaste']
-    smell = request.form['smell']
-    design = request.form['design']
-    score = request.form['score']
+  user_id = get_user_id_from_token()
+  # Ensure user_id is an integer and not a tuple or None
+  if not isinstance(user_id, int):
+      logger.error(f"Invalid user_id extracted: {user_id} (type: {type(user_id)})")
+      return jsonify({'error': 'Unauthorized'}), 401
 
-    try:
-      if event_id and user_id and beer_id and taste and aftertaste and smell and design and score:
-        RatingsService.create(event_id, user_id, beer_id, taste, aftertaste, smell, design, score)
-        return jsonify({'message': 'Ratings created succesfully'}), 201
-      else:
-        return jsonify({'error': 'Please fill out all fields.'}), 400
-    except ValueError as e:
-      return jsonify({'error': str(e), 'user_id': user_id}), 400
-  else:
-    return jsonify({'error': 'Please fill out all fields.'}), 400
+  event_id = data.get('event_id')
+  beer_id = data.get('beer_id')
+  taste = data.get('taste')
+  aftertaste = data.get('aftertaste')
+  smell = data.get('smell')
+  design = data.get('design')
+  score = data.get('score')
+
+  try:
+    if event_id and user_id and beer_id and taste and aftertaste and smell and design and score:
+      RatingsService.create(event_id, user_id, beer_id, taste, aftertaste, smell, design, score)
+      return jsonify({'message': 'Ratings created succesfully'}), 201
+    else:
+      return jsonify({'error': 'Please fill out all fields.'}), 400
+  except ValueError as e:
+    return jsonify({'error': str(e), 'user_id': user_id}), 400
 
 
 getRating = Blueprint('get_ratings', __name__)

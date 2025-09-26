@@ -1,44 +1,46 @@
-import type { ResponseTypeBeers } from "~/types/types";
+import type { Beer, ResponseTypeBeers } from "~/types/types";
 import { API_URL } from "../vars";
 
-type beerData = {
-  name: string,
-  description: string,
-  brewery: string,
-  type: string
-}
-
 export const eventBeer = {
-  newBeer: async (beer: beerData) => {
-    const formData = new FormData();
-    formData.append('name', beer.name);
-    formData.append('description', beer.description);
-    formData.append('brewery', beer.brewery);
-    formData.append('type', beer.type);
-
-    const { data, error } = await useFetch(`${API_URL}/beer/new`, {
-      method: 'POST',
-      body: formData
-    });
-    
-    if (error.value) {
-      return { success: false, error: error.value };
+  newBeer: async (beer: Beer) => {
+    if (!beer.brewery || !beer.description || !beer.name || !beer.type) {
+      return { success: false, error: 'All fields are required' };
     }
     
-    return { success: true, data: data.value };
+    const res = await fetch(`${API_URL}/beer/new`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(beer)
+    });
+
+    if (!res.ok) {
+      const error = await res.text();
+      return { success: false, error };
+    }
+
+    const data = await res.json();
+
+    return { success: true, response: data };
   },
 
   addBeerToEvent: async (eventId: string, beerId: string) => {
-    const formData = new FormData();
-    formData.append('beer_id', beerId);
+    if (!eventId || !beerId) {
+      return { success: false, error: 'Event ID and Beer ID are required' };
+    }
 
-    const { error } = await useFetch(`${API_URL}/events/${eventId}/beers`, {
+    const res = await fetch(`${API_URL}/events/${eventId}/beers`, {
       method: 'POST',
-      body: formData
+      body: JSON.stringify({ beer_id: beerId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
-    if (error.value) {
-      return { success: false, error: error.value };
+    if (!res.ok) {
+      const error = await res.text();
+      return { success: false, error };
     }
     return { success: true };
   },

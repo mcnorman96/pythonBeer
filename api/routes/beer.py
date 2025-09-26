@@ -5,46 +5,48 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 newBeer = Blueprint('new_beer', __name__)
-@newBeer.route('/new', methods=['GET', 'POST'])
+@newBeer.route('/new', methods=['POST'])
 def new_beer():
-	if request.method == 'POST' and all(k in request.form for k in ('name', 'description', 'brewery', 'type')):
-          name = request.form['name']
-          description = request.form['description']
-          brewery = request.form['brewery']
-          beer_type = request.form['type']
+    data = request.get_json()
+    if not data:
+        data = request.form.to_dict()
 
-          try:
-            if name and description:
-                beer = BeerService.create(
-                   name, 
-                   description, 
-                   brewery, 
-                   beer_type
-                )
+    name = data.get('name')
+    description = data.get('description')
+    brewery = data.get('brewery')
+    beer_type = data.get('type')
 
-                return jsonify({
-                   'message': 'Beer created successfully', 
-                   'beer': beer.to_dict()
-                   }), 201
-            else:
-                return jsonify({'error': 'Please fill out all fields.'}), 400
-          except ValueError as e:
-            return jsonify({'error': str(e)}), 400
+    try:
+      if name and description and brewery and beer_type:
+          beer = BeerService.create(
+              name, 
+              description, 
+              brewery, 
+              beer_type
+          )
+
+          return jsonify({
+              'message': 'Beer created successfully', 
+              'response': beer.to_dict()
+              }), 201
+      else:
+          return jsonify({'error': 'Please fill out all fields.'}), 400
+    except ValueError as e:
+      return jsonify({'error': str(e)}), 400
 
 
 allBeers = Blueprint('all_beers', __name__)
-@allBeers.route('/', methods=['GET', 'POST'])
+@allBeers.route('/', methods=['GET'])
 def all_beers():
-    if request.method == 'GET':
-        try:
-            beers = BeerService.get_all()
-            if beers:
-                beers_list = [beer.to_dict() for beer in beers]
-                return jsonify({'response': beers_list}), 200
-            else:
-                return jsonify({'response': []}), 200
-        except ValueError as e:
-            return jsonify({'error': str(e)}), 400
+    try:
+        beers = BeerService.get_all()
+        if beers:
+            beers_list = [beer.to_dict() for beer in beers]
+            return jsonify({'response': beers_list}), 200
+        else:
+            return jsonify({'response': []}), 200
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
           
 
 searchBeers = Blueprint('search_beers', __name__)
@@ -57,7 +59,7 @@ def search_beers():
     if beers:
       return jsonify(beers), 200
     else:
-      return jsonify({'message': 'No beers found'}), 404
+      return jsonify({'message': 'No beers found'}), 204
   else:
     return jsonify({'message': 'No search query provided'}), 400
 

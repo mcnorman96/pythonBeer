@@ -17,6 +17,9 @@ class EventParticipantService:
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 
+        if EventParticipantORM.query.filter_by(event_id=event_id, user_id=user_id).first():
+            raise ValueError("User is already registered for this event")
+
         event_participant = EventParticipantORM(
             event_id=validated_event_participant.event_id,
             user_id=validated_event_participant.user_id

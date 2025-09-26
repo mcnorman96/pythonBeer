@@ -2,20 +2,26 @@ import { API_URL } from '../vars';
 
 export const authService = {
   registerUser: async (userData: { username: string; password: string; email: string }) => {
-    const form = new FormData();
-    form.append('username', userData.username);
-    form.append('password', userData.password);
-    form.append('email', userData.email);
-    
+    if (!userData.username || !userData.password || !userData.email) {
+      throw new Error('All fields are required');
+    }
+
     const response = await fetch(`${API_URL}/auth/register`, {
       method: 'POST',
-      body: form
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
     });
     
     return response;
   },
 
   login: async (credentials: { username: string; password: string }) => {
+    if (!credentials.username || !credentials.password) {
+      throw new Error('All fields are required');
+    }
+
     const response = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: {

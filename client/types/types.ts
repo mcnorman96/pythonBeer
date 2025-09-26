@@ -24,6 +24,18 @@ export interface User {
   password: String,
   email: String 
 }
+
+export const Rating = {
+  id: Number,
+  event_id: String,
+  beer_id: String,
+  taste: Number,
+  aftertaste: Number,
+  smell: Number,
+  design: Number,
+  score: Number
+}
+
 export interface ResponseTypeBeers {
   response: Array<Beer>;
 }

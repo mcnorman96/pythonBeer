@@ -29,7 +29,7 @@ def get_user_id_from_token():
         return None  # Or handle invalid token
 
 register = Blueprint('register', __name__)
-@register.route('/register', methods=['GET', 'POST'])
+@register.route('/register', methods=['POST'])
 def register_user():
     data = request.get_json(silent=True)
     if not data: 
@@ -59,7 +59,6 @@ login = Blueprint('login', __name__)
 def login_user():
 
     data = request.get_json()
-
     username = data.get('username')
     password = data.get('password')
 
