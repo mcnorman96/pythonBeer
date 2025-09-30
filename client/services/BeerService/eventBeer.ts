@@ -23,11 +23,13 @@ export const eventBeer: EventBeerService = {
       },
       body: JSON.stringify(beer)
     });
-    if (!res.ok) {
-      const error = await res.text();
-      return { success: false, error };
-    }
+
     const data = await res.json();
+    
+    if (!res.ok) {
+      return { success: false, error: data.error };
+    }
+
     return { success: true, response: data };
   },
 
@@ -43,8 +45,8 @@ export const eventBeer: EventBeerService = {
       },
     });
     if (!res.ok) {
-      const error = await res.text();
-      return { success: false, error };
+      const data = await res.json();
+      return { success: false, error: data.error };
     }
     return { success: true };
   },
@@ -62,11 +64,12 @@ export const eventBeer: EventBeerService = {
 
   async toplistBeersInEvent(eventId: string): Promise<Response> {
     const response = await fetch(`${API_URL}/ratings/toplist/${eventId}`);
-    if (!response.ok) {
-      const error = await response.text();
-      return { success: false, error };
-    }
     const data = await response.json();
+
+    if (!response.ok) {
+      return { success: false, error: data.error };
+    }
+
     return { success: true, response: data.response };
   },
 

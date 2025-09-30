@@ -20,12 +20,13 @@ export const events: EventsService = {
       body: JSON.stringify(eventData),
     });
     
+    const data = await res.json();
+
     if (!res.ok) {
-      const error = await res.text();
-      return { success: false, error };
+      return { success: false, error: data.error };
     }
 
-    return { success: true, response: await res.json() };
+    return { success: true, response: data };
   },
 
   async getEvents(): Promise<{ data: any; error: any; pending: any }> {

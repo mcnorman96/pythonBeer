@@ -14,6 +14,7 @@ const aftertaste = ref<number>(0);
 const smell = ref<number>(0);
 const design = ref<number>(0);
 const total_score = ref<number>(0);
+const error = ref<string | null>(null);
 
 onMounted(async () => {
   const rating: Response<Rating> = await beerService.ratings.getRating(eventId as string, props.beer.id);
@@ -40,7 +41,16 @@ const handleSave = async () => {
     design: design.value,
     score: total_score.value
   });
-  emit('close');
+  console.log('saveRating', saveRating);
+  if (saveRating.error) {
+    // Handle error (e.g., show a notification)
+    console.error('Error saving rating:', saveRating.error);
+    error.value = saveRating.error;
+    return;
+  } else {
+    error.value = null;
+    emit('close');
+  }
 };
 
 const handleClose = () => {
@@ -67,6 +77,9 @@ const handleClose = () => {
       </div>
       <div class="flex justify-end space-x-2">
         <button @click="handleSave" class="px-4 py-2 w-full yellow rounded">Save</button>
+      </div>
+      <div v-if="error" class="mt-4 text-red-500">
+        {{ error }}
       </div>
     </div>
   </div>

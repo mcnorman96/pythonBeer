@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from services.beer_services import BeerService
+from utils.utils import get_json_data, get_valid_user_id
+
 import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -7,16 +9,14 @@ logger = logging.getLogger(__name__)
 newBeer = Blueprint('new_beer', __name__)
 @newBeer.route('/new', methods=['POST'])
 def new_beer():
-    data = request.get_json()
-    if not data:
-        data = request.form.to_dict()
-
-    name = data.get('name')
-    description = data.get('description')
-    brewery = data.get('brewery')
-    beer_type = data.get('type')
-
     try:
+      get_valid_user_id()  # Ensure user is authenticated
+      data = get_json_data()
+      name = data.get('name')
+      description = data.get('description')
+      brewery = data.get('brewery')
+      beer_type = data.get('type')
+
       if name and description and brewery and beer_type:
           beer = BeerService.create(
               name, 
@@ -33,6 +33,8 @@ def new_beer():
           return jsonify({'error': 'Please fill out all fields.'}), 400
     except ValueError as e:
       return jsonify({'error': str(e)}), 400
+    except Exception as e:
+      return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
 
 
 allBeers = Blueprint('all_beers', __name__)
@@ -52,14 +54,22 @@ def all_beers():
 searchBeers = Blueprint('search_beers', __name__)
 @searchBeers.route('/search', methods=['GET', 'POST'])
 def search_beers():
-  search_query = request.args.get('s', '')
-  if search_query:
-    beers = BeerService.search_by_name(search_query)
-    logger.debug(f"Search query: {search_query}, Result: {beers}")
-    if beers:
-      return jsonify({'response': beers}), 200
+  try: 
+    search_query = request.args.get('s', '')
+    if search_query:
+      beers = BeerService.search_by_name(search_query)
+      logger.debug(f"Search query: {search_query}, Result: {beers}")
+      if beers:
+        return jsonify({'response': beers}), 200
+      else:
+        return jsonify({'message': 'No beers found'}), 204
     else:
-      return jsonify({'message': 'No beers found'}), 204
-  else:
-    return jsonify({'message': 'No search query provided'}), 400
+      return jsonify({'message': 'No search query provided'}), 400
+     
+  except ValueError as e:
+      return jsonify({'error': str(e)}), 400
+  except Exception as e:
+      return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
+
+  
 

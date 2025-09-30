@@ -35,10 +35,12 @@ export const ratings: RatingsService = {
         'content-type': 'application/json'
       }
     });
+
     if (!res.ok) {
-      const error = await res.text();
-      return { success: false, error };
+      const data = await res.json();
+      return { success: false, error: data.error };
     }
+
     return { success: true, 'message': 'Rating added successfully' };
   },
 
@@ -53,11 +55,12 @@ export const ratings: RatingsService = {
         'content-type': 'application/json'
       }
     });
-    if (!res.ok) {
-      const error = await res.text();
-      return { success: false, error };
-    }
     const data = await res.json();
+
+    if (!res.ok) {
+      return { success: false, error: data.error };
+    }
+
     return { success: true, response: data };
   },
 
