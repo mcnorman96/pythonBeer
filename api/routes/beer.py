@@ -57,7 +57,7 @@ def search_beers():
     beers = BeerService.search_by_name(search_query)
     logger.debug(f"Search query: {search_query}, Result: {beers}")
     if beers:
-      return jsonify(beers), 200
+      return jsonify({'response': beers}), 200
     else:
       return jsonify({'message': 'No beers found'}), 204
   else:

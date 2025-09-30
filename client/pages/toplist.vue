@@ -11,8 +11,8 @@ const { data: event_beers, pending: beersPending, error: beersError } = await be
 
 // For adding existing beers
 const filteredBeers = ref<Beer[]>([]);
-const selectedBeerId = ref('');
-const beerSearch = ref('');
+const selectedBeerId = ref<string>('');
+const beerSearch = ref<string>('');
 </script>
 
 <template>

@@ -1,10 +1,6 @@
-Need to make decimals working
-
 Need to make types for everything in client
 
 Look how to optimize the api calls
-
-change from form data to json calls for post endpoints 
 
 Make some validations before sending to the endpoints 
 

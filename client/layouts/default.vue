@@ -24,7 +24,7 @@ function toggleMobileMenu() {
 </script>
 
 <template>
-  <header class="bg-black h-24 w-screen text-white relative">
+  <header class="bg-zinc-800 h-24 w-screen text-white relative">
     <nav>
       <div class="logo absolute left-0 top-1/2 -translate-y-1/2 px-5">
         <a href="/events" class="flex items-center">
@@ -36,7 +36,6 @@ function toggleMobileMenu() {
       <div v-if="isLoggedIn" class="middle-menu absolute right-0 top-1/2 -translate-y-1/2 flex hidden md:block">
         <NuxtLink :class=menuItemsClass to="/events">Events</NuxtLink>
         <NuxtLink :class=menuItemsClass to="/toplist">Toplist</NuxtLink>
-        <NuxtLink :class=menuItemsClass to="/">Profile</NuxtLink>
         <NuxtLink @click="logout" to="/login" :class=menuItemsClass>Log out</NuxtLink>
       </div>
       <client-only>
@@ -53,10 +52,9 @@ function toggleMobileMenu() {
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
         </button>
-        <div v-if="showMobileMenu" class="absolute bg-black text-white rounded shadow-lg mt-2 right-0 z-50 w-max">
+        <div v-if="showMobileMenu" class="absolute bg-zinc-800 text-white rounded shadow-lg mt-2 right-0 z-50 w-max">
           <NuxtLink :class="menuItemsClass + ' block py-2'" to="/events" @click="showMobileMenu = false">Events</NuxtLink>
           <NuxtLink :class="menuItemsClass + ' block py-2'" to="/toplist" @click="showMobileMenu = false">Toplist</NuxtLink>
-          <NuxtLink :class="menuItemsClass + ' block py-2'" to="/" @click="showMobileMenu = false">Profile</NuxtLink>
           <NuxtLink :class="menuItemsClass + ' block py-2'" to="/login" @click="showMobileMenu = false && logout()">Log out</NuxtLink>
         </div>
       </div>

@@ -1,31 +1,30 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { watch } from 'vue';
-import type { Beer } from '~/types/types';
+import type { Beer, newBeer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 
 const route = useRoute();
-const eventId = route.params.id;
-const emit = defineEmits(['close', 'save']);
+const eventId = ref<string>(route.params.id);
+const emit = defineEmits<{(e: 'close'): void; (e: 'save'): void}>();
 
-const beerName = ref('');
-const beerDescription = ref('');
-const beerBrewery = ref('');
-const beerType = ref('');
+const beerName = ref<string>('');
+const beerDescription = ref<string>('');
+const beerBrewery = ref<string>('');
+const beerType = ref<string>('');
 
-// For adding existing beers
 const filteredBeers = ref<Beer[]>([]);
-const selectedBeerId = ref('');
-const beerSearch = ref('');
-const showDropdown = ref(false);
+const selectedBeerId = ref<Beer | null>(null);
+const beerSearch = ref<string>('');
+const showDropdown = ref<boolean>(false);
 
-watch(beerSearch, async (val) => {
+watch(beerSearch, async (val: string) => {
   if (val.length < 2) {
     filteredBeers.value = [];
     showDropdown.value = false;
     return;
   }
-  const { data: searchedBeers } = await beerService.eventBeer.searchBeer(val);
+  const { data: searchedBeers }: Beer[] = await beerService.eventBeer.searchBeer(val);
   filteredBeers.value = searchedBeers.value || [];
   showDropdown.value = filteredBeers.value.length > 0;
 });
@@ -36,7 +35,7 @@ const handleClose = () => {
   beerDescription.value = '';
   beerBrewery.value = '';
   beerType.value = '';
-  selectedBeerId.value = '';
+  selectedBeerId.value = null;
   beerSearch.value = '';
   showDropdown.value = false;
   filteredBeers.value = [];
@@ -44,18 +43,22 @@ const handleClose = () => {
 
 const saveBeer = async () => {
   try {
-    const createBeer = await beerService.eventBeer.newBeer({
+    const createBeer: Response = await beerService.eventBeer.newBeer({
       name: beerName.value,
       description: beerDescription.value,
       brewery: beerBrewery.value,
       type: beerType.value
     });
 
-    const beerIdString = createBeer.data.beer.id.toString();
-    const addBeerToEvent = await beerService.eventBeer.addBeerToEvent(eventId as string, beerIdString);
+    if (!createBeer.success || !createBeer.response) {
+      console.error('Failed to create beer:', createBeer.error);
+      return;
+    }
+
+    const beerIdString: string = createBeer.response.id.toString();
+    const addBeerToEvent: Response = await beerService.eventBeer.addBeerToEvent(eventId as string, beerIdString);
 
     if (!addBeerToEvent.success) {
-      // Handle error
       console.error(addBeerToEvent.error);
     }
   } catch (error) {
@@ -81,7 +84,7 @@ const addExistingBeerToEvent = async (beerId: number) => {
 <template>
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white p-6 rounded shadow-lg w-96 relative m-2 max-h-[80vh] overflow-y-auto">
-      <button @click="handleClose" class="bg-black text-white rounded absolute top-2 right-2">X</button>
+      <button @click="handleClose" class="bg-zinc-800 text-white rounded absolute top-2 right-2">X</button>
       <h2 class="text-xl mb-4">Add Beer to Event</h2>
       
       <div class="mb-6 relative">

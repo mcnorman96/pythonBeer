@@ -4,6 +4,7 @@ from typing import List,Dict, Any
 from pydantic import ValidationError
 from models.event import Event as EventORM
 from schemas.event import EventsSchema
+from datetime import timedelta
 
 class EventService:
     @staticmethod
@@ -16,10 +17,13 @@ class EventService:
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 
+        startDate = datetime.utcnow()
+        endDate = startDate + timedelta(days=1)
+
         events = EventORM(
             name=validated_event.name,
-            start_date=datetime.utcnow(),
-            end_date=None,
+            start_date=startDate,
+            end_date=endDate,
             description=validated_event.description
         )
         db.session.add(events)

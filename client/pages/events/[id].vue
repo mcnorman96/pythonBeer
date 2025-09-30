@@ -14,18 +14,18 @@ import { socket } from '~/services/vars';
 const route = useRoute();
 const eventId = route.params.id;
 const event_beers = ref<Beer[]>([]);
-const event_data = ref<Event>(null);
-const event_ended = ref(false);
-const sortOption = ref('new');
+const event_data = ref<Event | null>(null);
+const event_ended = ref<boolean>(false);
+const sortOption = ref<string>('new');
 
-const fetchBeersinEvent = async () => {
-  const beerData = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
+const fetchBeersinEvent: () => Promise<void> = async () => {
+  const beerData: ResponseTypeBeers = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
   if (beerData.success && beerData.response) {
       event_beers.value = beerData.response;
   }
 }
 
-const sortBeers = () => {
+const sortBeers: () => void = () => {
   if (Array.isArray(event_beers.value)) {
     let sorted = [...event_beers.value];
     if (sortOption.value === 'new') {
@@ -71,9 +71,9 @@ onUnmounted(() => {
 
 
 // Modal state
-const showModal = ref(false);
-const ratingModal = ref(false);
-const viewRatingsModal = ref(false);
+const showModal = ref<boolean>(false);
+const ratingModal = ref<boolean>(false);
+const viewRatingsModal = ref<boolean>(false);
 const selectedBeerForRating = ref<Beer | null>(null);
 
 // Add Beer Modal functions

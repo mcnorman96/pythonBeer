@@ -4,11 +4,11 @@ import { useAuth } from '~/composables/useAuth';
 import { useRouter } from 'vue-router';
 import { authService } from '~/services/AuthService/authService';
 
-const username = ref('');
-const password = ref('');
-const email = ref('');
-const success = ref('');
-const error = ref('');
+const username = ref<string>('');
+const password = ref<string>('');
+const email = ref<string>('');
+const success = ref<string>('');
+const error = ref<string>('');
 const { login } = useAuth();
 const router = useRouter();
 

@@ -1,11 +1,17 @@
 import { API_URL } from "../vars";
 
-export const events = {
-  createEvent: async (eventData: { name: string; description: string }) => {
+export interface EventsService {
+  createEvent: (eventData: { name: string; description: string }) => Promise<{ success: boolean; error?: string; response?: any }>;
+  getEvents: () => Promise<{ data: any; error: any; pending: any }>;
+  getEventById: (eventId: string) => Promise<{ data: any; error: any; pending: any }>;
+}
+
+export const events: EventsService = {
+  async createEvent(eventData: { name: string; description: string }): Promise<{ success: boolean; error?: string; response?: any }> {
     if (!eventData.name || !eventData.description) {
       return { success: false, error: 'All fields are required' };
     }
-
+    
     const res = await fetch(`${API_URL}/events/new`, {
       method: 'POST',
       headers: {
@@ -13,7 +19,7 @@ export const events = {
       },
       body: JSON.stringify(eventData),
     });
-
+    
     if (!res.ok) {
       const error = await res.text();
       return { success: false, error };
@@ -22,12 +28,12 @@ export const events = {
     return { success: true, response: await res.json() };
   },
 
-  getEvents: async () => {
+  async getEvents(): Promise<{ data: any; error: any; pending: any }> {
     const { data, error, pending } = await useFetch(`${API_URL}/events`);
     return { data, error, pending };
   },
-  
-  getEventById: async (eventId: string) => {
+
+  async getEventById(eventId: string): Promise<{ data: any; error: any; pending: any }> {
     const { data, error, pending } = await useFetch(`${API_URL}/events/${eventId}`);
     return { data, error, pending };
   }

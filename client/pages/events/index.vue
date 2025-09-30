@@ -1,12 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { useFetch } from '#app';
 import beerService from '~/services/BeerService/beerService';
 import { ref, onMounted } from 'vue';
 import Event from '~/components/event.vue';
 
-const showModal = ref(false);
-const eventName = ref('');
-const eventDescription = ref('');
+const showModal = ref<boolean>(false);
+const eventName = ref<string>('');
+const eventDescription = ref<string>('');
 
 const openModal = () => {
   showModal.value = true;
@@ -22,7 +22,6 @@ const saveEvent = () => {
 };
 
 const { data, error, pending } = await beerService.events.getEvents();
-
 </script>
 
 <template>
@@ -50,7 +49,7 @@ const { data, error, pending } = await beerService.events.getEvents();
       <label class="block mb-2">Description</label>
       <input v-model="eventDescription" class="border p-2 w-full mb-4" placeholder="Description" />
       <div class="flex justify-end space-x-2">
-        <button @click="closeModal" class="px-4 py-2 bg-black text-white rounded">Close</button>
+        <button @click="closeModal" class="px-4 py-2 bg-zinc-800 text-white rounded">Close</button>
         <button @click="saveEvent" class="px-4 py-2 yellow rounded">Save</button>
       </div>
     </div>

@@ -1,17 +1,8 @@
-<script setup>
-import { ref } from 'vue';
-
-const props = defineProps({
-  rating: {
-    type: Number,
-    required: true,
-    validator: (value) => value >= 0 && value <= 100
-  },
-  name: {
-    type: String,
-    required: true
-  }
-});
+<script setup lang="ts">
+const props = defineProps<{
+  rating: number;
+  name: string;
+}>();
 </script>
 
 <template>

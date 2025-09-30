@@ -4,16 +4,16 @@ import beerService from '~/services/BeerService/beerService';
 import type { Beer, Rating } from '~/types/types';
 
 const props = defineProps<{ beer: Beer }>();
-const emit = defineEmits(['close']);
+const emit = defineEmits<{(e: 'close'): void}>();
 const route = useRoute();
 const eventId = route.params.id;
 
 const getRating = ref<Rating | null>(null);
-const taste = ref(0);
-const aftertaste = ref(0);
-const smell = ref(0);
-const design = ref(0);
-const total_score = ref(0);
+const taste = ref<number>(0);
+const aftertaste = ref<number>(0);
+const smell = ref<number>(0);
+const design = ref<number>(0);
+const total_score = ref<number>(0);
 
 onMounted(async () => {
   const rating: Response<Rating> = await beerService.ratings.getRating(eventId as string, props.beer.id);
@@ -51,7 +51,7 @@ const handleClose = () => {
 <template>
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white p-6 rounded shadow-lg w-96 relative m-2 max-h-[80vh] overflow-y-auto">
-      <button @click="handleClose" class="bg-black text-white rounded absolute top-2 right-2">X</button>
+      <button @click="handleClose" class="bg-zinc-800 text-white rounded absolute top-2 right-2">X</button>
       <h2 class="text-xl mb-4">Rate {{ props.beer.name }}</h2>
       <div class="mb-4">
         <label class="block mb-2">Taste</label>

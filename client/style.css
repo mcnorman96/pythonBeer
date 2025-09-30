@@ -15,7 +15,7 @@ button {
   font-optical-sizing: auto;
   font-weight: normal;
   font-style: normal;
-  background-color: #000;
+  background-color: rgb(39 39 42 / var(--tw-bg-opacity));
   color: #fff;
   padding: 10px 20px;
   border: none;

@@ -1,3 +1,8 @@
+import type { EventsService } from "../services/BeerService/events";
+import type { EventBeerService } from "../services/BeerService/eventBeer";
+import type { EventParticipantsService } from "../services/BeerService/eventParticipants";
+import type { RatingsService } from "../services/BeerService/ratings";
+
 export interface Event {
   id: Number,
   name: String,
@@ -25,7 +30,7 @@ export interface User {
   email: String 
 }
 
-export const Rating = {
+export interface Rating {
   id: Number,
   event_id: String,
   beer_id: String,
@@ -36,9 +41,17 @@ export const Rating = {
   score: Number
 }
 
-export interface ResponseTypeBeers {
+export interface ResponseTypeBeers extends Response {
   response: Array<Beer>;
 }
-export interface ResponseTypeParticipants {
+export interface ResponseTypeParticipants extends Response {
   response: Array<Participants>;
 }
+
+export interface Response {
+  'success': Boolean,
+  'error'?: String,
+  'response'?: Event | Participants | User | Rating | Array<Event> | Array<Participants> | Array<Beer>
+}
+
+export type { EventsService, EventBeerService, EventParticipantsService, RatingsService };
