@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 class BeerSchema(BaseModel):
     id: Optional[int] = None
     name: str
@@ -7,13 +7,13 @@ class BeerSchema(BaseModel):
     brewery: Optional[str]
     type: Optional[str]
 
-    @validator('name')
+    @field_validator('name')
     def name_must_be_non_empty(cls, v: str) -> str:
         if not v:
             raise ValueError('name cannot be empty')
         return v
 
-    @validator('description')
+    @field_validator('description')
     def description_must_be_non_empty(cls, v: str) -> str:
         if not v:
             raise ValueError('description cannot be empty')

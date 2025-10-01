@@ -1,5 +1,3 @@
-Look how to optimize the api calls
-
 Make some validations before sending to the endpoints 
 
 Make test components for client 

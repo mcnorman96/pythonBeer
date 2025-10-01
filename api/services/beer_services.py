@@ -42,19 +42,3 @@ class BeerService:
   @staticmethod
   def get_all() -> List[Dict[str, Any]]:
       return BeerORM.query.all()
-
-  @staticmethod
-  def delete(id: int) -> None:
-      if not id:
-          raise ValueError("ID must be provided")
-      if id < 0:
-          raise ValueError("ID must be a positive integer")
-      
-      beer = BeerORM.query.filter_by(id=id).first()
-      if not beer:
-          raise ValueError(f"No beer found with ID {id}")
-
-      if beer:
-          db.session.delete(beer)
-          db.session.commit()
-          return jsonify({'message': 'Beer deleted successfully'}), 200

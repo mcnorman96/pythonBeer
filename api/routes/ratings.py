@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from services.ratings_service import RatingsService
 from routes.auth import get_valid_user_id
 from utils.utils import get_json_data
-
+from werkzeug.exceptions import HTTPException
 import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -23,9 +23,12 @@ def new_ratings():
 
     if event_id and user_id and beer_id and taste and aftertaste and smell and design and score:
       RatingsService.create(event_id, user_id, beer_id, taste, aftertaste, smell, design, score)
-      return jsonify({'message': 'Ratings created succesfully'}), 201
+      return jsonify({'message': 'Rating created successfully'}), 201
     else:
       return jsonify({'error': 'Please fill out all fields.'}), 400
+    
+  except HTTPException as http_exc:
+    raise http_exc
   except ValueError as e:
     return jsonify({'error': str(e), 'user_id': user_id}), 400
   except Exception as e:
@@ -42,9 +45,14 @@ def get_ratings():
 
       if event_id and user_id and beer_id:
           getRating = RatingsService.getRating(event_id, user_id, beer_id)
+          if not getRating:
+              return jsonify({'error': 'No rating found'}), 400
           return jsonify({'response': getRating}), 200
       else:
           return jsonify({'error': 'Please fill out all fields.'}), 400
+      
+  except HTTPException as http_exc:
+      raise http_exc
   except ValueError as e:
       return jsonify({'error': str(e), 'user_id': user_id}), 400
   except Exception as e:
@@ -59,6 +67,8 @@ def get_all_ratings_for_beer():
 
     if event_id and beer_id:
         getRating = RatingsService.getAllRatingsForBeer(event_id, beer_id)
+        if not getRating:
+            return jsonify({'error': 'No ratings found for this beer in the event'}), 400
         return jsonify({'response': getRating}), 200
     else:
         return jsonify({'error': 'Please fill out all fields.'}), 400
@@ -109,7 +119,7 @@ def toplist_by_event(event_id):
       if ratings:
         return jsonify({'response': ratings}), 200
       else:
-        return jsonify({'error': 'No ratings found'}), 400
+        return jsonify({'error': 'No ratings found for this event'}), 400
         
   except ValueError as e:
     return jsonify({'error': str(e)}), 400

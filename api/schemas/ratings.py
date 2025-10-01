@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 class RatingsSchema(BaseModel):
     id: Optional[int] = None
@@ -12,49 +12,49 @@ class RatingsSchema(BaseModel):
     design: float
     score: float
 
-    @validator('event_id')
+    @field_validator('event_id')
     def eventid_must_be_non_empty(cls, v: int) -> int:
         if not v:
             raise ValueError('event id cannot be empty')
         return v
     
-    @validator('user_id')
+    @field_validator('user_id')
     def userid_must_be_non_empty(cls, v: int) -> int:
         if not v:
             raise ValueError('user id cannot be empty')
         return v
     
-    @validator('beer_id')
+    @field_validator('beer_id')
     def beerid_must_be_non_empty(cls, v: int) -> int:
         if not v:
             raise ValueError('beer id cannot be empty')
         return v
     
-    @validator('taste')
+    @field_validator('taste')
     def taste_must_be_non_empty(cls, v: float) -> float:
         if v is None:
             raise ValueError('taste cannot be empty')
         return v
     
-    @validator('aftertaste')
+    @field_validator('aftertaste')
     def aftertaste_must_be_non_empty(cls, v: float) -> float:
         if v is None:
             raise ValueError('aftertaste cannot be empty')
         return v
     
-    @validator('smell')
+    @field_validator('smell')
     def smell_must_be_non_empty(cls, v: float) -> float:
         if v is None:
             raise ValueError('smell cannot be empty')
         return v
     
-    @validator('design')
+    @field_validator('design')
     def design_must_be_non_empty(cls, v: float) -> float:
         if v is None:
             raise ValueError('design cannot be empty')
         return v
     
-    @validator('score')
+    @field_validator('score')
     def score_must_be_non_empty(cls, v: float) -> float:
         if v is None:
             raise ValueError('score cannot be empty')

@@ -6,6 +6,7 @@ from services.user_services import UserService
 from utils.utils import get_json_data, get_valid_user_id
 import jwt
 import datetime
+import os
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -56,7 +57,7 @@ def login_user():
             token = jwt.encode({
                 'user_id': user.id,
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
-            }, 'your_secret_key', algorithm='HS256')
+            }, os.getenv('SECRET_KEY_AUTH', ''), algorithm='HS256')
             return jsonify({'token': token}), 200
         else:
             return jsonify({'error': 'Incorrect username or password'}), 401

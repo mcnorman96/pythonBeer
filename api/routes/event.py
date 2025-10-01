@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from utils.utils import get_json_data, get_valid_user_id
 from services.event_services import EventService
-
+from werkzeug.exceptions import HTTPException
 import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -14,11 +14,15 @@ def new_events():
     data = get_json_data()
     name = data.get('name')
     description = data.get('description')
+
     if name and description:
       EventService.create(name, description)
       return jsonify({'message': 'Events created successfully'}), 201
     else:
       return jsonify({'error': 'Please fill out all fields.'}), 400
+    
+  except HTTPException as http_exc:
+    raise http_exc
   except ValueError as e:
     return jsonify({'error': str(e)}), 400
   except Exception as e:
@@ -35,6 +39,7 @@ def all_events():
       return jsonify({'response': events}), 200
     else: 
       return jsonify({'error': 'No events found'}), 400
+    
   except ValueError as e:
     return jsonify({'error': str(e)}), 400
   except Exception as e:
@@ -50,6 +55,7 @@ def get_event_by_id(event_id):
       return jsonify({'response': event}), 200
     else:
       return jsonify({'error': 'Event not found'}), 404
+    
   except ValueError as e:
     return jsonify({'error': str(e)}), 400
   except Exception as e:

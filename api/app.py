@@ -2,14 +2,13 @@ import os
 import logging
 from flask import Flask
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from dotenv import load_dotenv
 load_dotenv()
 import pymysql
 pymysql.install_as_MySQLdb()
 from db import db, migrate
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
+
 
 logging.basicConfig(
     level=os.environ.get("LOGLEVEL", "DEBUG"),

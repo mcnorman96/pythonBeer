@@ -1,5 +1,6 @@
 from flask import request, abort
 import jwt
+import os
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -20,7 +21,7 @@ def get_user_id_from_token():
 
     token = auth_header.split(' ')[1]
     try:
-        payload = jwt.decode(token, 'your_secret_key', algorithms=['HS256'])
+        payload = jwt.decode(token, os.getenv('SECRET_KEY_AUTH', ''), algorithms=['HS256'])
         user_id = payload.get('user_id')
         user_id = int(user_id)
         return user_id

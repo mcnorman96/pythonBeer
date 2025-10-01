@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from services.beer_services import BeerService
 from utils.utils import get_json_data, get_valid_user_id
-
+from werkzeug.exceptions import HTTPException
 import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -31,6 +31,9 @@ def new_beer():
               }), 201
       else:
           return jsonify({'error': 'Please fill out all fields.'}), 400
+      
+    except HTTPException as http_exc:
+        raise http_exc
     except ValueError as e:
       return jsonify({'error': str(e)}), 400
     except Exception as e:
@@ -52,10 +55,11 @@ def all_beers():
           
 
 searchBeers = Blueprint('search_beers', __name__)
-@searchBeers.route('/search', methods=['GET', 'POST'])
+@searchBeers.route('/search', methods=['GET'])
 def search_beers():
   try: 
     search_query = request.args.get('s', '')
+    logger.debug(f"Received search query: {search_query}")
     if search_query:
       beers = BeerService.search_by_name(search_query)
       logger.debug(f"Search query: {search_query}, Result: {beers}")
