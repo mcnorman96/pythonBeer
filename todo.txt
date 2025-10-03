@@ -1,5 +1,1 @@
-Make some validations before sending to the endpoints 
-
-Make test components for client 
-
 Look into where to deploy this environment
