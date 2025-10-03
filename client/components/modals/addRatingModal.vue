@@ -9,12 +9,20 @@ const route = useRoute();
 const eventId = route.params.id;
 
 const getRating = ref<Rating | null>(null);
-const taste = ref<number>(0);
-const aftertaste = ref<number>(0);
-const smell = ref<number>(0);
-const design = ref<number>(0);
-const total_score = ref<number>(0);
-const error = ref<string | null>(null);
+const taste = ref<number | undefined>(undefined);
+const aftertaste = ref<number | undefined>(undefined);
+const smell = ref<number | undefined>(undefined);
+const design = ref<number | undefined>(undefined);
+const total_score = ref<number | undefined>(undefined);
+const errorMsg = ref<string | null>(null);
+
+const errors = ref<{ [key: string]: string }>({
+  taste: '',
+  aftertaste: '',
+  smell: '',
+  design: '',
+  total_score: ''
+});
 
 onMounted(async () => {
   const rating: Response<Rating> = await beerService.ratings.getRating(eventId as string, props.beer.id);
@@ -31,24 +39,36 @@ watch(getRating, (beerRated: Response<Rating>) => {
   }
 }, { immediate: true });
 
+const validate = () => {
+  errors.value.taste = taste.value === undefined || taste.value < 0 || taste.value > 5 ? 'Taste must be between 0 and 5' : '';
+  errors.value.aftertaste = aftertaste.value === undefined || aftertaste.value < 0 || aftertaste.value > 5 ? 'Aftertaste must be between 0 and 5' : '';
+  errors.value.smell = smell.value === undefined || smell.value < 0 || smell.value > 5 ? 'Smell must be between 0 and 5' : '';
+  errors.value.design = design.value === undefined || design.value < 0 || design.value > 5 ? 'Design must be between 0 and 5' : '';
+  errors.value.total_score = total_score.value === undefined || total_score.value < 0 || total_score.value > 5 ? 'Total score must be between 0 and 5' : '';
+  return Object.values(errors.value).every(e => !e);
+}
+
 const handleSave = async () => {
+  if (!validate()) {
+    errorMsg.value = 'Please fix validation errors.';
+    return;
+  }
+
   const saveRating = await beerService.ratings.addRating({
     event_id: eventId,
     beer_id: props.beer.id,
-    taste: taste.value,
-    aftertaste: aftertaste.value,
-    smell: smell.value,
-    design: design.value,
-    score: total_score.value
+    taste: taste.value!,
+    aftertaste: aftertaste.value!,
+    smell: smell.value!,
+    design: design.value!,
+    score: total_score.value!
   });
-  console.log('saveRating', saveRating);
-  if (saveRating.error) {
-    // Handle error (e.g., show a notification)
-    console.error('Error saving rating:', saveRating.error);
-    error.value = saveRating.error;
+
+  if (saveRating.errorMsg) {
+    errorMsg.value = saveRating.errorMsg;
     return;
   } else {
-    error.value = null;
+    errorMsg.value = null;
     emit('close');
   }
 };
@@ -66,20 +86,25 @@ const handleClose = () => {
       <div class="mb-4">
         <label class="block mb-2">Taste</label>
         <input v-model="taste" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Taste" />
+        <div v-if="errors.taste" class="text-red-500 text-xs mb-2">{{ errors.taste }}</div>
         <label class="block mb-2">Aftertaste</label>
         <input v-model="aftertaste" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Aftertaste" />
+        <div v-if="errors.aftertaste" class="text-red-500 text-xs mb-2">{{ errors.aftertaste }}</div>
         <label class="block mb-2">Smell</label>
         <input v-model="smell" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Smell" />
+        <div v-if="errors.smell" class="text-red-500 text-xs mb-2">{{ errors.smell }}</div>
         <label class="block mb-2">Design</label>
         <input v-model="design" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Design" />
+        <div v-if="errors.design" class="text-red-500 text-xs mb-2">{{ errors.design }}</div>
         <label class="block mb-2">Total score</label>
         <input v-model="total_score" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Total Score" />
+        <div v-if="errors.total_score" class="text-red-500 text-xs mb-2">{{ errors.total_score }}</div>
       </div>
       <div class="flex justify-end space-x-2">
         <button @click="handleSave" class="px-4 py-2 w-full yellow rounded">Save</button>
       </div>
-      <div v-if="error" class="mt-4 text-red-500">
-        {{ error }}
+      <div v-if="errorMsg" class="mt-4 text-red-500">
+        {{ errorMsg }}
       </div>
     </div>
   </div>
