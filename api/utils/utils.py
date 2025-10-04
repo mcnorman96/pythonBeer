@@ -1,7 +1,6 @@
-from flask import request, abort
+from flask import request, abort, jsonify, make_response
 import jwt
 import os
-
 import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -17,7 +16,7 @@ def get_user_id_from_token():
     auth_header = request.headers.get('Authorization')
     if not auth_header or not auth_header.startswith('Bearer '):
         logger.warning("Authorization header missing or invalid")
-        return None  # Or raise an error
+        return None
 
     token = auth_header.split(' ')[1]
     try:
@@ -27,15 +26,16 @@ def get_user_id_from_token():
         return user_id
     except jwt.ExpiredSignatureError:
         logger.warning("Token has expired")
-        return None  # Or handle expired token
+        return None
     except jwt.InvalidTokenError:
         logger.warning("Invalid token")
-        return None  # Or handle invalid token
+        return None
 
 
 def get_valid_user_id():
     user_id = get_user_id_from_token()
     if not isinstance(user_id, int):
         logger.error(f"Invalid user_id extracted: {user_id} (type: {type(user_id)})")
-        abort(401, description="Unauthorized")
+        response = make_response(jsonify({"error": "Unauthorized"}), 401)
+        abort(response)
     return user_id

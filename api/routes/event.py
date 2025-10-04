@@ -60,3 +60,46 @@ def get_event_by_id(event_id):
     return jsonify({'error': str(e)}), 400
   except Exception as e:
     return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
+  
+updateEvent = Blueprint('update_event', __name__)
+@updateEvent.route('/<int:event_id>', methods=['PUT'])
+def update_event(event_id):
+  try:
+    get_valid_user_id()  # Ensure user is authenticated
+    data = get_json_data()
+    name = data.get('name')
+    description = data.get('description')
+
+    if name and description:
+      updated_event = EventService.update(event_id, name, description)
+      if updated_event:
+        return jsonify({'message': 'Event updated successfully', 'response': updated_event}), 200
+      else:
+        return jsonify({'error': 'Event not found'}), 404
+    else:
+      return jsonify({'error': 'Please fill out all fields.'}), 400
+    
+  except HTTPException as http_exc:
+    raise http_exc
+  except ValueError as e:
+    return jsonify({'error': str(e)}), 400
+  except Exception as e:
+    return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
+  
+deleteEvent = Blueprint('delete_event', __name__)
+@deleteEvent.route('/<int:event_id>', methods=['DELETE'])
+def delete_event(event_id):
+  try:
+    get_valid_user_id()  # Ensure user is authenticated
+    deleted = EventService.delete(event_id)
+    if deleted:
+      return jsonify({'message': 'Event deleted successfully'}), 200
+    else:
+      return jsonify({'error': 'Event not found'}), 404
+    
+  except HTTPException as http_exc:
+    raise http_exc
+  except ValueError as e:
+    return jsonify({'error': str(e)}), 400
+  except Exception as e:
+    return jsonify({'error': 'Internal server error', 'details': str(e)}), 500

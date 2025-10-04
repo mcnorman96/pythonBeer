@@ -2,6 +2,7 @@
 import RatingCircle from './ratingCircle.vue';
 import { computed } from 'vue';
 import type { Beer } from '~/types/types';
+import Button from './ui/Button.vue';
 
 const props = defineProps<{
   beer: Beer;
@@ -46,8 +47,8 @@ const handleAddRating = () => {
       <RatingCircle :rating="average_score" name="Score"/>
     </div>
     <div v-if="props.buttonsAvailable" class="flex md:w-max ml-auto mt-5">
-      <button @click="$emit('view-ratings', props.beer)" class="w-1/2 md:w-auto">View ratings</button>
-      <button @click="handleAddRating" class="ml-5 yellow w-1/2 md:w-auto">Add rating</button>
+      <Button @click="$emit('view-ratings', props.beer)" :class="'w-1/2 md:w-auto'">View ratings</Button>
+      <Button @click="handleAddRating" color='yellow' :class="'ml-5 w-1/2 md:w-auto'">Add rating</Button>
    </div>
    </div>
   </div>

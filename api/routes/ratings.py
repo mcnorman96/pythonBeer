@@ -68,7 +68,7 @@ def get_all_ratings_for_beer():
     if event_id and beer_id:
         getRating = RatingsService.getAllRatingsForBeer(event_id, beer_id)
         if not getRating:
-            return jsonify({'error': 'No ratings found for this beer in the event'}), 400
+            return jsonify({'error': 'No ratings found for this beer in the event'}), 204
         return jsonify({'response': getRating}), 200
     else:
         return jsonify({'error': 'Please fill out all fields.'}), 400
@@ -119,7 +119,7 @@ def toplist_by_event(event_id):
       if ratings:
         return jsonify({'response': ratings}), 200
       else:
-        return jsonify({'error': 'No ratings found for this event'}), 400
+        return jsonify({'error': 'No ratings found for this event'}), 204
         
   except ValueError as e:
     return jsonify({'error': str(e)}), 400

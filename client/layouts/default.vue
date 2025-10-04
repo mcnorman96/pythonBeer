@@ -47,11 +47,11 @@ function toggleMobileMenu() {
 
       <!-- Mobile hamburger -->
       <div v-if="isLoggedIn" class="absolute right-0 top-1/2 -translate-y-1/2 md:hidden">
-        <button @click="toggleMobileMenu" class="focus:outline-none">
+        <Button @click="toggleMobileMenu" :class="'focus:outline-none'">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
-        </button>
+        </Button>
         <div v-if="showMobileMenu" class="absolute bg-zinc-800 text-white rounded shadow-lg mt-2 right-0 z-50 w-max">
           <NuxtLink :class="menuItemsClass + ' block py-2'" to="/events" @click="showMobileMenu = false">Events</NuxtLink>
           <NuxtLink :class="menuItemsClass + ' block py-2'" to="/toplist" @click="showMobileMenu = false">Toplist</NuxtLink>

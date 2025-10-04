@@ -10,24 +10,3 @@ h1 {
   margin: 30px 0;
 }
 
-button {
-  font-family: "Oswald", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: normal;
-  font-style: normal;
-  background-color: rgb(39 39 42 / var(--tw-bg-opacity));
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  opacity: 0.6;
-}
-
-button.yellow {
-  background-color: #FECB23;
-  color: #000;
-}

@@ -64,6 +64,11 @@ export const eventBeer: EventBeerService = {
 
   async toplistBeersInEvent(eventId: string): Promise<Response> {
     const response = await fetch(`${API_URL}/ratings/toplist/${eventId}`);
+
+    if (response.status === 204) {
+      return { success: true, response: [] };
+    }
+    
     const data = await response.json();
 
     if (!response.ok) {

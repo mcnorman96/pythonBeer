@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import beerService from '~/services/BeerService/beerService';
 import type { Beer, Rating } from '~/types/types';
+import Button from '~/components/ui/Button.vue';
 
 const props = defineProps<{ beer: Beer }>();
 const emit = defineEmits<{(e: 'close'): void}>();
@@ -81,7 +82,7 @@ const handleClose = () => {
 <template>
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white p-6 rounded shadow-lg w-96 relative m-2 max-h-[80vh] overflow-y-auto">
-      <button @click="handleClose" class="bg-zinc-800 text-white rounded absolute top-2 right-2">X</button>
+      <Button close @click="handleClose" :class="'absolute top-2 right-2'"></Button>
       <h2 class="text-xl mb-4">Rate {{ props.beer.name }}</h2>
       <div class="mb-4">
         <label class="block mb-2">Taste</label>
@@ -101,7 +102,7 @@ const handleClose = () => {
         <div v-if="errors.total_score" class="text-red-500 text-xs mb-2">{{ errors.total_score }}</div>
       </div>
       <div class="flex justify-end space-x-2">
-        <button @click="handleSave" class="px-4 py-2 w-full yellow rounded">Save</button>
+        <Button color="yellow" @click="handleSave" class="w-full">Save</Button>
       </div>
       <div v-if="errorMsg" class="mt-4 text-red-500">
         {{ errorMsg }}

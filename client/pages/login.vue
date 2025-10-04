@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useAuth } from '~/composables/useAuth';
 import { useRouter } from 'vue-router';
 import { authService } from '~/services/AuthService/authService';
+import Button from '~/components/ui/Button.vue';
 
 const username = ref<string>('');
 const password = ref<string>('');
@@ -45,7 +46,7 @@ const handleLogin = async () => {
           <input v-model="password" type="password" class="border p-2 w-full" placeholder="Password" />
         </div>
         <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
-        <button type="submit" class="w-full px-4 py-2 yellow rounded">Login</button>
+        <Button color="yellow" type="submit" class="w-full">Login</Button>
       </form>
     </div>
   </div>

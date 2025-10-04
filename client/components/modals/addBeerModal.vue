@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { watch } from 'vue';
 import type { Beer, newBeer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
+import Button from '~/components/ui/Button.vue';
 
 const route = useRoute();
 const eventId:string = route.params.id;
@@ -93,7 +94,7 @@ const addExistingBeerToEvent = async (beerId: number) => {
 <template>
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white p-6 rounded shadow-lg w-96 relative m-2 max-h-[80vh] overflow-y-auto">
-      <button @click="handleClose" class="bg-zinc-800 text-white rounded absolute top-2 right-2">X</button>
+      <Button close @click="handleClose" :class="'rounded absolute top-2 right-2'"></Button>
       <h2 class="text-xl mb-4">Add Beer to Event</h2>
       
       <div class="mb-6 relative">
@@ -114,7 +115,7 @@ const addExistingBeerToEvent = async (beerId: number) => {
         <input name="brewery" v-model="beerBrewery" class="border p-2 w-full mb-2" placeholder="Brewery" />
         <label class="block mb-2">Type</label>
         <input name="type" v-model="beerType" class="border p-2 w-full mb-4" placeholder="Type" />
-        <button @click="saveBeer" class="px-4 py-2 rounded w-full mb-2 yellow">Save New Beer</button>
+        <Button @click="saveBeer" color='yellow' :class="'px-4 py-2 rounded w-full mb-2'">Save New Beer</Button>
       </div>
 
       <div v-if="error" class="text-red-500 mt-2">{{ error }}</div>

@@ -5,8 +5,12 @@ from pydantic import ValidationError
 from models.event import Event as EventORM
 from schemas.event import EventsSchema
 from datetime import timedelta
-
+from app import socketio
 class EventService:
+    @staticmethod
+    def event_created():
+        socketio.emit('event_created')
+
     @staticmethod
     def create(name: str, description: str) -> None:
         try:
@@ -28,6 +32,7 @@ class EventService:
         )
         db.session.add(events)
         db.session.commit()
+        EventService.event_created()
 
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
@@ -40,6 +45,25 @@ class EventService:
             return event.to_dict()
         else:
             return None
+        
+    @staticmethod
+    def update(id: int, name: str, description: str) -> None:
+        event = EventORM.query.get(id)
+        if event:
+            try:
+                validated_event = EventsSchema(
+                    name=name,
+                    description=description
+                )
+            except ValidationError as e:
+                raise ValueError(f"Invalid data: {e}")
+
+            event.name = validated_event.name
+            event.description = validated_event.description
+            db.session.commit()
+            EventService.event_created()
+            return True
+        return False
 
     @staticmethod
     def delete(id: int) -> None:
@@ -47,3 +71,6 @@ class EventService:
         if event:
             db.session.delete(event)
             db.session.commit()
+            EventService.event_created()
+            return True
+        return False
