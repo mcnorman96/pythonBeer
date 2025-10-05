@@ -7,6 +7,7 @@ import AddRatingModal from '~/components/modals/AddRatingModal.vue';
 import AddBeerModal from '~/components/modals/AddBeerModal.vue';
 import ViewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
 import EditEventModal from '~/components/modals/editEventModal.vue';
+import EditBeerModal from '~/components/modals/editBeerModal.vue'
 import type { Beer, Participants, ResponseTypeBeers, ResponseTypeParticipants, Event } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import { onMounted, onUnmounted } from 'vue';
@@ -75,43 +76,54 @@ onUnmounted(() => {
 // Modal state
 const showModal = ref<boolean>(false);
 const showEditEventModal = ref<boolean>(false);
-const ratingModal = ref<boolean>(false);
-const viewRatingsModal = ref<boolean>(false);
+const showRatingModal = ref<boolean>(false);
+const showViewRatingsModal = ref<boolean>(false);
+const showEditBeerModal = ref<boolean>(false);
 const selectedBeerForRating = ref<Beer | null>(null);
 
-// Add Beer Modal functions
-const openModal = async () => {
+const openAddBeerModal = async () => {
   showModal.value = true;
 };
-const closeModal = () => {
+const closeAddBeerModal = () => {
   showModal.value = false;
 };
 
-// Rating Modal functions
 const openRatingModal = (beer: Beer) => {
   selectedBeerForRating.value = beer;
-  ratingModal.value = true;
+  showRatingModal.value = true;
 };
 const closeRatingModal = () => {
-  ratingModal.value = false;
+  showRatingModal.value = false;
   selectedBeerForRating.value = null;
 };
 
 const openViewRatingModal = (beer: Beer) => {
   selectedBeerForRating.value = beer;
-  viewRatingsModal.value = true;
+  showViewRatingsModal.value = true;
 };
 const closeViewRatingsModal = () => {
-  viewRatingsModal.value = false;
+  showViewRatingsModal.value = false;
   selectedBeerForRating.value = null;
 };
 
-const openEditEventModal = async () => {
+const openEditEventModal = () => {
   showEditEventModal.value = true;
-};
+}
+
 const closeEditEventModal = () => {
   showEditEventModal.value = false;
+}
+
+const openEditBeerModal = (beer: Beer) => {
+  selectedBeerForRating.value = beer;
+  showEditBeerModal.value = true;
 };
+const closeEditBeerModal = () => {
+  selectedBeerForRating.value = null;
+  showEditBeerModal.value = false;
+};
+
+
 </script>
 
 <template>
@@ -129,15 +141,16 @@ const closeEditEventModal = () => {
         <Button edit :class="'ml-2 px-4 py-2 bg-zinc-800 text-white rounded'" @click="openEditEventModal">Edit event</Button>
       </div>
       <div v-for="beer in event_beers" :key="beer.id">
-        <BeerCard :buttonsAvailable="event_ended ? false : true"  :beer="beer" @add-rating="openRatingModal" @view-ratings="openViewRatingModal" />
+        <BeerCard :buttonsAvailable="event_ended ? false : true"  :beer="beer" @add-rating="openRatingModal" @view-ratings="openViewRatingModal" @edit-beer="openEditBeerModal"/>
       </div>
     </div>
-    <Button color="yellow" v-if="!event_ended" :class="'mt-5 ml-auto block'" @click="openModal">Add Beer to Event</Button>
+    <Button color="yellow" v-if="!event_ended" :class="'mt-5 ml-auto block'" @click="openAddBeerModal">Add Beer to Event</Button>
   </div>
 
   <!-- Modals -->
+  <EditBeerModal v-if="showEditBeerModal" :beer="selectedBeerForRating" @close="closeEditBeerModal" />
   <EditEventModal v-if="showEditEventModal" @close="closeEditEventModal" />
-  <AddBeerModal v-if="showModal" @close="closeModal" />
-  <AddRatingModal v-if="ratingModal" :beer="selectedBeerForRating" :eventId="eventId" @close="closeRatingModal" />
-  <ViewRatingsModal v-if="viewRatingsModal" :beer="selectedBeerForRating" @close="closeViewRatingsModal" />  
+  <AddBeerModal v-if="showModal" @close="closeAddBeerModal" />
+  <AddRatingModal v-if="showRatingModal" :beer="selectedBeerForRating" :eventId="eventId" @close="closeRatingModal" />
+  <ViewRatingsModal v-if="showViewRatingsModal" :beer="selectedBeerForRating" @close="closeViewRatingsModal" />  
 </template>
