@@ -19,7 +19,7 @@ describe('eventBeer service', () => {
     it('returns success if all fields are present and fetch is ok', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ id: 1, name: 'Test Beer' })
+        json: async () => ({ response: { id: 1, name: 'Test Beer' } })
       });
       const beer = { name: 'Test', brewery: 'Brew', description: 'Desc', type: 'IPA' };
       const result = await eventBeer.newBeer(beer as any);

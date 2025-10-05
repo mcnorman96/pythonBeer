@@ -31,7 +31,7 @@
   const buttonClasses = computed(() => {
     let base;
     if (close.value) {
-      base = `${btnCss}`;
+      base = `${btnCss} closebtn `;
     } else if (color.value === 'yellow') {
       base = `${btnCss} bg-yellow-400 text-black `;
     } else {

@@ -78,7 +78,7 @@ describe('addRatingModal.vue', () => {
     await wrapper.find('input[placeholder="Total Score"]').setValue(4.8);
 
     // Trigger save
-    await wrapper.find('button.yellow').trigger('click');
+    await wrapper.find('button.savebtn').trigger('click');
     await flushPromises();
 
     // Assertions

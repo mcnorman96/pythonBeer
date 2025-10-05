@@ -55,7 +55,7 @@ describe('BeerCard.vue', () => {
         stubs: { RatingCircle: ratingCircleStub }
       }
     });
-    const viewBtn = wrapper.find('button');
+    const viewBtn = wrapper.find('button.view-ratings');
     await viewBtn.trigger('click');
     expect(wrapper.emitted('view-ratings')).toBeTruthy();
     expect(wrapper.emitted('view-ratings')[0][0]).toEqual(beer);
@@ -68,7 +68,7 @@ describe('BeerCard.vue', () => {
         stubs: { RatingCircle: ratingCircleStub }
       }
     });
-    const addBtn = wrapper.findAll('button').at(1);
+    const addBtn = wrapper.find('button.add-rating');
     await addBtn.trigger('click');
     expect(wrapper.emitted('add-rating')).toBeTruthy();
     expect(wrapper.emitted('add-rating')[0][0]).toEqual(beer);

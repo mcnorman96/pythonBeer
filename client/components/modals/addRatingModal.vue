@@ -102,7 +102,7 @@ const handleClose = () => {
         <div v-if="errors.total_score" class="text-red-500 text-xs mb-2">{{ errors.total_score }}</div>
       </div>
       <div class="flex justify-end space-x-2">
-        <Button color="yellow" @click="handleSave" class="w-full">Save</Button>
+        <Button color="yellow" @click="handleSave" class="w-full savebtn ">Save</Button>
       </div>
       <div v-if="errorMsg" class="mt-4 text-red-500">
         {{ errorMsg }}
