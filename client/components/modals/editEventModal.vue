@@ -10,6 +10,7 @@ const router = useRouter();
 
 const eventName = ref<string>('');
 const eventDescription = ref<string>('');
+const error = ref<string>('');
 
 const handleClose = () => {
   emit('close');
@@ -49,7 +50,7 @@ const deleteEvent = async () => {
         <Button @click="updateEvent" color='yellow' :class="'px-4 py-2 rounded w-full mb-2'">Update Event</Button>
       </div>
 
-      <Button error @click="deleteEvent" :class="'mt-4 w-full'">Delete Event</Button>
+      <Button error @click="deleteEvent" :class="'w-full'">Delete Event</Button>
       <div v-if="error" class="text-red-500 mt-2">{{ error }}</div>
     </div>
   </div>

@@ -20,6 +20,7 @@ export const eventBeer: EventBeerService = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(beer)
     });
@@ -30,7 +31,7 @@ export const eventBeer: EventBeerService = {
       return { success: false, error: data.error };
     }
 
-    return { success: true, response: data };
+    return { success: true, response: data.response };
   },
 
   async addBeerToEvent(eventId: string, beerId: string): Promise<Response> {
@@ -42,6 +43,7 @@ export const eventBeer: EventBeerService = {
       body: JSON.stringify({ beer_id: beerId }),
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
     });
     if (!res.ok) {
