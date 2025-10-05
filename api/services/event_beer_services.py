@@ -6,6 +6,7 @@ from models.event_beer import EventBeer as EventBeerORM
 from sqlalchemy import text
 from datetime import datetime
 from app import socketio
+from services.ratings_service import RatingsService
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -36,3 +37,15 @@ class EventBeersService:
         db.session.add(event_beers)
         db.session.commit()
         EventBeersService.add_beer_to_event(event_id)
+
+    @staticmethod
+    def deleteAllEventBeersForEvent(event_id: int) -> None:
+        if not event_id:
+            raise ValueError("event id should be passed")
+        
+        # Delete all ratings attached to the event beers
+        RatingsService.deleteAllRatingsForEvent(event_id)
+
+        # Deleting all the event beers attached to the event
+        EventBeerORM.query.filter_by(event_id=event_id).delete()
+        db.session.commit()

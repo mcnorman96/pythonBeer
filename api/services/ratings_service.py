@@ -142,3 +142,11 @@ class RatingsService:
             raise ValueError("ID must be provided")
         db.session.query(RatingORM).filter_by(id=id).delete()
         db.session.commit()
+
+    @staticmethod
+    def deleteAllRatingsForEvent(event_id: int) -> None:
+        if not event_id:
+            raise ValueError("event id should be passed")
+        
+        RatingORM.query.filter_by(event_id=event_id).delete()
+        db.session.commit()

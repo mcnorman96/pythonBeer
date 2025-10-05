@@ -6,6 +6,7 @@ from models.event import Event as EventORM
 from schemas.event import EventsSchema
 from datetime import timedelta
 from app import socketio
+from services.event_beer_services import EventBeersService
 class EventService:
     @staticmethod
     def event_created():
@@ -69,8 +70,12 @@ class EventService:
     def delete(id: int) -> None:
         event = EventORM.query.get(id)
         if event:
+            # Deleting the Event Beers
+            EventBeersService.deleteAllEventBeersForEvent(id);
+
+            # Deleting the event
             db.session.delete(event)
             db.session.commit()
-            EventService.event_created()
+
             return True
         return False
