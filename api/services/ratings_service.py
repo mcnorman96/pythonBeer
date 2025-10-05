@@ -1,16 +1,20 @@
+
 from models.rating import Rating as RatingORM
 from schemas.ratings import RatingsSchema
 from db import db
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from pydantic import ValidationError
 from sqlalchemy import text
 from app import socketio
+from utils.utils import get_logger
+logging = get_logger(__name__)
 
 
 class RatingsService:
     @staticmethod
     def rating_update(event_id):
         socketio.emit("rating_updated", {"event_id": event_id})
+        logging.info(f"Socket event 'rating_updated' emitted for event {event_id}")
 
     @staticmethod
     def create(
@@ -22,7 +26,12 @@ class RatingsService:
         smell: float,
         design: float,
         score: float,
-    ) -> None:
+    ) -> Optional[RatingORM]:
+        # Validate input
+        if not all([event_id, user_id, beer_id]):
+            logging.error("event_id, user_id, and beer_id must be provided")
+            raise ValueError("event_id, user_id, and beer_id must be provided")
+
         try:
             validated_rating = RatingsSchema(
                 event_id=event_id,
@@ -35,6 +44,7 @@ class RatingsService:
                 score=score,
             )
         except ValidationError as e:
+            logging.error(f"Invalid data: {e}")
             raise ValueError(f"Invalid data: {e}")
 
         # Check if rating already exists for this user, event, and beer
@@ -50,6 +60,8 @@ class RatingsService:
             existing_rating.score = validated_rating.score
             db.session.commit()
             RatingsService.rating_update(event_id)
+            logging.info(f"Updated rating for user {user_id}, event {event_id}, beer {beer_id}")
+            return existing_rating
         else:
             # Create new rating
             rating = RatingORM(
@@ -65,20 +77,24 @@ class RatingsService:
             db.session.add(rating)
             db.session.commit()
             RatingsService.rating_update(event_id)
+            logging.info(f"Created rating for user {user_id}, event {event_id}, beer {beer_id}")
+            return rating
 
     @staticmethod
-    def getRating(event_id: int, user_id: int, beer_id: int) -> Dict[str, Any]:
+    def getRating(event_id: int, user_id: int, beer_id: int) -> Optional[Dict[str, Any]]:
         # Check if rating already exists for this user, event, and beer
         existing_rating = RatingORM.query.filter_by(
             event_id=event_id, user_id=user_id, beer_id=beer_id
         ).first()
         if existing_rating:
+            logging.info(f"Fetched rating for user {user_id}, event {event_id}, beer {beer_id}")
             return existing_rating.to_dict()
         else:
+            logging.warning(f"No rating found for user {user_id}, event {event_id}, beer {beer_id}")
             return None
 
     @staticmethod
-    def getAllRatingsForBeer(event_id: int, beer_id: int) -> Dict[str, Any]:
+    def getAllRatingsForBeer(event_id: int, beer_id: int) -> List[Dict[str, Any]]:
         # Retrieve ratings for a beer in an event, including username
         query = text(
             """
@@ -86,23 +102,22 @@ class RatingsService:
             FROM rating AS r
             JOIN `user` AS u ON r.user_id = u.id
             WHERE r.event_id = :event_id AND r.beer_id = :beer_id
-        """
+            """
         )
         result = db.session.execute(query, {"event_id": event_id, "beer_id": beer_id})
-        ratings = []
-        for row in result:
-            rating_dict = dict(row._mapping)
-            ratings.append(rating_dict)
+        ratings = [dict(row._mapping) for row in result]
+        logging.info(f"Fetched {len(ratings)} ratings for beer {beer_id} in event {event_id}")
         return ratings
 
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
-        return [rating.to_dict() for rating in RatingORM.query.all()]
+        ratings = RatingORM.query.all()
+        logging.info(f"Fetched {len(ratings)} ratings")
+        return [rating.to_dict() for rating in ratings]
 
     @staticmethod
     def get_toplist() -> List[Dict[str, Any]]:
         """Get the top beers based on average ratings."""
-
         query = text(
             """
             SELECT 
@@ -120,17 +135,19 @@ class RatingsService:
             JOIN rating r ON b.id = r.beer_id
             GROUP BY b.id
             ORDER BY average_score DESC
-        """
+            """
         )
-
         result = db.session.execute(query)
-        return [dict(row._mapping) for row in result]
+        toplist = [dict(row._mapping) for row in result]
+        logging.info(f"Fetched toplist with {len(toplist)} beers")
+        return toplist
 
     @staticmethod
     def get_toplist_by_event(
         event_id, sortby="event_beer_id", order="desc"
     ) -> List[Dict[str, Any]]:
         if not event_id:
+            logging.error("Event ID must be provided")
             raise ValueError("Event ID must be provided")
 
         # Validate sortby and order
@@ -166,34 +183,45 @@ class RatingsService:
             WHERE e.event_id = :event_id
             GROUP BY b.id, e.id
             ORDER BY {sortby} {order}
-        """
+            """
         )
 
         result = db.session.execute(query, {"event_id": event_id})
-
-        if not result:
+        toplist = [dict(row._mapping) for row in result]
+        if not toplist:
+            logging.warning(f"No ratings found for event {event_id}")
             raise ValueError("No ratings found for this event")
-        return [dict(row._mapping) for row in result]
+        logging.info(f"Fetched toplist for event {event_id} with {len(toplist)} beers")
+        return toplist
 
     @staticmethod
-    def delete(id: int) -> None:
+    def delete(id: int) -> bool:
         if not id:
+            logging.error("ID must be provided")
             raise ValueError("ID must be provided")
-        db.session.query(RatingORM).filter_by(id=id).delete()
+        deleted = db.session.query(RatingORM).filter_by(id=id).delete()
         db.session.commit()
+        logging.info(f"Deleted rating {id}")
+        return bool(deleted)
 
     @staticmethod
-    def deleteAllRatingsForBeerInEvent(event_id: int, beer_id: int) -> None:
+    def deleteAllRatingsForBeerInEvent(event_id: int, beer_id: int) -> bool:
         if not event_id or not beer_id:
+            logging.error("event id and beer id should be passed")
             raise ValueError("event id and beer id should be passed")
 
-        RatingORM.query.filter_by(event_id=event_id, beer_id=beer_id).delete()
+        deleted = RatingORM.query.filter_by(event_id=event_id, beer_id=beer_id).delete()
         db.session.commit()
+        logging.info(f"Deleted {deleted} ratings for beer {beer_id} in event {event_id}")
+        return bool(deleted)
 
     @staticmethod
-    def deleteAllRatingsForEvent(event_id: int) -> None:
+    def deleteAllRatingsForEvent(event_id: int) -> bool:
         if not event_id:
+            logging.error("event id should be passed")
             raise ValueError("event id should be passed")
 
-        RatingORM.query.filter_by(event_id=event_id).delete()
+        deleted = RatingORM.query.filter_by(event_id=event_id).delete()
         db.session.commit()
+        logging.info(f"Deleted {deleted} ratings for event {event_id}")
+        return bool(deleted)
