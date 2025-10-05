@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 from services.ratings_service import RatingsService
-from routes.auth import get_valid_user_id
 from utils.utils import (
     get_json_data,
     get_valid_user_id,

@@ -44,7 +44,7 @@ def logout_user():
 def login_user():
     try:
         data = get_json_data()
-        valid, msg = validate_fields(data, ["username", "password", "email"])
+        valid, msg = validate_fields(data, ["username", "password"])
         if not valid:
             return jsonify({"error": msg}), 400
 

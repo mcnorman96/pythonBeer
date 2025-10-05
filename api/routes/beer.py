@@ -23,7 +23,7 @@ def new_beer():
             return jsonify({"error": msg}), 400
 
         beer = BeerService.create(
-            data["name"], data["description"], data["brewery"], data["beer_type"]
+            data["name"], data["description"], data["brewery"], data["type"]
         )
 
         return (
