@@ -3,6 +3,7 @@ from services.beer_services import BeerService
 from utils.utils import get_json_data, get_valid_user_id, validate_fields, handle_exceptions
 
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 

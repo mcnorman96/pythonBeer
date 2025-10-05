@@ -3,8 +3,10 @@ from werkzeug.exceptions import HTTPException
 import jwt
 import os
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
 
 def get_json_data():
     data = request.get_json()
@@ -19,15 +21,17 @@ def validate_fields(data, fields):
     return True, None
 
 def get_user_id_from_token():
-    auth_header = request.headers.get('Authorization')
-    if not auth_header or not auth_header.startswith('Bearer '):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
         logger.warning("Authorization header missing or invalid")
         return None
 
-    token = auth_header.split(' ')[1]
+    token = auth_header.split(" ")[1]
     try:
-        payload = jwt.decode(token, os.getenv('SECRET_KEY_AUTH', ''), algorithms=['HS256'])
-        user_id = payload.get('user_id')
+        payload = jwt.decode(
+            token, os.getenv("SECRET_KEY_AUTH", ""), algorithms=["HS256"]
+        )
+        user_id = payload.get("user_id")
         user_id = int(user_id)
         return user_id
     except jwt.ExpiredSignatureError:

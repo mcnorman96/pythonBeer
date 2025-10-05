@@ -17,6 +17,7 @@ def seed():
 
     print("Database seeded successfully!")
 
+
 if __name__ == "__main__":
     with app.app_context():  # <--- This is critical!
         seed()

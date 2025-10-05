@@ -2,26 +2,27 @@ from pydantic import BaseModel, field_validator
 from typing import Optional
 import re
 
+
 class UserSchema(BaseModel):
     id: Optional[int] = None
     username: str
     password: str
     email: str
 
-    @field_validator('username')
+    @field_validator("username")
     def validate_username(cls, v):
-        if not v or not re.match(r'^[A-Za-z0-9]+$', v):
+        if not v or not re.match(r"^[A-Za-z0-9]+$", v):
             raise ValueError("Username must be alphanumeric and non-empty.")
         return v
 
-    @field_validator('password')
+    @field_validator("password")
     def validate_password(cls, v):
         if not v:
             raise ValueError("Password cannot be empty.")
         return v
 
-    @field_validator('email')
+    @field_validator("email")
     def validate_email(cls, v):
-        if not re.match(r'[^@]+@[^@]+\.[^@]+', v):
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", v):
             raise ValueError("Invalid email address.")
         return v

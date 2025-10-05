@@ -5,20 +5,42 @@ from typing import List, Dict, Any
 from pydantic import ValidationError
 from sqlalchemy import text
 from app import socketio
+
+
 class RatingsService:
     @staticmethod
     def rating_update(event_id):
-        socketio.emit('rating_updated', {'event_id': event_id})
+        socketio.emit("rating_updated", {"event_id": event_id})
 
     @staticmethod
-    def create(event_id: int, user_id: int, beer_id: int, taste: float, aftertaste: float, smell: float, design: float,  score: float) -> None:
+    def create(
+        event_id: int,
+        user_id: int,
+        beer_id: int,
+        taste: float,
+        aftertaste: float,
+        smell: float,
+        design: float,
+        score: float,
+    ) -> None:
         try:
-            validated_rating = RatingsSchema(event_id=event_id, user_id=user_id, beer_id=beer_id, taste=taste, aftertaste=aftertaste, smell=smell, design=design,  score=score)
+            validated_rating = RatingsSchema(
+                event_id=event_id,
+                user_id=user_id,
+                beer_id=beer_id,
+                taste=taste,
+                aftertaste=aftertaste,
+                smell=smell,
+                design=design,
+                score=score,
+            )
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 
         # Check if rating already exists for this user, event, and beer
-        existing_rating = RatingORM.query.filter_by(event_id=event_id, user_id=user_id, beer_id=beer_id).first()
+        existing_rating = RatingORM.query.filter_by(
+            event_id=event_id, user_id=user_id, beer_id=beer_id
+        ).first()
         if existing_rating:
             # Update existing rating
             existing_rating.taste = validated_rating.taste
@@ -38,7 +60,7 @@ class RatingsService:
                 aftertaste=validated_rating.aftertaste,
                 smell=validated_rating.smell,
                 design=validated_rating.design,
-                score=validated_rating.score
+                score=validated_rating.score,
             )
             db.session.add(rating)
             db.session.commit()
@@ -47,21 +69,25 @@ class RatingsService:
     @staticmethod
     def getRating(event_id: int, user_id: int, beer_id: int) -> Dict[str, Any]:
         # Check if rating already exists for this user, event, and beer
-        existing_rating = RatingORM.query.filter_by(event_id=event_id, user_id=user_id, beer_id=beer_id).first()
+        existing_rating = RatingORM.query.filter_by(
+            event_id=event_id, user_id=user_id, beer_id=beer_id
+        ).first()
         if existing_rating:
             return existing_rating.to_dict()
         else:
             return None
 
     @staticmethod
-    def getAllRatingsForBeer(event_id: int,  beer_id: int) -> Dict[str, Any]:
+    def getAllRatingsForBeer(event_id: int, beer_id: int) -> Dict[str, Any]:
         # Retrieve ratings for a beer in an event, including username
-        query = text("""
+        query = text(
+            """
             SELECT r.*, u.username
             FROM rating AS r
             JOIN `user` AS u ON r.user_id = u.id
             WHERE r.event_id = :event_id AND r.beer_id = :beer_id
-        """)
+        """
+        )
         result = db.session.execute(query, {"event_id": event_id, "beer_id": beer_id})
         ratings = []
         for row in result:
@@ -77,7 +103,8 @@ class RatingsService:
     def get_toplist() -> List[Dict[str, Any]]:
         """Get the top beers based on average ratings."""
 
-        query = text("""
+        query = text(
+            """
             SELECT 
                 b.id AS id, 
                 b.name AS name, 
@@ -93,23 +120,34 @@ class RatingsService:
             JOIN rating r ON b.id = r.beer_id
             GROUP BY b.id
             ORDER BY average_score DESC
-        """)
+        """
+        )
 
-        result = db.session.execute(query);
+        result = db.session.execute(query)
         return [dict(row._mapping) for row in result]
 
     @staticmethod
-    def get_toplist_by_event(event_id, sortby='event_beer_id', order='desc') -> List[Dict[str, Any]]:
+    def get_toplist_by_event(
+        event_id, sortby="event_beer_id", order="desc"
+    ) -> List[Dict[str, Any]]:
         if not event_id:
             raise ValueError("Event ID must be provided")
 
         # Validate sortby and order
-        allowed_sort_fields = ['event_beer_id', 'average_score', 'average_smell', 'average_aftertaste', 'average_taste', 'average_design']
+        allowed_sort_fields = [
+            "event_beer_id",
+            "average_score",
+            "average_smell",
+            "average_aftertaste",
+            "average_taste",
+            "average_design",
+        ]
         if sortby not in allowed_sort_fields:
-            sortby = 'average_score'
-        order = 'DESC' if order.lower() == 'desc' else 'ASC'
+            sortby = "average_score"
+        order = "DESC" if order.lower() == "desc" else "ASC"
 
-        query = text(f"""
+        query = text(
+            f"""
             SELECT 
                 b.id AS id, 
                 b.name AS name, 
@@ -128,7 +166,8 @@ class RatingsService:
             WHERE e.event_id = :event_id
             GROUP BY b.id, e.id
             ORDER BY {sortby} {order}
-        """)
+        """
+        )
 
         result = db.session.execute(query, {"event_id": event_id})
 
@@ -147,7 +186,7 @@ class RatingsService:
     def deleteAllRatingsForBeerInEvent(event_id: int, beer_id: int) -> None:
         if not event_id or not beer_id:
             raise ValueError("event id and beer id should be passed")
-        
+
         RatingORM.query.filter_by(event_id=event_id, beer_id=beer_id).delete()
         db.session.commit()
 
@@ -155,6 +194,6 @@ class RatingsService:
     def deleteAllRatingsForEvent(event_id: int) -> None:
         if not event_id:
             raise ValueError("event id should be passed")
-        
+
         RatingORM.query.filter_by(event_id=event_id).delete()
         db.session.commit()

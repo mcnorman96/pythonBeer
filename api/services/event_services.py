@@ -1,24 +1,23 @@
 from datetime import datetime
 from db import db
-from typing import List,Dict, Any
+from typing import List, Dict, Any
 from pydantic import ValidationError
 from models.event import Event as EventORM
 from schemas.event import EventsSchema
 from datetime import timedelta
 from app import socketio
 from services.event_beer_services import EventBeersService
+
+
 class EventService:
     @staticmethod
     def event_created():
-        socketio.emit('event_created')
+        socketio.emit("event_created")
 
     @staticmethod
     def create(name: str, description: str) -> None:
         try:
-            validated_event = EventsSchema(
-                name=name,
-                description=description
-            )
+            validated_event = EventsSchema(name=name, description=description)
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 
@@ -29,7 +28,7 @@ class EventService:
             name=validated_event.name,
             start_date=startDate,
             end_date=endDate,
-            description=validated_event.description
+            description=validated_event.description,
         )
         db.session.add(events)
         db.session.commit()
@@ -38,7 +37,7 @@ class EventService:
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
         return [event.to_dict() for event in EventORM.query.all()]
-    
+
     @staticmethod
     def get_by_id(id: int) -> Dict[str, Any]:
         event = EventORM.query.get(id)
@@ -46,16 +45,13 @@ class EventService:
             return event.to_dict()
         else:
             return None
-        
+
     @staticmethod
     def update(id: int, name: str, description: str) -> None:
         event = EventORM.query.get(id)
         if event:
             try:
-                validated_event = EventsSchema(
-                    name=name,
-                    description=description
-                )
+                validated_event = EventsSchema(name=name, description=description)
             except ValidationError as e:
                 raise ValueError(f"Invalid data: {e}")
 
@@ -71,7 +67,7 @@ class EventService:
         event = EventORM.query.get(id)
         if event:
             # Deleting the Event Beers
-            EventBeersService.deleteAllEventBeersForEvent(id);
+            EventBeersService.deleteAllEventBeersForEvent(id)
 
             # Deleting the event
             db.session.delete(event)
