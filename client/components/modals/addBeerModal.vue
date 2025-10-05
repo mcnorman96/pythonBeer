@@ -21,13 +21,14 @@ const showDropdown = ref<boolean>(false);
 const error = ref<string | null>(null);
 
 watch(beerSearch, async (val: string) => {
-  if (val.length < 2) {
+  if (val.length < 3) {
     filteredBeers.value = [];
     showDropdown.value = false;
     return;
   }
   const { data: searchedBeers }: Beer[] = await beerService.eventBeer.searchBeer(val);
-  filteredBeers.value = searchedBeers.value || [];
+  
+  filteredBeers.value = searchedBeers.value?.response || [];
   showDropdown.value = filteredBeers.value.length > 0;
 });
 
@@ -83,9 +84,8 @@ const addExistingBeerToEvent = async (beerId: number) => {
   const addBeerToEvent = await beerService.eventBeer.addBeerToEvent(eventId as string, beerIdString);
   
   if (!addBeerToEvent.success) {
-    error.value = 'Failed to add beer to event.';
-    // Handle error
-    console.error(addBeerToEvent.error);
+    error.value = addBeerToEvent.error;
+    return
   }
   handleClose();
 };
@@ -99,7 +99,7 @@ const addExistingBeerToEvent = async (beerId: number) => {
       
       <div class="mb-6 relative">
         <h3 class="font-semibold mb-2">Add Existing Beer</h3>
-        <input name="beerSearch" v-model="beerSearch" class="border p-2 w-full mb-2" placeholder="Search for beer..." @focus="showDropdown = filteredBeers.length > 0" @blur="setTimeout(() => showDropdown = false, 200)" />
+        <input name="beerSearch" v-model="beerSearch" class="border p-2 w-full mb-2" placeholder="Search for beer..." @focus="showDropdown = filteredBeers.length > 0" @blur="() => setTimeout(() => showDropdown = false, 200)" />
         <ul v-if="showDropdown" class="absolute left-0 right-0 bg-white border rounded shadow z-10 max-h-48 overflow-auto">
           <li v-for="beer in filteredBeers" :key="beer.id" @mousedown.prevent="addExistingBeerToEvent(beer.id)" class="px-4 py-2 cursor-pointer hover:bg-gray-100">{{ beer.name }}</li>
         </ul>

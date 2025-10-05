@@ -20,7 +20,12 @@ const handleClose = () => {
 
 const updateEvent = async () => {
   const updateEvent = await beerService.events.updateEvent(eventId, { name: eventName.value, description: eventDescription.value });
-  return updateEvent;
+
+  if (!updateEvent.success) {
+    error.value = updateEvent.error;
+    return;
+  }
+  window.location.reload();
 };
 
 const deleteEvent = async () => {
