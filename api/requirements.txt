@@ -8,6 +8,7 @@ flask-migrate
 python-dotenv
 cryptography>=41.0.0
 pytest
+pytest-cov
 PyJWT
 flask-socketio
 pytest-mock
