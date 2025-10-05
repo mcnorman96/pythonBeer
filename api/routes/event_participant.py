@@ -1,42 +1,31 @@
-from flask import Blueprint, request, jsonify
-from utils.utils import get_json_data, get_valid_user_id
+from flask import Blueprint, jsonify
 from services.event_participant_service import EventParticipantService
-from werkzeug.exceptions import HTTPException
+from utils.utils import get_valid_user_id, handle_exceptions, get_logger
 
-newEventParticipant = Blueprint("new_event_participant", __name__)
+logging = get_logger(__name__)
+
+event_participant_bp = Blueprint("event_participant", __name__)
 
 
-@newEventParticipant.route("/<int:event_id>/participants/new", methods=["POST"])
+@event_participant_bp.route("/<int:event_id>/participants/new", methods=["POST"])
 def new_event_participant(event_id):
     try:
         user_id = get_valid_user_id()  # Ensure user is authenticated
+        EventParticipantService.create(event_id, user_id)
+        return jsonify({"message": "Event participant created successfully"}), 201
 
-        if event_id and user_id:
-            EventParticipantService.create(event_id, user_id)
-            return jsonify({"message": "Event participant created successfully"}), 201
-        else:
-            return jsonify({"error": "Please fill out all fields."}), 400
-
-    except HTTPException as http_exc:
-        raise http_exc
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
     except Exception as e:
-        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+        return handle_exceptions(e)
 
 
-allEventParticipant = Blueprint("all_event_participant", __name__)
-
-
-@allEventParticipant.route("/<int:event_id>/participants/", methods=["GET", "POST"])
+@event_participant_bp.route("/<int:event_id>/participants/", methods=["GET", "POST"])
 def all_event_participant(event_id):
     try:
-        events = EventParticipantService.get_all_users_in_event(event_id)
-        if events:
-            return jsonify({"response": events}), 200
-        else:
+        eventParticipants = EventParticipantService.get_all_users_in_event(event_id)
+        if not eventParticipants:
             return jsonify({"error": "No event participant found"}), 400
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+
+        return jsonify({"response": eventParticipants}), 200
+
     except Exception as e:
-        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+        return handle_exceptions(e)
