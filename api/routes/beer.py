@@ -1,114 +1,89 @@
 from flask import Blueprint, request, jsonify
 from services.beer_services import BeerService
-from utils.utils import get_json_data, get_valid_user_id
-from werkzeug.exceptions import HTTPException
+from utils.utils import get_json_data, get_valid_user_id, validate_fields, handle_exceptions
+
 import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-newBeer = Blueprint('new_beer', __name__)
-@newBeer.route('/new', methods=['POST'])
+beer_bp = Blueprint('beer', __name__)
+
+@beer_bp.route('/new', methods=['POST'])
 def new_beer():
-    try:
-      get_valid_user_id()  # Ensure user is authenticated
-      data = get_json_data()
-      name = data.get('name')
-      description = data.get('description')
-      brewery = data.get('brewery')
-      beer_type = data.get('type')
+  try:
+    get_valid_user_id()  # Ensure user is authenticated
+    data = get_json_data()
+    valid, msg = validate_fields(data, ['name', 'description', 'brewery', 'type'])
+    if not valid:
+      return jsonify({'error': msg}), 400
 
-      if name and description and brewery and beer_type:
-          beer = BeerService.create(
-              name, 
-              description, 
-              brewery, 
-              beer_type
-          )
+    beer = BeerService.create(data['name'], data['description'], data['brewery'], data['beer_type'])
 
-          return jsonify({
-              'message': 'Beer created successfully', 
-              'response': beer.to_dict()
-              }), 201
-      else:
-          return jsonify({'error': 'Please fill out all fields.'}), 400
-      
-    except HTTPException as http_exc:
-        raise http_exc
-    except ValueError as e:
-      return jsonify({'error': str(e)}), 400
-    except Exception as e:
-      return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
+    return jsonify({
+        'message': 'Beer created successfully', 
+        'response': beer.to_dict()
+    }), 201
+    
+  except Exception as e:
+    return handle_exceptions(e)
+    
 
-updateBeer = Blueprint('update_beer', __name__)
-@updateBeer.route('/update', methods=['PUT'])
+@beer_bp.route('/update', methods=['PUT'])
 def update_beer():
-    try:
-      get_valid_user_id()  # Ensure user is authenticated
-      data = get_json_data()
-      beer_id = data.get('id')
-      name = data.get('name')
-      description = data.get('description')
-      brewery = data.get('brewery')
-      beer_type = data.get('type')
+  try:
+    get_valid_user_id()  # Ensure user is authenticated
+    data = get_json_data()
+    valid, msg = validate_fields(data, ['id', 'name', 'description', 'brewery', 'type'])
+    if not valid:
+      return jsonify({'error': msg}), 400
 
-      if name and description and brewery and beer_type:
-          beer = BeerService.update(
-              beer_id, 
-              name, 
-              description, 
-              brewery, 
-              beer_type
-          )
+    beer = BeerService.update(
+        data['id'],
+        data['name'], 
+        data['description'], 
+        data['brewery'], 
+        data['type']
+    )
 
-          return jsonify({
-              'message': 'Beer updated successfully', 
-              'response': beer.to_dict()
-              }), 201
-      else:
-          return jsonify({'error': 'Please fill out all fields.'}), 400
-      
-    except HTTPException as http_exc:
-        raise http_exc
-    except ValueError as e:
-      return jsonify({'error': str(e)}), 400
-    except Exception as e:
-      return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
+    return jsonify({
+        'message': 'Beer updated successfully', 
+        'response': beer.to_dict()
+    }), 201
+    
+  except Exception as e:
+    return handle_exceptions(e)
 
 
-allBeers = Blueprint('all_beers', __name__)
-@allBeers.route('/', methods=['GET'])
+@beer_bp.route('/', methods=['GET'])
 def all_beers():
-    try:
-        beers = BeerService.get_all()
-        if beers:
-            beers_list = [beer.to_dict() for beer in beers]
-            return jsonify({'response': beers_list}), 200
-        else:
-            return jsonify({'response': []}), 200
-    except ValueError as e:
-        return jsonify({'error': str(e)}), 400
-          
+  try:
+      beers = BeerService.get_all()
+      if not beers:
+        return jsonify({'response': []}), 200
 
-searchBeers = Blueprint('search_beers', __name__)
-@searchBeers.route('/search', methods=['GET'])
+      beers_list = [beer.to_dict() for beer in beers]
+      return jsonify({'response': beers_list}), 200
+  
+  except Exception as e:
+    return handle_exceptions(e)
+        
+
+@beer_bp.route('/search', methods=['GET'])
 def search_beers():
   try: 
     search_query = request.args.get('s', '')
-    logger.debug(f"Received search query: {search_query}")
-    if search_query:
-      beers = BeerService.search_by_name(search_query)
-      logger.debug(f"Search query: {search_query}, Result: {beers}")
-      if beers:
-        return jsonify({'response': beers}), 200
-      else:
-        return jsonify({'message': 'No beers found'}), 204
-    else:
+
+    if not search_query:
       return jsonify({'message': 'No search query provided'}), 400
+
+    beers = BeerService.search_by_name(search_query)
+    if not beers:
+      return jsonify({'response': []}), 200
+      
+    return jsonify({'response': beers}), 200
      
-  except ValueError as e:
-      return jsonify({'error': str(e)}), 400
   except Exception as e:
-      return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
+    return handle_exceptions(e)
 
   
 

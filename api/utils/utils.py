@@ -1,4 +1,5 @@
 from flask import request, abort, jsonify, make_response
+from werkzeug.exceptions import HTTPException
 import jwt
 import os
 import logging
@@ -11,6 +12,11 @@ def get_json_data():
         data = request.form.to_dict()
     return data
 
+def validate_fields(data, fields):
+    missing = [f for f in fields if not data.get(f)]
+    if missing:
+        return False, f"Missing fields: {', '.join(missing)}"
+    return True, None
 
 def get_user_id_from_token():
     auth_header = request.headers.get('Authorization')
@@ -39,3 +45,19 @@ def get_valid_user_id():
         response = make_response(jsonify({"error": "Unauthorized"}), 401)
         abort(response)
     return user_id
+
+def handle_exceptions(e):
+    if isinstance(e, HTTPException):
+        logger.error(f"HTTPException: {e}")
+        return jsonify({'error': e.description}), e.code
+    elif isinstance(e, ValueError):
+        logger.error(f"ValueError: {e}")
+        return jsonify({'error': str(e)}), 400
+    else:
+        logger.error(f"Exception: {e}")
+        return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
+    
+
+def get_logger(name=None, level=logging.DEBUG):
+    logging.basicConfig(level=level, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    return logging.getLogger(name)
