@@ -1,4 +1,9 @@
-import type { EventBeerService, EventParticipantsService, EventsService, RatingsService } from "~/types/types";
+import type {
+  EventBeerService,
+  EventParticipantsService,
+  EventsService,
+  RatingsService,
+} from '~/types/types';
 import { eventBeer } from './eventBeer';
 import { eventParticipants } from './eventParticipants';
 import { events } from './events';
@@ -15,8 +20,7 @@ const beerService: BeerService = {
   events,
   eventBeer,
   eventParticipants,
-  ratings
+  ratings,
 };
 
 export default beerService;
-

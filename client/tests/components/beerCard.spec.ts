@@ -4,7 +4,7 @@ import BeerCard from '~/components/beerCard.vue';
 // Custom stub for RatingCircle to show the name prop
 const ratingCircleStub = {
   template: '<div>{{ name }}</div>',
-  props: ['name']
+  props: ['name'],
 };
 
 describe('BeerCard.vue', () => {
@@ -18,15 +18,15 @@ describe('BeerCard.vue', () => {
     average_aftertaste: 3.8,
     average_smell: 4.0,
     average_design: 4.5,
-    average_score: 4.1
+    average_score: 4.1,
   };
 
   it('renders beer details', () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: true },
       global: {
-        stubs: { RatingCircle: ratingCircleStub }
-      }
+        stubs: { RatingCircle: ratingCircleStub },
+      },
     });
     expect(wrapper.text()).toContain('Test Beer');
     expect(wrapper.text()).toContain('Test Brewery');
@@ -38,8 +38,8 @@ describe('BeerCard.vue', () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: true },
       global: {
-        stubs: { RatingCircle: ratingCircleStub }
-      }
+        stubs: { RatingCircle: ratingCircleStub },
+      },
     });
     expect(wrapper.text()).toContain('Taste');
     expect(wrapper.text()).toContain('Aftertaste');
@@ -52,8 +52,8 @@ describe('BeerCard.vue', () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: true },
       global: {
-        stubs: { RatingCircle: ratingCircleStub }
-      }
+        stubs: { RatingCircle: ratingCircleStub },
+      },
     });
     const viewBtn = wrapper.find('button.view-ratings');
     await viewBtn.trigger('click');
@@ -65,8 +65,8 @@ describe('BeerCard.vue', () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: true },
       global: {
-        stubs: { RatingCircle: ratingCircleStub }
-      }
+        stubs: { RatingCircle: ratingCircleStub },
+      },
     });
     const addBtn = wrapper.find('button.add-rating');
     await addBtn.trigger('click');
@@ -78,8 +78,8 @@ describe('BeerCard.vue', () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: false },
       global: {
-        stubs: { RatingCircle: ratingCircleStub }
-      }
+        stubs: { RatingCircle: ratingCircleStub },
+      },
     });
     expect(wrapper.findAll('button').length).toBe(0);
   });

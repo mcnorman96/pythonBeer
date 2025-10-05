@@ -42,7 +42,7 @@ const props = defineProps<{
   fill: none;
   stroke-width: 3.8;
   stroke-linecap: round;
-  stroke: #FECB23;
+  stroke: #fecb23;
   transition: stroke-dasharray 0.35s;
 }
 

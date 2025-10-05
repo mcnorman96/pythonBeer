@@ -1,20 +1,20 @@
 import { mount } from '@vue/test-utils';
 import addRatingModal from '~/components/modals/addRatingModal.vue';
 import { flushPromises } from '@vue/test-utils';
-import beerService from '@/services/BeerService/beerService'
+import beerService from '@/services/BeerService/beerService';
 
 // Type declarations for Nuxt auto-import composables
-globalThis.useRoute = () => ({ params: { id: "1" } })
-globalThis.useFetch = () => Promise<{ data: { value: any[] }, error: null, pending: false }>
-globalThis.onMounted = (fn: () => void) => { }
-globalThis.watch = (source: any, cb: (newValue: any, oldValue: any) => void) => { }
+globalThis.useRoute = () => ({ params: { id: '1' } });
+globalThis.useFetch = () => Promise<{ data: { value: any[] }; error: null; pending: false }>;
+globalThis.onMounted = (fn: () => void) => {};
+globalThis.watch = (source: any, cb: (newValue: any, oldValue: any) => void) => {};
 
 describe('addRatingModal.vue', () => {
   it('renders the modal', () => {
     const wrapper = mount(addRatingModal, {
       props: {
-        beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' }
-      }
+        beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' },
+      },
     });
     expect(wrapper.exists()).toBe(true);
   });
@@ -22,8 +22,8 @@ describe('addRatingModal.vue', () => {
   it('emits close event when close button is clicked', async () => {
     const wrapper = mount(addRatingModal, {
       props: {
-        beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' }
-      }
+        beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' },
+      },
     });
     const closeBtn = wrapper.find('button'); // The close button is just <button>
     await closeBtn.trigger('click');
@@ -33,8 +33,8 @@ describe('addRatingModal.vue', () => {
   it('has inputs for all rating fields', () => {
     const wrapper = mount(addRatingModal, {
       props: {
-        beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' }
-      }
+        beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' },
+      },
     });
     expect(wrapper.find('input[placeholder="Taste"]').exists()).toBe(true);
     expect(wrapper.find('input[placeholder="Aftertaste"]').exists()).toBe(true);
@@ -52,10 +52,10 @@ describe('addRatingModal.vue', () => {
         aftertaste: 0,
         smell: 0,
         design: 0,
-        score: 0
-      }
+        score: 0,
+      },
     });
-    
+
     const addRatingMock = vi.fn().mockResolvedValue({
       success: true,
       response: {},
@@ -66,8 +66,8 @@ describe('addRatingModal.vue', () => {
 
     const wrapper = mount(addRatingModal, {
       props: {
-        beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' }
-      }
+        beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' },
+      },
     });
 
     // Set input values
@@ -89,7 +89,7 @@ describe('addRatingModal.vue', () => {
       aftertaste: 4.0,
       smell: 3.5,
       design: 5.0,
-      score: 4.8
+      score: 4.8,
     });
     expect(wrapper.emitted('close')).toBeTruthy();
   });

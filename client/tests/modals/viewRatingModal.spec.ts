@@ -12,22 +12,25 @@ describe('viewRatingsModal.vue', () => {
 
   // Helps initialize the modal
   const wrapperHelper = async () => {
-    return await mount({
-      template: '<Suspense><ViewRatingsModal :beer="beer" /></Suspense>',
-      components: { ViewRatingsModal: viewRatingsModal },
-      setup() {
-        return { beer };
+    return await mount(
+      {
+        template: '<Suspense><ViewRatingsModal :beer="beer" /></Suspense>',
+        components: { ViewRatingsModal: viewRatingsModal },
+        setup() {
+          return { beer };
+        },
+      },
+      {
+        global: {
+          components: {
+            RatingCircle: {
+              template: '<div><slot></slot> {{ name }}</div>',
+              props: ['name'],
+            },
+          },
+        },
       }
-    }, {
-      global: {
-        components: {
-          RatingCircle: {
-            template: '<div><slot></slot> {{ name }}</div>',
-            props: ['name']
-          }
-        }
-      }
-    });
+    );
   };
 
   beforeEach(() => {
@@ -39,7 +42,7 @@ describe('viewRatingsModal.vue', () => {
     vi.spyOn(beerService.ratings, 'getAllRatingsForBeer').mockResolvedValue({
       data: { response: [] },
       error: null,
-      pending: false
+      pending: false,
     });
     const wrapper = await wrapperHelper();
     await flushPromises();
@@ -52,7 +55,7 @@ describe('viewRatingsModal.vue', () => {
     vi.spyOn(beerService.ratings, 'getAllRatingsForBeer').mockResolvedValue({
       data: null,
       error: null,
-      pending: true
+      pending: true,
     });
 
     const wrapper = await wrapperHelper();
@@ -66,7 +69,7 @@ describe('viewRatingsModal.vue', () => {
     vi.spyOn(beerService.ratings, 'getAllRatingsForBeer').mockResolvedValue({
       data: null,
       error: { message: 'Failed to load' },
-      pending: false
+      pending: false,
     });
 
     const wrapper = await wrapperHelper();
@@ -80,7 +83,7 @@ describe('viewRatingsModal.vue', () => {
     vi.spyOn(beerService.ratings, 'getAllRatingsForBeer').mockResolvedValue({
       data: { response: [] },
       error: null,
-      pending: false
+      pending: false,
     });
 
     const wrapper = await wrapperHelper();
@@ -101,12 +104,12 @@ describe('viewRatingsModal.vue', () => {
             aftertaste: 3.5,
             smell: 4.5,
             design: 5,
-            score: 4.7
-          }
-        ]
+            score: 4.7,
+          },
+        ],
       },
       error: null,
-      pending: false
+      pending: false,
     });
 
     const wrapper = await wrapperHelper();
@@ -122,7 +125,7 @@ describe('viewRatingsModal.vue', () => {
     vi.spyOn(beerService.ratings, 'getAllRatingsForBeer').mockResolvedValue({
       data: { response: [] },
       error: null,
-      pending: false
+      pending: false,
     });
 
     const wrapper = await wrapperHelper();

@@ -7,7 +7,11 @@ import type { Beer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 
 // Use useFetch for SSR and immediate data loading
-const { data: event_beers, pending: beersPending, error: beersError } = await beerService.eventBeer.toplist();
+const {
+  data: event_beers,
+  pending: beersPending,
+  error: beersError,
+} = await beerService.eventBeer.toplist();
 
 // For adding existing beers
 const filteredBeers = ref<Beer[]>([]);
@@ -20,7 +24,7 @@ const beerSearch = ref<string>('');
   <div class="beerContainer max-w-3xl m-auto">
     <div v-if="beersPending">Loading beers...</div>
     <div v-if="event_beers" v-for="beer in event_beers.response">
-      <BeerCard :beer="beer" :buttonsAvailable="false"/>
+      <BeerCard :beer="beer" :buttonsAvailable="false" />
     </div>
   </div>
 </template>

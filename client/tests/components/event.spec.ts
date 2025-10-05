@@ -12,15 +12,14 @@ describe('Event.vue', () => {
     name: 'Test Event',
     start_date: '2025-10-01T00:00:00.000Z',
     end_date: '2025-10-10T00:00:00.000Z',
-    description: 'An awesome event'
+    description: 'An awesome event',
   };
 
   const beers = [
     { id: 1, name: 'Beer One' },
     { id: 2, name: 'Beer Two' },
-    { id: 3, name: 'Beer Three' }
+    { id: 3, name: 'Beer Three' },
   ];
-
 
   const wrapperHelper = async (customEvent = event) => {
     const wrapper = mount(EventCard, {
@@ -48,8 +47,10 @@ describe('Event.vue', () => {
   });
 
   it('renders event details', async () => {
-    vi.spyOn(beerService.eventBeer, 'toplistBeersInEvent')
-      .mockResolvedValue({ success: true, response: beers });
+    vi.spyOn(beerService.eventBeer, 'toplistBeersInEvent').mockResolvedValue({
+      success: true,
+      response: beers,
+    });
 
     const wrapper = await wrapperHelper();
 
@@ -63,12 +64,14 @@ describe('Event.vue', () => {
   });
 
   it('shows top 3 beers with trophy images', async () => {
-    vi.spyOn(beerService.eventBeer, 'toplistBeersInEvent')
-      .mockResolvedValue({ success: true, response: beers });
+    vi.spyOn(beerService.eventBeer, 'toplistBeersInEvent').mockResolvedValue({
+      success: true,
+      response: beers,
+    });
 
     const wrapper = await wrapperHelper();
 
-    beers.forEach(b => {
+    beers.forEach((b) => {
       expect(wrapper.text()).toContain(b.name);
     });
 
@@ -81,16 +84,20 @@ describe('Event.vue', () => {
 
   it('shows Ended status if event is over', async () => {
     const endedEvent = { ...event, end_date: '2020-01-01T00:00:00.000Z' };
-    vi.spyOn(beerService.eventBeer, 'toplistBeersInEvent')
-      .mockResolvedValue({ success: true, response: beers });
+    vi.spyOn(beerService.eventBeer, 'toplistBeersInEvent').mockResolvedValue({
+      success: true,
+      response: beers,
+    });
 
     const wrapper = await wrapperHelper(endedEvent);
     expect(wrapper.text()).toContain('Ended');
   });
 
   it('links to the correct event page', async () => {
-    vi.spyOn(beerService.eventBeer, 'toplistBeersInEvent')
-      .mockResolvedValue({ success: true, response: beers });
+    vi.spyOn(beerService.eventBeer, 'toplistBeersInEvent').mockResolvedValue({
+      success: true,
+      response: beers,
+    });
 
     const wrapper = await wrapperHelper();
     const link = wrapper.findComponent({ name: 'NuxtLink' });

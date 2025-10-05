@@ -1,5 +1,10 @@
-h1, h2, h3, p, a, div {
-  font-family: "Oswald", sans-serif;
+h1,
+h2,
+h3,
+p,
+a,
+div {
+  font-family: 'Oswald', sans-serif;
   font-optical-sizing: auto;
   font-weight: normal;
   font-style: normal;
@@ -9,4 +14,3 @@ h1 {
   font-size: 52px;
   margin: 30px 0;
 }
-
