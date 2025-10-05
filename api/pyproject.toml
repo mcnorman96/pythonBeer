@@ -1,0 +1,21 @@
+[tool.black]
+line-length = 88
+skip-string-normalization = false
+skip-magic-trailing-comma = false
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.[^/]+ | # hidden files and directories
+    __pycache__ | 
+    build | 
+    dist | 
+    .venv | 
+    env | 
+    venv | 
+    migrations | 
+    node_modules | 
+    client | 
+    public
+)/
+'''
+target-version = ['py38']

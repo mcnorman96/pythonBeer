@@ -5,12 +5,10 @@ from utils.utils import (
     get_valid_user_id,
     validate_fields,
     handle_exceptions,
+    get_logger,
 )
 
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 beer_bp = Blueprint("beer", __name__)
 
@@ -58,7 +56,7 @@ def update_beer():
             jsonify(
                 {"message": "Beer updated successfully", "response": beer.to_dict()}
             ),
-            201,
+            200,
         )
 
     except Exception as e:
