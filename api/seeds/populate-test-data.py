@@ -15,8 +15,16 @@ def seed():
     db.drop_all()
     db.create_all()
 
-    user1 = User(username="alice", password=generate_password_hash("password1"), email="alice@example.com")
-    user2 = User(username="bob", password=generate_password_hash("password2"), email="bob@example.com")
+    user1 = User(
+        username="alice",
+        password=generate_password_hash("password1"),
+        email="alice@example.com",
+    )
+    user2 = User(
+        username="bob",
+        password=generate_password_hash("password2"),
+        email="bob@example.com",
+    )
     db.session.add_all([user1, user2])
     db.session.commit()
 
@@ -34,22 +42,55 @@ def seed():
     db.session.add_all([participant1, participant2])
     db.session.commit()
 
-    beer1 = Beer(name="Golden Ale", description="Light and crisp", brewery="Brewery A", type="Ale")
-    beer2 = Beer(name="Dark Stout", description="Rich and creamy", brewery="Brewery B", type="Stout")
+    beer1 = Beer(
+        name="Golden Ale",
+        description="Light and crisp",
+        brewery="Brewery A",
+        type="Ale",
+    )
+    beer2 = Beer(
+        name="Dark Stout",
+        description="Rich and creamy",
+        brewery="Brewery B",
+        type="Stout",
+    )
     db.session.add_all([beer1, beer2])
     db.session.commit()
 
-    event_beer1 = EventBeer(event_id=event1.id, beer_id=beer1.id, added_at=datetime.utcnow())
-    event_beer2 = EventBeer(event_id=event1.id, beer_id=beer2.id, added_at=datetime.utcnow())
+    event_beer1 = EventBeer(
+        event_id=event1.id, beer_id=beer1.id, added_at=datetime.utcnow()
+    )
+    event_beer2 = EventBeer(
+        event_id=event1.id, beer_id=beer2.id, added_at=datetime.utcnow()
+    )
     db.session.add_all([event_beer1, event_beer2])
     db.session.commit()
 
-    rating1 = Rating(event_id=event1.id, beer_id=beer1.id, user_id=user1.id, taste=1, aftertaste=2, smell=3, design=4, score=5)
-    rating2 = Rating(event_id=event1.id, beer_id=beer2.id, user_id=user2.id, taste=5, aftertaste=4, smell=3, design=2, score=1)
+    rating1 = Rating(
+        event_id=event1.id,
+        beer_id=beer1.id,
+        user_id=user1.id,
+        taste=1,
+        aftertaste=2,
+        smell=3,
+        design=4,
+        score=5,
+    )
+    rating2 = Rating(
+        event_id=event1.id,
+        beer_id=beer2.id,
+        user_id=user2.id,
+        taste=5,
+        aftertaste=4,
+        smell=3,
+        design=2,
+        score=1,
+    )
     db.session.add_all([rating1, rating2])
     db.session.commit()
 
     print("Database seeded successfully!")
+
 
 if __name__ == "__main__":
     with app.app_context():  # <--- This is critical!

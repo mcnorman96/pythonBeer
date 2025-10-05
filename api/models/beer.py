@@ -1,6 +1,8 @@
 from db import db
+
+
 class Beer(db.Model):
-    __tablename__ = 'beer'
+    __tablename__ = "beer"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
@@ -10,9 +12,9 @@ class Beer(db.Model):
 
     def to_dict(self):
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'brewery': self.brewery,
-            'type': self.type
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "brewery": self.brewery,
+            "type": self.type,
         }

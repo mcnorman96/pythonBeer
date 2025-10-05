@@ -9,13 +9,15 @@ from app import socketio
 from services.ratings_service import RatingsService
 
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
 
 class EventBeersService:
     @staticmethod
     def add_beer_to_event(event_id):
-        socketio.emit('beer_added', {'event_id': event_id})
+        socketio.emit("beer_added", {"event_id": event_id})
 
     @staticmethod
     def create(event_id: int, beer_id: int) -> None:
@@ -24,14 +26,18 @@ class EventBeersService:
         except ValidationError as e:
             raise ValueError(f"Invalid data: {e}")
 
-        checkIfBeerExists = db.session.query(EventBeerORM).filter_by(event_id=event_id, beer_id=beer_id).first()
+        checkIfBeerExists = (
+            db.session.query(EventBeerORM)
+            .filter_by(event_id=event_id, beer_id=beer_id)
+            .first()
+        )
         if checkIfBeerExists:
             raise ValueError("This beer is already added to the event")
-        
+
         event_beers = EventBeerORM(
             event_id=validated_event_beers.event_id,
             beer_id=validated_event_beers.beer_id,
-            added_at=datetime.utcnow()
+            added_at=datetime.utcnow(),
         )
 
         db.session.add(event_beers)
@@ -42,7 +48,7 @@ class EventBeersService:
     def deleteSingleEventBeerForEvent(event_id: int, beer_id: int) -> None:
         if not event_id or not beer_id:
             raise ValueError("event id and beer id should be passed")
-        
+
         # Delete all ratings attached to the event beers
         RatingsService.deleteAllRatingsForBeerInEvent(event_id, beer_id)
 
@@ -54,7 +60,7 @@ class EventBeersService:
     def deleteAllEventBeersForEvent(event_id: int) -> None:
         if not event_id:
             raise ValueError("event id should be passed")
-        
+
         # Delete all ratings attached to the event beers
         RatingsService.deleteAllRatingsForEvent(event_id)
 

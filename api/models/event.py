@@ -1,7 +1,8 @@
 from db import db
 
+
 class Event(db.Model):
-    __tablename__ = 'event'
+    __tablename__ = "event"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
@@ -11,9 +12,9 @@ class Event(db.Model):
 
     def to_dict(self):
         return {
-            'id': self.id,
-            'name': self.name,
-            'start_date': self.start_date.isoformat() if self.start_date else None,
-            'end_date': self.end_date.isoformat() if self.end_date else None,
-            'description': self.description,
+            "id": self.id,
+            "name": self.name,
+            "start_date": self.start_date.isoformat() if self.start_date else None,
+            "end_date": self.end_date.isoformat() if self.end_date else None,
+            "description": self.description,
         }
