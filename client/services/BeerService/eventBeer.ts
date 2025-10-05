@@ -1,4 +1,4 @@
-import type { Beer, ResponseTypeBeers, Response } from "~/types/types";
+import type { Beer, ResponseTypeBeers, Response, Event } from "~/types/types";
 import { API_URL } from "../vars";
 
 export interface EventBeerService {
@@ -7,6 +7,8 @@ export interface EventBeerService {
   searchBeer: (query: string) => Promise<{ data: any; error: any; pending: any }>;
   toplistBeersInEvent: (eventId: string) => Promise<Response>;
   toplist: () => Promise<{ data: any; error: any; pending: any }>;
+  updateBeer: (beer: Beer) => Promise<{ success: any; error?: any; }>;
+  deleteBeerFromEvent: (beer_id: string, event_id: string) => Promise<{ success: any; error?: any; }>;
 }
 
 export const eventBeer: EventBeerService = {
@@ -88,4 +90,41 @@ export const eventBeer: EventBeerService = {
       pending: fetchPending
     };
   },
+
+  async updateBeer(beer: Beer): Promise<{ success: any; error?: any; }> {
+    const response = await await fetch(`${API_URL}/beer/update`, {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify(beer)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { success: false, error: data.error }
+    }
+
+    return { success: true }
+  },
+
+  async deleteBeerFromEvent(beer_id: string, event_id: string): Promise<{ success: any; error?: any }> {
+    const response = await await fetch(`${API_URL}/events/${event_id}/beers/${beer_id}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { success: false, error: data.error }
+    }
+
+    return { success: true }
+  }
 };

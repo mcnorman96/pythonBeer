@@ -37,10 +37,10 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Import routes
 from routes.auth import register, logout, login
-from routes.beer import newBeer, allBeers, searchBeers
+from routes.beer import newBeer, allBeers, searchBeers, updateBeer
 from routes.event import newEvents, allEvents, getEventById, updateEvent, deleteEvent
 from routes.event_participant import newEventParticipant, allEventParticipant
-from routes.event_beer import newEventBeer
+from routes.event_beer import newEventBeer, deleteEventBeer
 from routes.ratings import newRatings, getRating, getAllRatingsForBeer, toplistRatings, toplistRatingsByEvent
 
 # Register blueprints
@@ -51,6 +51,7 @@ app.register_blueprint(logout, url_prefix='/auth/')
 app.register_blueprint(newBeer, url_prefix='/beer/')
 app.register_blueprint(allBeers, url_prefix='/beer/')
 app.register_blueprint(searchBeers, url_prefix='/beer/')
+app.register_blueprint(updateBeer, url_prefix='/beer/')
 
 app.register_blueprint(newEvents, url_prefix='/events/')
 app.register_blueprint(allEvents, url_prefix='/events/')
@@ -62,6 +63,7 @@ app.register_blueprint(newEventParticipant, url_prefix='/events/')
 app.register_blueprint(allEventParticipant, url_prefix='/events/')
 
 app.register_blueprint(newEventBeer, url_prefix='/events/')
+app.register_blueprint(deleteEventBeer, url_prefix='/events/')
 
 app.register_blueprint(newRatings, url_prefix='/ratings/')
 app.register_blueprint(getRating, url_prefix='/ratings/')

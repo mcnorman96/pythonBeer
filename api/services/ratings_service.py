@@ -144,6 +144,14 @@ class RatingsService:
         db.session.commit()
 
     @staticmethod
+    def deleteAllRatingsForBeerInEvent(event_id: int, beer_id: int) -> None:
+        if not event_id or not beer_id:
+            raise ValueError("event id and beer id should be passed")
+        
+        RatingORM.query.filter_by(event_id=event_id, beer_id=beer_id).delete()
+        db.session.commit()
+
+    @staticmethod
     def deleteAllRatingsForEvent(event_id: int) -> None:
         if not event_id:
             raise ValueError("event id should be passed")

@@ -23,7 +23,7 @@ const handleClose = () => {
       <h2 class="text-xl mb-4">Ratings for {{ props.beer.name }}</h2>
       <div v-if="pending" class="mb-4">Loading ratings...</div>
       <div v-else-if="error" class="mb-4 text-red-500">Error loading ratings: {{ error.message }}</div>
-      <div v-else-if="ratings && ratings.response.length === 0" class="mb-4">No ratings available.</div>
+      <div v-else-if="ratings && ratings.response.length === 0 || !ratings" class="mb-4">No ratings available.</div>
       <div v-else class="">
         <div v-for="rating in ratings.response" :key="rating.id" class="mb-2">
           <div class="flex justify-between py-5 border-t border-t-black">
