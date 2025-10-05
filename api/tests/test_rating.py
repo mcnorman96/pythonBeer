@@ -108,8 +108,8 @@ def test_get_all_ratings_for_beer_no_ratings(client, mocker):
     mocker.patch('services.ratings_service.RatingsService.getAllRatingsForBeer', return_value=[])
     response = client.get('/ratings/all', query_string={'beer_id': 3, 'event_id': 2})
 
-    assert response.status_code == 400
-    assert response.get_json()['error'] == 'No ratings found for this beer in the event'
+    assert response.status_code == 200
+    assert response.get_json()['response'] == []
 
 def test_get_all_ratings_for_beer_error(client, mocker):
     mocker.patch('services.ratings_service.RatingsService.getAllRatingsForBeer', side_effect=ValueError('DB error'))
@@ -161,8 +161,8 @@ def test_toplist_by_event_id_no_ratings(client, mocker):
     mocker.patch('services.ratings_service.RatingsService.get_toplist_by_event', return_value=[])
     response = client.get('/ratings/toplist/4')
 
-    assert response.status_code == 400
-    assert response.get_json()['error'] == 'No ratings found for this event'
+    assert response.status_code == 200
+    assert response.get_json()['response'] == []
 
 def test_toplist_by_event_id_error(client, mocker):
     mocker.patch('services.ratings_service.RatingsService.get_toplist_by_event', side_effect=ValueError('DB error'))
