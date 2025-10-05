@@ -14,7 +14,10 @@ const router = useRouter();
 const handleLogin = async () => {
   error.value = '';
   try {
-    const response = await authService.login({ username: username.value, password: password.value });
+    const response = await authService.login({
+      username: username.value,
+      password: password.value,
+    });
 
     if (!response.ok) {
       throw new Error('Login failed');
@@ -43,7 +46,12 @@ const handleLogin = async () => {
         </div>
         <div class="mb-4">
           <label class="block mb-2">Password</label>
-          <input v-model="password" type="password" class="border p-2 w-full" placeholder="Password" />
+          <input
+            v-model="password"
+            type="password"
+            class="border p-2 w-full"
+            placeholder="Password"
+          />
         </div>
         <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
         <Button color="yellow" type="submit" class="w-full">Login</Button>

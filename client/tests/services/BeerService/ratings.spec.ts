@@ -3,7 +3,7 @@ import { ratings } from '~/services/BeerService/ratings';
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 global.localStorage = {
-  getItem: vi.fn(() => 'test-token')
+  getItem: vi.fn(() => 'test-token'),
 };
 
 describe('ratings service', () => {
@@ -13,14 +13,30 @@ describe('ratings service', () => {
 
   describe('addRating', () => {
     it('returns error if required fields are missing', async () => {
-      const result = await ratings.addRating({ event_id: '', beer_id: '', taste: null, aftertaste: null, smell: null, design: null, score: null });
+      const result = await ratings.addRating({
+        event_id: '',
+        beer_id: '',
+        taste: null,
+        aftertaste: null,
+        smell: null,
+        design: null,
+        score: null,
+      });
       expect(result.success).toBe(false);
       expect(result.error).toBe('All fields are required');
     });
 
     it('returns success if all fields are present and fetch is ok', async () => {
       mockFetch.mockResolvedValueOnce({ ok: true });
-      const result = await ratings.addRating({ event_id: '1', beer_id: '2', taste: 1, aftertaste: 2, smell: 3, design: 4, score: 5 });
+      const result = await ratings.addRating({
+        event_id: '1',
+        beer_id: '2',
+        taste: 1,
+        aftertaste: 2,
+        smell: 3,
+        design: 4,
+        score: 5,
+      });
       expect(result.success).toBe(true);
       expect(result.message).toBe('Rating added successfully');
     });
@@ -28,9 +44,17 @@ describe('ratings service', () => {
     it('returns error if fetch fails', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: async () => ({ error: 'Failed' })
+        json: async () => ({ error: 'Failed' }),
       });
-      const result = await ratings.addRating({ event_id: '1', beer_id: '2', taste: 1, aftertaste: 2, smell: 3, design: 4, score: 5 });
+      const result = await ratings.addRating({
+        event_id: '1',
+        beer_id: '2',
+        taste: 1,
+        aftertaste: 2,
+        smell: 3,
+        design: 4,
+        score: 5,
+      });
       expect(result.success).toBe(false);
       expect(result.error).toBe('Failed');
     });
@@ -46,7 +70,7 @@ describe('ratings service', () => {
     it('returns success and response if fetch is ok', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ id: 1, score: 5 })
+        json: async () => ({ id: 1, score: 5 }),
       });
       const result = await ratings.getRating('1', '2');
       expect(result.success).toBe(true);
@@ -56,7 +80,7 @@ describe('ratings service', () => {
     it('returns error if fetch fails', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: async () => ({ error: 'Failed' })
+        json: async () => ({ error: 'Failed' }),
       });
       const result = await ratings.getRating('1', '2');
       expect(result.success).toBe(false);

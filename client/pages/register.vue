@@ -16,7 +16,11 @@ const router = useRouter();
 const handleRegister = async () => {
   error.value = '';
   try {
-    const response = await authService.registerUser({ username: username.value, password: password.value, email: email.value });
+    const response = await authService.registerUser({
+      username: username.value,
+      password: password.value,
+      email: email.value,
+    });
 
     if (!response.ok) {
       throw new Error('Registration failed');
@@ -40,7 +44,12 @@ const handleRegister = async () => {
         </div>
         <div class="mb-4">
           <label class="block mb-2">Password</label>
-          <input v-model="password" type="password" class="border p-2 w-full" placeholder="Password" />
+          <input
+            v-model="password"
+            type="password"
+            class="border p-2 w-full"
+            placeholder="Password"
+          />
         </div>
         <div class="mb-4">
           <label class="block mb-2">Email</label>

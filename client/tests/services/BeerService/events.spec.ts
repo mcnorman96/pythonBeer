@@ -18,7 +18,7 @@ describe('events service', () => {
     it('returns success if all fields are present and fetch is ok', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ id: 1, name: 'Test Event' })
+        json: async () => ({ id: 1, name: 'Test Event' }),
       });
       const result = await events.createEvent({ name: 'Test', description: 'Desc' });
       expect(result.success).toBe(true);
@@ -28,7 +28,7 @@ describe('events service', () => {
     it('returns error if fetch fails', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: async () => ({ error: 'Failed' })
+        json: async () => ({ error: 'Failed' }),
       });
       const result = await events.createEvent({ name: 'Test', description: 'Desc' });
       expect(result.success).toBe(false);

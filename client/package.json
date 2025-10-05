@@ -9,7 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",
@@ -24,6 +25,9 @@
     "@vue/test-utils": "^2.4.6",
     "jest": "^30.2.0",
     "jsdom": "^27.0.0",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "prettier": "^3.2.5",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3"
   }
 }

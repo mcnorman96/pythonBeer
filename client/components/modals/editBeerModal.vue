@@ -5,10 +5,10 @@ import type { Beer, newBeer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import Button from '~/components/ui/Button.vue';
 
-const props = defineProps<{ beer: Beer }>()
+const props = defineProps<{ beer: Beer }>();
 const route = useRoute();
-const eventId:string = route.params.id;
-const emit = defineEmits<{(e: 'close'): void; }>();
+const eventId: string = route.params.id;
+const emit = defineEmits<{ (e: 'close'): void }>();
 
 const beerName = ref<string>('');
 const beerDescription = ref<string>('');
@@ -40,17 +40,17 @@ const updateBeer = async () => {
     name: beerName.value,
     description: beerDescription.value,
     brewery: beerBrewery.value,
-    type: beerType.value
-  }
+    type: beerType.value,
+  };
 
   const updateBeer = await beerService.eventBeer.updateBeer(BeerObj);
 
   if (!updateBeer.success) {
     error.value = updateBeer.error;
-    return
+    return;
   }
   handleClose();
-}
+};
 
 const handleDeleteBeerFromEvent = () => {
   const deleteBeerFromEvent = beerService.eventBeer.deleteBeerFromEvent(props.beer.id, eventId);
@@ -59,10 +59,9 @@ const handleDeleteBeerFromEvent = () => {
     error.value = deleteBeerFromEvent.error;
     return;
   }
-  
-  handleClose();
-}
 
+  handleClose();
+};
 </script>
 
 <template>
@@ -72,16 +71,33 @@ const handleDeleteBeerFromEvent = () => {
       <h2 class="text-xl mb-4">Update beer</h2>
 
       <label class="block mb-2">Name</label>
-      <input name="name" v-model="beerName" class="border p-2 w-full mb-2" placeholder="Beer name" />
+      <input
+        name="name"
+        v-model="beerName"
+        class="border p-2 w-full mb-2"
+        placeholder="Beer name"
+      />
       <label class="block mb-2">Description</label>
-      <input name="description" v-model="beerDescription" class="border p-2 w-full mb-2" placeholder="Description" />
+      <input
+        name="description"
+        v-model="beerDescription"
+        class="border p-2 w-full mb-2"
+        placeholder="Description"
+      />
       <label class="block mb-2">Brewery</label>
-      <input name="brewery" v-model="beerBrewery" class="border p-2 w-full mb-2" placeholder="Brewery" />
+      <input
+        name="brewery"
+        v-model="beerBrewery"
+        class="border p-2 w-full mb-2"
+        placeholder="Brewery"
+      />
       <label class="block mb-2">Type</label>
       <input name="type" v-model="beerType" class="border p-2 w-full mb-4" placeholder="Type" />
 
-      <Button @click="updateBeer" color='yellow' :class="'w-full mb-2'">Update Beer</Button>
-      <Button delete @click="handleDeleteBeerFromEvent" class="w-full">Delete beer from event</Button>
+      <Button @click="updateBeer" color="yellow" :class="'w-full mb-2'">Update Beer</Button>
+      <Button delete @click="handleDeleteBeerFromEvent" class="w-full"
+        >Delete beer from event</Button
+      >
 
       <div v-if="error" class="text-red-500 mt-2">{{ error }}</div>
     </div>

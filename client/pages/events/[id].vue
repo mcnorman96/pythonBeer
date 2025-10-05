@@ -7,8 +7,14 @@ import AddRatingModal from '~/components/modals/AddRatingModal.vue';
 import AddBeerModal from '~/components/modals/AddBeerModal.vue';
 import ViewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
 import EditEventModal from '~/components/modals/editEventModal.vue';
-import EditBeerModal from '~/components/modals/editBeerModal.vue'
-import type { Beer, Participants, ResponseTypeBeers, ResponseTypeParticipants, Event } from '~/types/types';
+import EditBeerModal from '~/components/modals/editBeerModal.vue';
+import type {
+  Beer,
+  Participants,
+  ResponseTypeBeers,
+  ResponseTypeParticipants,
+  Event,
+} from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import { onMounted, onUnmounted } from 'vue';
 import { socket } from '~/services/vars';
@@ -22,11 +28,13 @@ const event_ended = ref<boolean>(false);
 const sortOption = ref<string>('new');
 
 const fetchBeersinEvent: () => Promise<void> = async () => {
-  const beerData: ResponseTypeBeers = await beerService.eventBeer.toplistBeersInEvent(eventId as string);
+  const beerData: ResponseTypeBeers = await beerService.eventBeer.toplistBeersInEvent(
+    eventId as string
+  );
   if (beerData.success && beerData.response) {
-      event_beers.value = beerData.response;
+    event_beers.value = beerData.response;
   }
-}
+};
 
 const sortBeers: () => void = () => {
   if (Array.isArray(event_beers.value)) {
@@ -52,7 +60,7 @@ onMounted(async () => {
     event_data.value = eventData.data.value.response;
     event_ended.value = eventData.data.value.response.end_date < new Date().toISOString();
   }
-  
+
   socket.on('rating_updated', async (data: Event) => {
     if (String(data.event_id) === String(eventId)) {
       await fetchBeersinEvent();
@@ -71,7 +79,6 @@ onMounted(async () => {
 onUnmounted(() => {
   socket.off('rating_updated');
 });
-
 
 // Modal state
 const showModal = ref<boolean>(false);
@@ -108,11 +115,11 @@ const closeViewRatingsModal = () => {
 
 const openEditEventModal = () => {
   showEditEventModal.value = true;
-}
+};
 
 const closeEditEventModal = () => {
   showEditEventModal.value = false;
-}
+};
 
 const openEditBeerModal = (beer: Beer) => {
   selectedBeerForRating.value = beer;
@@ -122,8 +129,6 @@ const closeEditBeerModal = () => {
   selectedBeerForRating.value = null;
   showEditBeerModal.value = false;
 };
-
-
 </script>
 
 <template>
@@ -131,26 +136,58 @@ const closeEditBeerModal = () => {
   <p class="text-center mb-5">{{ event_data?.description }}</p>
   <div class="beerContainer max-w-3xl m-auto mb-5">
     <div v-if="beersPending">Loading beers...</div>
-    <div class="text-center" v-if="event_beers.length === 0 && !beersPending">No beers in this event yet.</div>
+    <div class="text-center" v-if="event_beers.length === 0 && !beersPending">
+      No beers in this event yet.
+    </div>
     <div v-if="event_beers">
       <div class="flex justify-between mb-4">
         <select class="p-2 border border-gray-300 rounded" v-model="sortOption">
           <option value="new">Newest</option>
           <option value="top">Top Rated</option>
         </select>
-        <Button edit :class="'ml-2 px-4 py-2 bg-zinc-800 text-white rounded'" @click="openEditEventModal">Edit event</Button>
+        <Button
+          edit
+          :class="'ml-2 px-4 py-2 bg-zinc-800 text-white rounded'"
+          @click="openEditEventModal"
+          >Edit event</Button
+        >
       </div>
       <div v-for="beer in event_beers" :key="beer.id">
-        <BeerCard :buttonsAvailable="event_ended ? false : true"  :beer="beer" @add-rating="openRatingModal" @view-ratings="openViewRatingModal" @edit-beer="openEditBeerModal"/>
+        <BeerCard
+          :buttonsAvailable="event_ended ? false : true"
+          :beer="beer"
+          @add-rating="openRatingModal"
+          @view-ratings="openViewRatingModal"
+          @edit-beer="openEditBeerModal"
+        />
       </div>
     </div>
-    <Button color="yellow" v-if="!event_ended" :class="'mt-5 ml-auto block'" @click="openAddBeerModal">Add Beer to Event</Button>
+    <Button
+      color="yellow"
+      v-if="!event_ended"
+      :class="'mt-5 ml-auto block'"
+      @click="openAddBeerModal"
+      >Add Beer to Event</Button
+    >
   </div>
 
   <!-- Modals -->
-  <EditBeerModal v-if="showEditBeerModal" :beer="selectedBeerForRating" @close="closeEditBeerModal" />
+  <EditBeerModal
+    v-if="showEditBeerModal"
+    :beer="selectedBeerForRating"
+    @close="closeEditBeerModal"
+  />
   <EditEventModal v-if="showEditEventModal" @close="closeEditEventModal" />
   <AddBeerModal v-if="showModal" @close="closeAddBeerModal" />
-  <AddRatingModal v-if="showRatingModal" :beer="selectedBeerForRating" :eventId="eventId" @close="closeRatingModal" />
-  <ViewRatingsModal v-if="showViewRatingsModal" :beer="selectedBeerForRating" @close="closeViewRatingsModal" />  
+  <AddRatingModal
+    v-if="showRatingModal"
+    :beer="selectedBeerForRating"
+    :eventId="eventId"
+    @close="closeRatingModal"
+  />
+  <ViewRatingsModal
+    v-if="showViewRatingsModal"
+    :beer="selectedBeerForRating"
+    @close="closeViewRatingsModal"
+  />
 </template>

@@ -5,7 +5,7 @@ import type { Beer, Rating } from '~/types/types';
 import Button from '~/components/ui/Button.vue';
 
 const props = defineProps<{ beer: Beer }>();
-const emit = defineEmits<{(e: 'close'): void}>();
+const emit = defineEmits<{ (e: 'close'): void }>();
 const route = useRoute();
 const eventId = route.params.id;
 
@@ -22,32 +22,54 @@ const errors = ref<{ [key: string]: string }>({
   aftertaste: '',
   smell: '',
   design: '',
-  total_score: ''
+  total_score: '',
 });
 
 onMounted(async () => {
-  const rating: Response<Rating> = await beerService.ratings.getRating(eventId as string, props.beer.id);
+  const rating: Response<Rating> = await beerService.ratings.getRating(
+    eventId as string,
+    props.beer.id
+  );
   getRating.value = rating.response;
 });
 
-watch(getRating, (beerRated: Response<Rating>) => {
-  if (beerRated && beerRated.response) {
-    taste.value = beerRated.response.taste;
-    aftertaste.value = beerRated.response.aftertaste;
-    smell.value = beerRated.response.smell;
-    design.value = beerRated.response.design;
-    total_score.value = beerRated.response.score;
-  }
-}, { immediate: true });
+watch(
+  getRating,
+  (beerRated: Response<Rating>) => {
+    if (beerRated && beerRated.response) {
+      taste.value = beerRated.response.taste;
+      aftertaste.value = beerRated.response.aftertaste;
+      smell.value = beerRated.response.smell;
+      design.value = beerRated.response.design;
+      total_score.value = beerRated.response.score;
+    }
+  },
+  { immediate: true }
+);
 
 const validate = () => {
-  errors.value.taste = taste.value === undefined || taste.value < 0 || taste.value > 5 ? 'Taste must be between 0 and 5' : '';
-  errors.value.aftertaste = aftertaste.value === undefined || aftertaste.value < 0 || aftertaste.value > 5 ? 'Aftertaste must be between 0 and 5' : '';
-  errors.value.smell = smell.value === undefined || smell.value < 0 || smell.value > 5 ? 'Smell must be between 0 and 5' : '';
-  errors.value.design = design.value === undefined || design.value < 0 || design.value > 5 ? 'Design must be between 0 and 5' : '';
-  errors.value.total_score = total_score.value === undefined || total_score.value < 0 || total_score.value > 5 ? 'Total score must be between 0 and 5' : '';
-  return Object.values(errors.value).every(e => !e);
-}
+  errors.value.taste =
+    taste.value === undefined || taste.value < 0 || taste.value > 5
+      ? 'Taste must be between 0 and 5'
+      : '';
+  errors.value.aftertaste =
+    aftertaste.value === undefined || aftertaste.value < 0 || aftertaste.value > 5
+      ? 'Aftertaste must be between 0 and 5'
+      : '';
+  errors.value.smell =
+    smell.value === undefined || smell.value < 0 || smell.value > 5
+      ? 'Smell must be between 0 and 5'
+      : '';
+  errors.value.design =
+    design.value === undefined || design.value < 0 || design.value > 5
+      ? 'Design must be between 0 and 5'
+      : '';
+  errors.value.total_score =
+    total_score.value === undefined || total_score.value < 0 || total_score.value > 5
+      ? 'Total score must be between 0 and 5'
+      : '';
+  return Object.values(errors.value).every((e) => !e);
+};
 
 const handleSave = async () => {
   if (!validate()) {
@@ -62,7 +84,7 @@ const handleSave = async () => {
     aftertaste: aftertaste.value!,
     smell: smell.value!,
     design: design.value!,
-    score: total_score.value!
+    score: total_score.value!,
   });
 
   if (saveRating.errorMsg) {
@@ -86,23 +108,67 @@ const handleClose = () => {
       <h2 class="text-xl mb-4">Rate {{ props.beer.name }}</h2>
       <div class="mb-4">
         <label class="block mb-2">Taste</label>
-        <input v-model="taste" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Taste" />
+        <input
+          v-model="taste"
+          type="number"
+          min="0"
+          max="5"
+          step="0.1"
+          class="border p-2 w-full mb-2"
+          placeholder="Taste"
+        />
         <div v-if="errors.taste" class="text-red-500 text-xs mb-2">{{ errors.taste }}</div>
         <label class="block mb-2">Aftertaste</label>
-        <input v-model="aftertaste" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Aftertaste" />
-        <div v-if="errors.aftertaste" class="text-red-500 text-xs mb-2">{{ errors.aftertaste }}</div>
+        <input
+          v-model="aftertaste"
+          type="number"
+          min="0"
+          max="5"
+          step="0.1"
+          class="border p-2 w-full mb-2"
+          placeholder="Aftertaste"
+        />
+        <div v-if="errors.aftertaste" class="text-red-500 text-xs mb-2">
+          {{ errors.aftertaste }}
+        </div>
         <label class="block mb-2">Smell</label>
-        <input v-model="smell" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Smell" />
+        <input
+          v-model="smell"
+          type="number"
+          min="0"
+          max="5"
+          step="0.1"
+          class="border p-2 w-full mb-2"
+          placeholder="Smell"
+        />
         <div v-if="errors.smell" class="text-red-500 text-xs mb-2">{{ errors.smell }}</div>
         <label class="block mb-2">Design</label>
-        <input v-model="design" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Design" />
+        <input
+          v-model="design"
+          type="number"
+          min="0"
+          max="5"
+          step="0.1"
+          class="border p-2 w-full mb-2"
+          placeholder="Design"
+        />
         <div v-if="errors.design" class="text-red-500 text-xs mb-2">{{ errors.design }}</div>
         <label class="block mb-2">Total score</label>
-        <input v-model="total_score" type="number" min="0" max="5" step="0.1" class="border p-2 w-full mb-2" placeholder="Total Score" />
-        <div v-if="errors.total_score" class="text-red-500 text-xs mb-2">{{ errors.total_score }}</div>
+        <input
+          v-model="total_score"
+          type="number"
+          min="0"
+          max="5"
+          step="0.1"
+          class="border p-2 w-full mb-2"
+          placeholder="Total Score"
+        />
+        <div v-if="errors.total_score" class="text-red-500 text-xs mb-2">
+          {{ errors.total_score }}
+        </div>
       </div>
       <div class="flex justify-end space-x-2">
-        <Button color="yellow" @click="handleSave" class="w-full savebtn ">Save</Button>
+        <Button color="yellow" @click="handleSave" class="w-full savebtn">Save</Button>
       </div>
       <div v-if="errorMsg" class="mt-4 text-red-500">
         {{ errorMsg }}

@@ -25,7 +25,10 @@ const closeModal = () => {
 };
 
 const saveEvent = async () => {
-  const newEvent = await beerService.events.createEvent({ name: eventName.value, description: eventDescription.value });
+  const newEvent = await beerService.events.createEvent({
+    name: eventName.value,
+    description: eventDescription.value,
+  });
   if (!newEvent.success) {
     errorMsg.value = newEvent.error || 'Failed to create event';
     return;
@@ -37,7 +40,7 @@ const fetchingEvents = async () => {
   pending.value = true;
 
   const getEvents = await beerService.events.getEvents();
-  
+
   if (getEvents.success) {
     events.value = getEvents.response || [];
   }
@@ -46,7 +49,7 @@ const fetchingEvents = async () => {
   }
 
   pending.value = false;
-}
+};
 
 onMounted(async () => {
   await fetchingEvents();
@@ -59,7 +62,6 @@ onMounted(async () => {
 onUnmounted(() => {
   socket.off('event_created');
 });
-
 </script>
 
 <template>
@@ -69,14 +71,17 @@ onUnmounted(() => {
   <div v-else-if="pending">Loading...</div>
   <div v-else class="max-w-screen-md m-auto">
     <div class="eventbody pt-2">
-      <div v-for="event in events" >
-        <Event :event="event"/>
+      <div v-for="event in events">
+        <Event :event="event" />
       </div>
     </div>
   </div>
 
   <!-- Add Event Modal -->
-  <div v-if="showModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div
+    v-if="showModal"
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  >
     <div class="bg-white p-6 rounded shadow-lg w-96 relative">
       <Button close @click="closeModal" class="absolute top-2 right-2"></Button>
       <h2 class="text-xl mb-4">Add New Event</h2>

@@ -19,7 +19,7 @@ describe('eventBeer service', () => {
     it('returns success if all fields are present and fetch is ok', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ response: { id: 1, name: 'Test Beer' } })
+        json: async () => ({ response: { id: 1, name: 'Test Beer' } }),
       });
       const beer = { name: 'Test', brewery: 'Brew', description: 'Desc', type: 'IPA' };
       const result = await eventBeer.newBeer(beer as any);
@@ -30,7 +30,7 @@ describe('eventBeer service', () => {
     it('returns error if fetch fails', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: async () => ({ error: 'Failed' })
+        json: async () => ({ error: 'Failed' }),
       });
       const beer = { name: 'Test', brewery: 'Brew', description: 'Desc', type: 'IPA' };
       const result = await eventBeer.newBeer(beer as any);
@@ -55,7 +55,7 @@ describe('eventBeer service', () => {
     it('returns error if fetch fails', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: async () => ({ error: 'Failed' })
+        json: async () => ({ error: 'Failed' }),
       });
       const result = await eventBeer.addBeerToEvent('1', '2');
       expect(result.success).toBe(false);
@@ -67,7 +67,7 @@ describe('eventBeer service', () => {
     it('returns success and response if fetch is ok', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ response: [{ id: 1, name: 'Beer' }] })
+        json: async () => ({ response: [{ id: 1, name: 'Beer' }] }),
       });
       const result = await eventBeer.toplistBeersInEvent('1');
       expect(result.success).toBe(true);
@@ -77,7 +77,7 @@ describe('eventBeer service', () => {
     it('returns error if fetch fails', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: async () => ({ error: 'Failed' })
+        json: async () => ({ error: 'Failed' }),
       });
       const result = await eventBeer.toplistBeersInEvent('1');
       expect(result.success).toBe(false);
