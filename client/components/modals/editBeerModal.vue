@@ -34,7 +34,7 @@ onMounted(() => {
   }
 });
 
-const updateBeer = () => {
+const updateBeer = async () => {
   const BeerObj: Beer = {
     id: props.beer.id,
     name: beerName.value,
@@ -42,15 +42,14 @@ const updateBeer = () => {
     brewery: beerBrewery.value,
     type: beerType.value
   }
-  const updateBeer = beerService.eventBeer.updateBeer(BeerObj);
 
-  console.log(updateBeer);
+  const updateBeer = await beerService.eventBeer.updateBeer(BeerObj);
 
   if (!updateBeer.success) {
     error.value = updateBeer.error;
     return
   }
-  emit('close');
+  handleClose();
 }
 
 const handleDeleteBeerFromEvent = () => {
@@ -60,7 +59,8 @@ const handleDeleteBeerFromEvent = () => {
     error.value = deleteBeerFromEvent.error;
     return;
   }
-  emit('close');
+  
+  handleClose();
 }
 
 </script>

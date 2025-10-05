@@ -8,7 +8,7 @@ export interface EventBeerService {
   toplistBeersInEvent: (eventId: string) => Promise<Response>;
   toplist: () => Promise<{ data: any; error: any; pending: any }>;
   updateBeer: (beer: Beer) => Promise<{ success: any; error?: any; }>;
-  deleteBeerFromEvent: (beer_id: Beer, event_id: Event) => Promise<{ success: any; error: any; }>;
+  deleteBeerFromEvent: (beer_id: string, event_id: string) => Promise<{ success: any; error?: any; }>;
 }
 
 export const eventBeer: EventBeerService = {
@@ -110,7 +110,21 @@ export const eventBeer: EventBeerService = {
     return { success: true }
   },
 
-  async deleteBeerFromEvent(): Promise<{ success: any; error: any }> {
-    
+  async deleteBeerFromEvent(beer_id: string, event_id: string): Promise<{ success: any; error?: any }> {
+    const response = await await fetch(`${API_URL}/events/${event_id}/beers/${beer_id}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { success: false, error: data.error }
+    }
+
+    return { success: true }
   }
 };

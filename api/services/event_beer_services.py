@@ -39,6 +39,18 @@ class EventBeersService:
         EventBeersService.add_beer_to_event(event_id)
 
     @staticmethod
+    def deleteSingleEventBeerForEvent(event_id: int, beer_id: int) -> None:
+        if not event_id or not beer_id:
+            raise ValueError("event id and beer id should be passed")
+        
+        # Delete all ratings attached to the event beers
+        RatingsService.deleteAllRatingsForBeerInEvent(event_id, beer_id)
+
+        # Deleting all the event beers attached to the event
+        EventBeerORM.query.filter_by(event_id=event_id, beer_id=beer_id).delete()
+        db.session.commit()
+
+    @staticmethod
     def deleteAllEventBeersForEvent(event_id: int) -> None:
         if not event_id:
             raise ValueError("event id should be passed")

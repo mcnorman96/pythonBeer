@@ -31,6 +31,31 @@ class BeerService:
       return beer; 
 
   @staticmethod
+  def update(beer_id: int, name: str, description: str, brewery: str, type: str) -> None:
+    try:
+        validated_beer = BeerSchema(id=beer_id, name=name, description=description, brewery=brewery, type=type)
+    except ValidationError as e:
+        raise ValueError(f"Invalid data: {e}")
+
+    beer = BeerORM(
+        id=beer_id,
+        name=validated_beer.name,
+        description=validated_beer.description,
+        brewery=validated_beer.brewery,
+        type=validated_beer.type
+    )
+
+    BeerORM.query.filter_by(id=beer_id).update({
+        'name':beer.name,
+        'description':beer.description,
+        'brewery':beer.brewery,
+        'type':beer.type
+    })
+
+    db.session.commit()
+    return beer; 
+
+  @staticmethod
   def search_by_name(name: str) -> List[dict]:
     if not name:
         return []
