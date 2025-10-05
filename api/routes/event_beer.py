@@ -1,48 +1,47 @@
-from flask import Blueprint, request, jsonify
-from utils.utils import get_json_data, get_valid_user_id
+from flask import Blueprint, jsonify
 from services.event_beer_services import EventBeersService
-from werkzeug.exceptions import HTTPException
+from utils.utils import (
+    get_json_data,
+    get_valid_user_id,
+    validate_fields,
+    get_logger,
+    handle_exceptions,
+)
 
-newEventBeer = Blueprint("new_event_beer", __name__)
+logging = get_logger(__name__)
+
+event_beer_bp = Blueprint("event_beer", __name__)
 
 
-@newEventBeer.route("/<int:event_id>/beers", methods=["POST"])
+@event_beer_bp.route("/<int:event_id>/beers", methods=["POST"])
 def new_event_beer(event_id):
     try:
         get_valid_user_id()  # Ensure user is authenticated
         data = get_json_data()
+        valid, msg = validate_fields(data, ["beer_id"])
+        if not valid:
+            return jsonify({"error": msg}), 400
+
         beer_id = data.get("beer_id")
-        if event_id and beer_id:
-            EventBeersService.create(event_id, beer_id)
-            return jsonify({"message": "Event beer created successfully"}), 201
-        else:
+        if not event_id or not beer_id:
             return jsonify({"error": "Please fill out all fields."}), 400
 
-    except HTTPException as http_exc:
-        raise http_exc
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        EventBeersService.create(event_id, beer_id)
+        return jsonify({"message": "Event beer created successfully"}), 201
+
     except Exception as e:
-        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+        return handle_exceptions(e)
 
 
-deleteEventBeer = Blueprint("delete_event_beer", __name__)
-
-
-@deleteEventBeer.route("/<int:event_id>/beers/<int:beer_id>", methods=["DELETE"])
+@event_beer_bp.route("/<int:event_id>/beers/<int:beer_id>", methods=["DELETE"])
 def delete_event_beer(event_id, beer_id):
     try:
         get_valid_user_id()  # Ensure user is authenticated
-
-        if event_id and beer_id:
-            EventBeersService.deleteSingleEventBeerForEvent(event_id, beer_id)
-            return jsonify({"message": "Event beer deleted successfully"}), 201
-        else:
+        if not event_id or not beer_id:
             return jsonify({"error": "Please fill out all fields."}), 400
 
-    except HTTPException as http_exc:
-        raise http_exc
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        EventBeersService.deleteSingleEventBeerForEvent(event_id, beer_id)
+        return jsonify({"message": "Event beer deleted successfully"}), 201
+
     except Exception as e:
-        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+        return handle_exceptions(e)

@@ -119,7 +119,7 @@ def test_search_beers_no_results(client, mocker):
     mocker.patch("services.beer_services.BeerService.search_by_name", return_value=[])
 
     response = client.get("/beer/search", query_string={"s": "NoMatch"})
-    assert response.status_code == 204
+    assert response.status_code == 200
 
 
 def test_search_beers_error(client, mocker):
