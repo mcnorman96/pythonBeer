@@ -4,10 +4,22 @@ from typing import List
 from pydantic import ValidationError
 from schemas.beer import BeerSchema
 from typing import List
+from app import socketio
 from utils.utils import get_logger
 logging = get_logger(__name__)
 
 class BeerService:
+
+    @staticmethod
+    def beer_created():
+        socketio.emit("beer_created")
+        logging.info("Socket event 'beer_created' emitted.")
+
+    @staticmethod
+    def beer_updated(beer: BeerORM):
+        # Convert BeerORM object to dict for JSON serialization
+        socketio.emit("beer_updated", {"beer": beer.to_dict()})
+        logging.info("Socket event 'beer_updated' emitted.")
 
     @staticmethod
     def create(name: str, description: str, brewery: str, type: str) -> BeerORM:
@@ -29,6 +41,7 @@ class BeerService:
         )
         db.session.add(beer)
         db.session.commit()
+        BeerService.beer_created()
         return beer
 
 
@@ -55,6 +68,7 @@ class BeerService:
         beer.brewery = validated_beer.brewery
         beer.type = validated_beer.type
         db.session.commit()
+        BeerService.beer_updated(beer)
         return beer
 
 

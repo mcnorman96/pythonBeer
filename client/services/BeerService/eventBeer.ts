@@ -1,4 +1,4 @@
-import type { Beer, ResponseTypeBeers, Response, Event } from '~/types/types';
+import type { Beer, ResponseTypeBeers, Response } from '~/types/types';
 import { API_URL } from '../vars';
 
 export interface EventBeerService {
