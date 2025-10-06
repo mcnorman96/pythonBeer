@@ -28,12 +28,13 @@ const updateEvent = async () => {
     error.value = updateEvent.error;
     return;
   }
-  window.location.reload();
+  
+  handleClose();
 };
 
 const deleteEvent = async () => {
   const deleteEvent = await beerService.events.deleteEvent(eventId);
-
+  
   if (deleteEvent.success) {
     handleClose();
     router.push('/events');

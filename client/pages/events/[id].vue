@@ -36,6 +36,14 @@ const fetchBeersinEvent: () => Promise<void> = async () => {
   }
 };
 
+const fetchEventData: () => Promise<void> = async () => {
+  const eventData = await beerService.events.getEventById(eventId as string);
+  if (eventData?.data?.value?.response) {
+    event_data.value = eventData.data.value.response;
+    event_ended.value = eventData.data.value.response.end_date < new Date().toISOString();
+  }
+}
+
 const sortBeers: () => void = () => {
   if (Array.isArray(event_beers.value)) {
     let sorted = [...event_beers.value];
@@ -54,12 +62,7 @@ watch(sortOption, (newVal: string) => {
 
 onMounted(async () => {
   await fetchBeersinEvent();
-
-  const eventData = await beerService.events.getEventById(eventId as string);
-  if (eventData?.data?.value?.response) {
-    event_data.value = eventData.data.value.response;
-    event_ended.value = eventData.data.value.response.end_date < new Date().toISOString();
-  }
+  await fetchEventData();
 
   socket.on('rating_updated', async (data: Event) => {
     if (String(data.event_id) === String(eventId)) {
@@ -68,16 +71,36 @@ onMounted(async () => {
     }
   });
 
-  socket.on('beer_added', async (data: Event) => {
+  socket.on('beers_in_event_updated', async (data: Event) => {
     if (String(data.event_id) === String(eventId)) {
       await fetchBeersinEvent();
       sortBeers();
+    }
+  });
+
+  socket.on('beer_updated', async (data: Beer) => {
+    const containsBeer = event_beers.value.some((beer) => {
+      return beer.id === data.beer.id
+    });
+    
+    if (containsBeer) {
+      await fetchBeersinEvent();
+      sortBeers();
+    }
+  });
+
+  socket.on('event_updated', async (data: Event) => {
+    if (String(data.event_id) === String(eventId)) {
+      await fetchEventData();
     }
   });
 });
 
 onUnmounted(() => {
   socket.off('rating_updated');
+  socket.off('beers_in_event_updated');
+  socket.off('event_updated');
+  socket.off('beer_updated')
 });
 
 // Modal state

@@ -10,14 +10,12 @@ logging = get_logger(__name__)
 
 class EventBeersService:
     @staticmethod
-    def add_beer_to_event(event_id: int) -> None:
-        # Emit socket event for beer added
-        logging.info(f"Beer added to event {event_id}")
-        socketio.emit("beer_added", {"event_id": event_id})
+    def updated_beer_in_event(event_id: int) -> None:
+        logging.info(f"Beers in event updated {event_id}")
+        socketio.emit("beers_in_event_updated", {"event_id": event_id})
 
     @staticmethod
     def create(event_id: int, beer_id: int) -> EventBeerORM:
-        # Validate input data
         try:
             validated_event_beers = EventBeersSchema(event_id=event_id, beer_id=beer_id)
         except ValidationError as e:
@@ -43,13 +41,12 @@ class EventBeersService:
 
         db.session.add(event_beers)
         db.session.commit()
-        EventBeersService.add_beer_to_event(event_id)
+        EventBeersService.updated_beer_in_event(event_id)
         logging.info(f"Created EventBeer: event_id={event_id}, beer_id={beer_id}")
         return event_beers
 
     @staticmethod
     def deleteSingleEventBeerForEvent(event_id: int, beer_id: int) -> None:
-        # Validate input
         if not event_id or not beer_id:
             logging.error("event id and beer id should be passed")
             raise ValueError("event id and beer id should be passed")

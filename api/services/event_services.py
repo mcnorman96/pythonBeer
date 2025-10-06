@@ -18,6 +18,11 @@ class EventService:
         logging.info("Socket event 'event_created' emitted.")
 
     @staticmethod
+    def event_updated(event: EventORM):
+        socketio.emit("event_updated", {"event": event})
+        logging.info("Socket event 'event_updated' emitted.")
+
+    @staticmethod
     def create(name: str, description: str) -> Optional[EventORM]:
         # Validate input
         if not name or not description:
@@ -47,7 +52,7 @@ class EventService:
 
     @staticmethod
     def get_all() -> List[Dict[str, Any]]:
-        events = EventORM.query.all()
+        events = EventORM.query.order_by(EventORM.start_date.desc()).all()
         logging.info(f"Fetched {len(events)} events")
         return [event.to_dict() for event in events]
 
@@ -74,8 +79,8 @@ class EventService:
             event.name = validated_event.name
             event.description = validated_event.description
             db.session.commit()
-            EventService.event_created()
             logging.info(f"Updated event {id} with name '{name}' and description '{description}'")
+            EventService.event_updated(event)
             return True
         logging.warning(f"Event {id} not found for update")
         return False
