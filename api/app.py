@@ -1,8 +1,10 @@
 import os
 import logging
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint
 from dotenv import load_dotenv
+
 
 load_dotenv()
 import pymysql
@@ -53,11 +55,33 @@ app.register_blueprint(event_participant_bp, url_prefix="/events/")
 app.register_blueprint(event_beer_bp, url_prefix="/events/")
 app.register_blueprint(ratings_bp, url_prefix="/ratings/")
 
+## Docs
+SWAGGER_URL = '/api/docs'
+API_URL = '/api/openapi.yaml'
+
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "PythonBeer API"
+    }
+)
+
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+
+@app.route('/api/openapi.yaml')
+def send_openapi():
+    return send_from_directory('./', 'openapi.yaml')
 
 @app.route("/")
 def index():
     return "Beer event rating API is running!"
 
 
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    import sys
+    debug_mode = False
+    if "--reload" in sys.argv:
+        debug_mode = True
+    app.run(host="0.0.0.0", port=5000, debug=debug_mode)

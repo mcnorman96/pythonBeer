@@ -5,7 +5,6 @@ from db import db
 from typing import List, Dict, Any, Optional
 from pydantic import ValidationError
 from sqlalchemy import text
-from app import socketio
 from utils.utils import get_logger
 logging = get_logger(__name__)
 
@@ -13,6 +12,7 @@ logging = get_logger(__name__)
 class RatingsService:
     @staticmethod
     def rating_update(event_id):
+        from app import socketio
         socketio.emit("rating_updated", {"event_id": event_id})
         logging.info(f"Socket event 'rating_updated' emitted for event {event_id}")
 

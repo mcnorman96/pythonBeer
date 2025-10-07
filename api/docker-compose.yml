@@ -15,7 +15,7 @@ services:
 
   web:
     build: .
-    command: flask run --host=0.0.0.0 --reload
+    command: python app.py --reload
     volumes:
       - .:/app
     ports:
