@@ -12,3 +12,4 @@ pytest-cov
 PyJWT
 flask-socketio
 pytest-mock
+flask-swagger-ui

@@ -1,0 +1,29 @@
+openapi: 3.1.0
+info:
+  title: PythonBeer API
+  version: 1.0.0
+  description: API documentation for the PythonBeer backend
+servers:
+  - url: http://localhost:8000
+tags:
+  - name: Beer
+    description: Beer-related endpoints
+  - name: Events
+    description: Event-related endpoints
+paths:
+  /beer:
+    get:
+      tags:
+        - Beer
+      summary: Get all beers
+      responses:
+        '200':
+          description: List of beers
+  /events:
+    get:
+      tags:
+        - Events
+      summary: Get all events
+      responses:
+        '200':
+          description: List of events
