@@ -26,7 +26,7 @@ def get_user_id_from_token():
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
         logger.warning("Authorization header missing or invalid")
-        return None
+        return None, "Authorization header missing or invalid"
 
     token = auth_header.split(" ")[1]
     try:
@@ -35,21 +35,23 @@ def get_user_id_from_token():
         )
         user_id = payload.get("user_id")
         user_id = int(user_id)
-        return user_id
+        return user_id, None
     except jwt.ExpiredSignatureError:
         logger.warning("Token has expired")
-        return None
+        return None, "Token has expired"
     except jwt.InvalidTokenError:
         logger.warning("Invalid token")
-        return None
+        return None, "Invalid token"
 
 
 def get_valid_user_id():
-    user_id = get_user_id_from_token()
+    user_id, error = get_user_id_from_token()
+    if error:
+        logger.error(f"User ID extraction error: {error}")
+        abort(401, description=error)
     if not isinstance(user_id, int):
         logger.error(f"Invalid user_id extracted: {user_id} (type: {type(user_id)})")
-        response = make_response(jsonify({"error": "Unauthorized"}), 401)
-        abort(response)
+        abort(401, description=error)
     return user_id
 
 

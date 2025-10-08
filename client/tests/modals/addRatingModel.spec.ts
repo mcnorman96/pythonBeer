@@ -2,9 +2,13 @@ import { mount } from '@vue/test-utils';
 import addRatingModal from '~/components/modals/addRatingModal.vue';
 import { flushPromises } from '@vue/test-utils';
 import beerService from '@/services/BeerService/beerService';
+import { vi } from 'vitest';
+
+vi.mock('vue-router', () => ({
+  useRoute: () => ({ params: { id: '1' } }),
+}));
 
 // Type declarations for Nuxt auto-import composables
-globalThis.useRoute = () => ({ params: { id: '1' } });
 globalThis.onMounted = (fn: () => void) => {};
 globalThis.watch = (source: any, cb: (newValue: any, oldValue: any) => void) => {};
 

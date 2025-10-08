@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { watch } from 'vue';
-import type { Beer, newBeer } from '~/types/types';
+import { ref, onMounted } from 'vue';
+import type { Beer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import Button from '~/components/ui/Button.vue';
+import { useRoute } from 'vue-router';
 
 const props = defineProps<{ beer: Beer }>();
 const route = useRoute();

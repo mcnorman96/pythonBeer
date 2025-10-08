@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useFetch } from '#app';
 import beerService from '~/services/BeerService/beerService';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import Event from '~/components/event.vue';
 import Button from '~/components/ui/Button.vue';
 import { socket } from '~/services/vars.ts';
@@ -71,7 +70,7 @@ onUnmounted(() => {
   <div v-else-if="pending">Loading...</div>
   <div v-else class="max-w-screen-md m-auto">
     <div class="eventbody pt-2">
-      <div v-for="event in events">
+      <div v-for="event in events" :key="event.id">
         <Event :event="event" />
       </div>
     </div>

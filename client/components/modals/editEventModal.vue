@@ -2,6 +2,7 @@
 import Button from '~/components/ui/Button.vue';
 import beerService from '~/services/BeerService/beerService';
 import { useRoute, useRouter } from 'vue-router';
+import { ref } from 'vue';
 
 const route = useRoute();
 const eventId: string = route.params.id;
@@ -28,13 +29,13 @@ const updateEvent = async () => {
     error.value = updateEvent.error;
     return;
   }
-  
+
   handleClose();
 };
 
 const deleteEvent = async () => {
   const deleteEvent = await beerService.events.deleteEvent(eventId);
-  
+
   if (deleteEvent.success) {
     handleClose();
     router.push('/events');

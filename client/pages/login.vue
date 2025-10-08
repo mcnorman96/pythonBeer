@@ -30,6 +30,7 @@ const handleLogin = async () => {
       error.value = 'Invalid credentials';
     }
   } catch (e) {
+    console.error('login failed', e);
     error.value = 'Login failed';
   }
 };

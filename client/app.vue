@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import './style.css';
+
+// eslint-disable-next-line no-undef
 useHead({
   link: [
     {

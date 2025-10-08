@@ -130,6 +130,8 @@ Manage users, events, and beers with analytics and moderation tools.
 Use Swagger/OpenAPI for backend API docs ✅
 Need to make DOCS for all endpoints
 
+- Check if token has expired
+
 - End-to-End Tests
 Add Cypress UI testing.
 

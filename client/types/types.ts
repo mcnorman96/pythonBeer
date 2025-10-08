@@ -62,3 +62,16 @@ export interface Response {
 }
 
 export type { EventsService, EventBeerService, EventParticipantsService, RatingsService };
+
+// Define a generic type for useFetch return
+export type UseFetchResult<T> = {
+  data: Ref<T | null>;
+  error: Ref<string | null>;
+  pending: Ref<boolean>;
+};
+
+export type FetchResult<T> = {
+  success: boolean;
+  error?: string | null;
+  response?: T;
+};

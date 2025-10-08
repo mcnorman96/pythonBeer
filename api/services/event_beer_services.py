@@ -5,12 +5,12 @@ from models.event_beer import EventBeer as EventBeerORM
 from datetime import datetime
 from services.ratings_service import RatingsService
 from utils.utils import get_logger
+from socketio_instance import socketio
 logging = get_logger(__name__)
 
 class EventBeersService:
     @staticmethod
     def updated_beer_in_event(event_id: int) -> None:
-        from app import socketio
         logging.info(f"Beers in event updated {event_id}")
         socketio.emit("beers_in_event_updated", {"event_id": event_id})
 

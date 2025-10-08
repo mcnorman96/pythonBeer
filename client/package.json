@@ -11,7 +11,8 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "lint-fix": "npx eslint . --fix",
+    "pre-commit": "npm run coverage && npm run lint-fix && npm run format"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",

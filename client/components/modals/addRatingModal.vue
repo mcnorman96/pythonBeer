@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import beerService from '~/services/BeerService/beerService';
 import type { Beer, Rating } from '~/types/types';
 import Button from '~/components/ui/Button.vue';
+import { useRoute } from 'vue-router';
 
 const props = defineProps<{ beer: Beer }>();
 const emit = defineEmits<{ (e: 'close'): void }>();

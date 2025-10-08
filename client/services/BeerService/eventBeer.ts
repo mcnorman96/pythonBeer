@@ -1,21 +1,19 @@
-import type { Beer, ResponseTypeBeers, Response } from '~/types/types';
+import type { Beer, FetchResult, UseFetchResult } from '~/types/types';
 import { API_URL } from '../vars';
+import { checkTokenExpired } from '@/utils/authUtil';
 
 export interface EventBeerService {
-  newBeer: (beer: Beer) => Promise<Response>;
-  addBeerToEvent: (eventId: string, beerId: string) => Promise<Response>;
-  searchBeer: (query: string) => Promise<{ data: any; error: any; pending: any }>;
-  toplistBeersInEvent: (eventId: string) => Promise<Response>;
-  toplist: () => Promise<{ data: any; error: any; pending: any }>;
-  updateBeer: (beer: Beer) => Promise<{ success: any; error?: any }>;
-  deleteBeerFromEvent: (
-    beer_id: string,
-    event_id: string
-  ) => Promise<{ success: any; error?: any }>;
+  newBeer: (beer: Beer) => Promise<FetchResult<Beer>>;
+  addBeerToEvent: (eventId: string, beerId: string) => Promise<FetchResult<Beer>>;
+  searchBeer: (query: string) => Promise<UseFetchResult<Beer>>;
+  toplistBeersInEvent: (eventId: string) => Promise<FetchResult<Beer[]>>;
+  toplist: () => Promise<UseFetchResult<Beer[]>>;
+  updateBeer: (beer: Beer) => Promise<FetchResult<null>>;
+  deleteBeerFromEvent: (beer_id: string, event_id: string) => Promise<FetchResult<null>>;
 }
 
 export const eventBeer: EventBeerService = {
-  async newBeer(beer: Beer): Promise<Response> {
+  async newBeer(beer: Beer): Promise<FetchResult<Beer>> {
     if (!beer.brewery || !beer.description || !beer.name || !beer.type) {
       return {
         success: false,
@@ -33,6 +31,8 @@ export const eventBeer: EventBeerService = {
 
     const data = await res.json();
 
+    checkTokenExpired(res.status, data.error)
+
     if (!res.ok) {
       return { success: false, error: data.error };
     }
@@ -40,7 +40,7 @@ export const eventBeer: EventBeerService = {
     return { success: true, response: data.response };
   },
 
-  async addBeerToEvent(eventId: string, beerId: string): Promise<Response> {
+  async addBeerToEvent(eventId: string, beerId: string): Promise<FetchResult<Beer>> {
     if (!eventId || !beerId) {
       return { success: false, error: 'Event ID and Beer ID are required' };
     }
@@ -52,19 +52,23 @@ export const eventBeer: EventBeerService = {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
+
+    const data = await res.json();
+
+    checkTokenExpired(res.status, data.error)
+
     if (!res.ok) {
-      const data = await res.json();
       return { success: false, error: data.error };
     }
     return { success: true };
   },
 
-  async searchBeer(query: string): Promise<{ data: any; error: any; pending: any }> {
+  async searchBeer(query: string): Promise<UseFetchResult<Beer>> {
     const {
       data: fetchedBeers,
       error: fetchError,
       pending: fetchPending,
-    } = await useFetch<ResponseTypeBeers>(`${API_URL}/beer/search`, {
+    }: UseFetchResult<Beer> = await useFetch(`${API_URL}/beer/search`, {
       params: { s: query },
     });
     return {
@@ -74,7 +78,7 @@ export const eventBeer: EventBeerService = {
     };
   },
 
-  async toplistBeersInEvent(eventId: string): Promise<Response> {
+  async toplistBeersInEvent(eventId: string): Promise<FetchResult<Beer[]>> {
     const response = await fetch(`${API_URL}/ratings/toplist/${eventId}`);
 
     if (response.status === 204) {
@@ -83,6 +87,8 @@ export const eventBeer: EventBeerService = {
 
     const data = await response.json();
 
+    checkTokenExpired(response.status, data.error)
+
     if (!response.ok) {
       return { success: false, error: data.error };
     }
@@ -90,12 +96,12 @@ export const eventBeer: EventBeerService = {
     return { success: true, response: data.response };
   },
 
-  async toplist(): Promise<{ data: any; error: any; pending: any }> {
+  async toplist(): Promise<UseFetchResult<Beer[]>> {
     const {
       data: fetchedBeers,
       error: fetchError,
       pending: fetchPending,
-    } = await useFetch<ResponseTypeBeers>(`${API_URL}/ratings/toplist`);
+    }: UseFetchResult<Beer[]> = await useFetch(`${API_URL}/ratings/toplist`);
     return {
       data: fetchedBeers,
       error: fetchError,
@@ -103,7 +109,7 @@ export const eventBeer: EventBeerService = {
     };
   },
 
-  async updateBeer(beer: Beer): Promise<{ success: any; error?: any }> {
+  async updateBeer(beer: Beer): Promise<FetchResult<null>> {
     const response = await await fetch(`${API_URL}/beer/update`, {
       method: 'PUT',
       headers: {
@@ -115,6 +121,8 @@ export const eventBeer: EventBeerService = {
 
     const data = await response.json();
 
+    checkTokenExpired(response.status, data.error)
+
     if (!response.ok) {
       return { success: false, error: data.error };
     }
@@ -122,10 +130,7 @@ export const eventBeer: EventBeerService = {
     return { success: true };
   },
 
-  async deleteBeerFromEvent(
-    beer_id: string,
-    event_id: string
-  ): Promise<{ success: any; error?: any }> {
+  async deleteBeerFromEvent(beer_id: string, event_id: string): Promise<FetchResult<null>> {
     const response = await await fetch(`${API_URL}/events/${event_id}/beers/${beer_id}`, {
       method: 'DELETE',
       headers: {
@@ -135,6 +140,8 @@ export const eventBeer: EventBeerService = {
     });
 
     const data = await response.json();
+
+    checkTokenExpired(response.status, data.error)
 
     if (!response.ok) {
       return { success: false, error: data.error };

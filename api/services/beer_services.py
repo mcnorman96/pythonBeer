@@ -5,19 +5,18 @@ from pydantic import ValidationError
 from schemas.beer import BeerSchema
 from typing import List
 from utils.utils import get_logger
+from socketio_instance import socketio
 logging = get_logger(__name__)
 
 class BeerService:
 
     @staticmethod
     def beer_created():
-        from app import socketio
         socketio.emit("beer_created")
         logging.info("Socket event 'beer_created' emitted.")
 
     @staticmethod
     def beer_updated(beer: BeerORM):
-        from app import socketio
         socketio.emit("beer_updated", {"beer": beer.to_dict()})
         logging.info("Socket event 'beer_updated' emitted.")
 

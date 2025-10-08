@@ -1,9 +1,13 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import viewRatingsModal from '~/components/modals/viewRatingsModal.vue';
 import beerService from '@/services/BeerService/beerService';
+import { vi } from 'vitest';
+
+vi.mock('vue-router', () => ({
+  useRoute: () => ({ params: { id: '1' } }),
+}));
 
 // Mock Nuxt auto-import composables globally
-globalThis.useRoute = () => ({ params: { id: '1' } });
 globalThis.useFetch = async () => ({ data: { value: [] }, error: null, pending: false });
 globalThis.onMounted = (fn: () => void) => fn();
 

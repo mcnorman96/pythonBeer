@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useAuth } from '~/composables/useAuth';
-import { useRouter } from 'vue-router';
 import { authService } from '~/services/AuthService/authService';
 import Button from '~/components/ui/Button.vue';
 
@@ -10,8 +8,6 @@ const password = ref<string>('');
 const email = ref<string>('');
 const success = ref<string>('');
 const error = ref<string>('');
-const { login } = useAuth();
-const router = useRouter();
 
 const handleRegister = async () => {
   error.value = '';
@@ -28,6 +24,7 @@ const handleRegister = async () => {
 
     success.value = 'Registration successful! You can now log in.';
   } catch (e) {
+    console.error('Registration failed', e);
     error.value = 'Registration failed';
   }
 };

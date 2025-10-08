@@ -1,4 +1,3 @@
-
 from datetime import datetime, timedelta
 from db import db
 from typing import List, Dict, Any, Optional
@@ -7,20 +6,19 @@ from models.event import Event as EventORM
 from schemas.event import EventsSchema
 from services.event_beer_services import EventBeersService
 from utils.utils import get_logger
-logging = get_logger(__name__)
+from socketio_instance import socketio
 
+logging = get_logger(__name__)
 
 class EventService:
     @staticmethod
     def event_created():
-        from app import socketio
         socketio.emit("event_created")
         logging.info("Socket event 'event_created' emitted.")
 
     @staticmethod
     def event_updated(event: EventORM):
-        from app import socketio
-        socketio.emit("event_updated", {"event": event})
+        socketio.emit("event_updated", {"event": event.to_dict()})
         logging.info("Socket event 'event_updated' emitted.")
 
     @staticmethod

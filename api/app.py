@@ -11,7 +11,7 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 from db import db, migrate
-from flask_socketio import SocketIO
+from socketio_instance import socketio
 
 
 logging.basicConfig(
@@ -37,7 +37,7 @@ db.init_app(app)
 migrate.init_app(app, db)
 
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio.init_app(app, cors_allowed_origins="*")
 
 # Import routes
 from routes.auth import auth_bp

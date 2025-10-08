@@ -7,12 +7,11 @@ from pydantic import ValidationError
 from sqlalchemy import text
 from utils.utils import get_logger
 logging = get_logger(__name__)
-
+from socketio_instance import socketio
 
 class RatingsService:
     @staticmethod
     def rating_update(event_id):
-        from app import socketio
         socketio.emit("rating_updated", {"event_id": event_id})
         logging.info(f"Socket event 'rating_updated' emitted for event {event_id}")
 

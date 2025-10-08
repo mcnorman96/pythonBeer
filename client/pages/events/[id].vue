@@ -1,20 +1,13 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useFetch } from '#app';
 import BeerCard from '~/components/beerCard.vue';
 import AddRatingModal from '~/components/modals/AddRatingModal.vue';
 import AddBeerModal from '~/components/modals/AddBeerModal.vue';
 import ViewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
 import EditEventModal from '~/components/modals/editEventModal.vue';
 import EditBeerModal from '~/components/modals/editBeerModal.vue';
-import type {
-  Beer,
-  Participants,
-  ResponseTypeBeers,
-  ResponseTypeParticipants,
-  Event,
-} from '~/types/types';
+import type { Beer, ResponseTypeBeers, Event } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import { onMounted, onUnmounted } from 'vue';
 import { socket } from '~/services/vars';
@@ -26,14 +19,17 @@ const event_beers = ref<Beer[]>([]);
 const event_data = ref<Event | null>(null);
 const event_ended = ref<boolean>(false);
 const sortOption = ref<string>('new');
+const beersPending = ref<boolean>(false);
 
 const fetchBeersinEvent: () => Promise<void> = async () => {
+  beersPending.value = true;
   const beerData: ResponseTypeBeers = await beerService.eventBeer.toplistBeersInEvent(
     eventId as string
   );
   if (beerData.success && beerData.response) {
     event_beers.value = beerData.response;
   }
+  beersPending.value = false;
 };
 
 const fetchEventData: () => Promise<void> = async () => {
@@ -42,7 +38,7 @@ const fetchEventData: () => Promise<void> = async () => {
     event_data.value = eventData.data.value.response;
     event_ended.value = eventData.data.value.response.end_date < new Date().toISOString();
   }
-}
+};
 
 const sortBeers: () => void = () => {
   if (Array.isArray(event_beers.value)) {
@@ -56,7 +52,7 @@ const sortBeers: () => void = () => {
   }
 };
 
-watch(sortOption, (newVal: string) => {
+watch(sortOption, () => {
   sortBeers();
 });
 
@@ -80,9 +76,9 @@ onMounted(async () => {
 
   socket.on('beer_updated', async (data: Beer) => {
     const containsBeer = event_beers.value.some((beer) => {
-      return beer.id === data.beer.id
+      return beer.id === data.beer.id;
     });
-    
+
     if (containsBeer) {
       await fetchBeersinEvent();
       sortBeers();
@@ -90,7 +86,7 @@ onMounted(async () => {
   });
 
   socket.on('event_updated', async (data: Event) => {
-    if (String(data.event_id) === String(eventId)) {
+    if (String(data.event.id) === String(eventId)) {
       await fetchEventData();
     }
   });
@@ -100,7 +96,7 @@ onUnmounted(() => {
   socket.off('rating_updated');
   socket.off('beers_in_event_updated');
   socket.off('event_updated');
-  socket.off('beer_updated')
+  socket.off('beer_updated');
 });
 
 // Modal state
@@ -158,8 +154,8 @@ const closeEditBeerModal = () => {
   <h1 class="text-center">{{ event_data?.name }}</h1>
   <p class="text-center mb-5">{{ event_data?.description }}</p>
   <div class="beerContainer max-w-3xl m-auto mb-5">
-    <div v-if="beersPending">Loading beers...</div>
-    <div class="text-center" v-if="event_beers.length === 0 && !beersPending">
+    <div v-if="beersPending" class="text-center">Loading beers...</div>
+    <div class="text-center" v-if="event_beers.length === 0">
       No beers in this event yet.
     </div>
     <div v-if="event_beers">

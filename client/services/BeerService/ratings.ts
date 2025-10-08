@@ -1,5 +1,6 @@
+import type { Rating, UseFetchResult } from '@/types/types';
 import { API_URL } from '../vars';
-
+import { checkTokenExpired } from '@/utils/authUtil';
 export interface RatingsService {
   addRating: (ratingData: {
     event_id: string;
@@ -13,11 +14,11 @@ export interface RatingsService {
   getRating: (
     eventId: string,
     beerId: string
-  ) => Promise<{ success: boolean; error?: string; response?: any }>;
+  ) => Promise<{ success: boolean; error?: string; response?: Rating }>;
   getAllRatingsForBeer: (
     eventId: string,
     beerId: string
-  ) => Promise<{ data: any; error: any; pending: any } | { success: boolean; error?: string }>;
+  ) => Promise<UseFetchResult<Rating> | { success: boolean; error?: string }>;
 }
 
 export const ratings: RatingsService = {
@@ -50,8 +51,11 @@ export const ratings: RatingsService = {
       },
     });
 
+    const data = await res.json();
+
+    checkTokenExpired(res.status, data.error)
+
     if (!res.ok) {
-      const data = await res.json();
       return { success: false, error: data.error };
     }
 
@@ -61,7 +65,7 @@ export const ratings: RatingsService = {
   async getRating(
     eventId: string,
     beerId: string
-  ): Promise<{ success: boolean; error?: string; response?: any }> {
+  ): Promise<{ success: boolean; error?: string; response?: Rating }> {
     if (!eventId || !beerId) {
       return { success: false, error: 'Event ID and Beer ID are required' };
     }
@@ -72,7 +76,10 @@ export const ratings: RatingsService = {
         'content-type': 'application/json',
       },
     });
+
     const data = await res.json();
+
+    checkTokenExpired(res.status, data.error)
 
     if (!res.ok) {
       return { success: false, error: data.error };
@@ -84,11 +91,11 @@ export const ratings: RatingsService = {
   async getAllRatingsForBeer(
     eventId: string,
     beerId: string
-  ): Promise<{ data: any; error: any; pending: any } | { success: boolean; error?: string }> {
+  ): Promise<UseFetchResult<Rating> | { success: boolean; error?: string }> {
     if (!eventId || !beerId) {
       return { success: false, error: 'Event ID and Beer ID are required' };
     }
-    const { data, error, pending } = await useFetch(
+    const { data, error, pending }: UseFetchResult<Rating> = await useFetch(
       `${API_URL}/ratings/all?event_id=${eventId}&beer_id=${beerId}`,
       {
         method: 'GET',
