@@ -5,7 +5,6 @@ import beerService from '@/services/BeerService/beerService';
 
 // Type declarations for Nuxt auto-import composables
 globalThis.useRoute = () => ({ params: { id: '1' } });
-globalThis.useFetch = () => Promise<{ data: { value: any[] }; error: null; pending: false }>;
 globalThis.onMounted = (fn: () => void) => {};
 globalThis.watch = (source: any, cb: (newValue: any, oldValue: any) => void) => {};
 

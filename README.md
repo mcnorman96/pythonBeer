@@ -126,11 +126,9 @@ Make hooks for optimizing the code before committing
 - Admin Dashboard
 Manage users, events, and beers with analytics and moderation tools.
 
-- Progressive Web App (PWA)
-Make the client installable and offline-capable.
-
 - API Documentation
-Use Swagger/OpenAPI for backend API docs.
+Use Swagger/OpenAPI for backend API docs ✅
+Need to make DOCS for all endpoints
 
 - End-to-End Tests
 Add Cypress UI testing.

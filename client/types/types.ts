@@ -4,41 +4,41 @@ import type { EventParticipantsService } from '../services/BeerService/eventPart
 import type { RatingsService } from '../services/BeerService/ratings';
 
 export interface Event {
-  id: Number;
-  name: String;
-  start_date: String;
-  end_date: String;
-  description: String;
+  id: number;
+  name: string;
+  start_date: string;
+  end_date: string;
+  description: string;
 }
 
 export interface Beer {
-  id: Number;
-  brewery: String;
-  description: String;
-  name: String;
-  type: String;
+  id: number;
+  brewery: string;
+  description: string;
+  name: string;
+  type: string;
 }
 
 export interface Participants {
-  user_id: Number;
-  user_name: String;
+  user_id: number;
+  user_name: string;
 }
 
 export interface User {
-  user_name: String;
-  password: String;
-  email: String;
+  user_name: string;
+  password: string;
+  email: string;
 }
 
 export interface Rating {
-  id: Number;
-  event_id: String;
-  beer_id: String;
-  taste: Number;
-  aftertaste: Number;
-  smell: Number;
-  design: Number;
-  score: Number;
+  id: number;
+  event_id: string;
+  beer_id: string;
+  taste: number;
+  aftertaste: number;
+  smell: number;
+  design: number;
+  score: number;
 }
 
 export interface ResponseTypeBeers extends Response {
@@ -49,8 +49,8 @@ export interface ResponseTypeParticipants extends Response {
 }
 
 export interface Response {
-  success: Boolean;
-  error?: String;
+  success: boolean;
+  error?: string;
   response?:
     | Event
     | Participants
