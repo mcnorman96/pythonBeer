@@ -155,9 +155,7 @@ const closeEditBeerModal = () => {
   <p class="text-center mb-5">{{ event_data?.description }}</p>
   <div class="beerContainer max-w-3xl m-auto mb-5">
     <div v-if="beersPending" class="text-center">Loading beers...</div>
-    <div class="text-center" v-if="event_beers.length === 0">
-      No beers in this event yet.
-    </div>
+    <div class="text-center" v-if="event_beers.length === 0">No beers in this event yet.</div>
     <div v-if="event_beers">
       <div class="flex justify-between mb-4">
         <select class="p-2 border border-gray-300 rounded" v-model="sortOption">

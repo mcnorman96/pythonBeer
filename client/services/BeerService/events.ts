@@ -37,7 +37,7 @@ export const events: EventsService = {
 
     const data = await res.json();
 
-    checkTokenExpired(res.status, data.error)
+    checkTokenExpired(res.status, data.error);
 
     if (!res.ok) {
       return { success: false, error: data.error };
@@ -53,7 +53,7 @@ export const events: EventsService = {
 
     const data = await res.json();
 
-    checkTokenExpired(res.status, data.error)
+    checkTokenExpired(res.status, data.error);
 
     if (!res.ok) {
       return { success: false, error: data.error };
@@ -66,7 +66,7 @@ export const events: EventsService = {
     const { data, error, pending }: UseFetchResult<Event> = await useFetch(
       `${API_URL}/events/${eventId}`
     );
-    
+
     return { data, error, pending };
   },
 
@@ -89,7 +89,7 @@ export const events: EventsService = {
 
     const data = await res.json();
 
-    checkTokenExpired(res.status, data.error)
+    checkTokenExpired(res.status, data.error);
 
     if (!res.ok) {
       return { success: false, error: data.error };
@@ -109,7 +109,7 @@ export const events: EventsService = {
 
     const data = await res.json();
 
-    checkTokenExpired(res.status, data.error)
+    checkTokenExpired(res.status, data.error);
 
     if (!res.ok) {
       return { success: false, error: data.error };

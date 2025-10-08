@@ -53,7 +53,7 @@ export const ratings: RatingsService = {
 
     const data = await res.json();
 
-    checkTokenExpired(res.status, data.error)
+    checkTokenExpired(res.status, data.error);
 
     if (!res.ok) {
       return { success: false, error: data.error };
@@ -79,7 +79,7 @@ export const ratings: RatingsService = {
 
     const data = await res.json();
 
-    checkTokenExpired(res.status, data.error)
+    checkTokenExpired(res.status, data.error);
 
     if (!res.ok) {
       return { success: false, error: data.error };

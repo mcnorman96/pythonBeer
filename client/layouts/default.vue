@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useAuth } from '~/composables/useAuth';
 import { ref, onMounted, watch } from 'vue';
-
+import Button from '~/components/ui/Button.vue';
 const menuItemsClass = 'px-5';
 const isLoggedIn = ref(false);
 const showMobileMenu = ref(false);

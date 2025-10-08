@@ -27,7 +27,10 @@ describe('ratings service', () => {
     });
 
     it('returns success if all fields are present and fetch is ok', async () => {
-      mockFetch.mockResolvedValueOnce({ ok: true });
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ message: 'Rating added successfully' }),
+      });
       const result = await ratings.addRating({
         event_id: '1',
         beer_id: '2',

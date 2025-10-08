@@ -8,3 +8,7 @@ onMounted(() => {
   router.push('/events');
 });
 </script>
+
+<template>
+  <div></div>
+</template>

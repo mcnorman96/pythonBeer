@@ -31,7 +31,7 @@ export const eventBeer: EventBeerService = {
 
     const data = await res.json();
 
-    checkTokenExpired(res.status, data.error)
+    checkTokenExpired(res.status, data.error);
 
     if (!res.ok) {
       return { success: false, error: data.error };
@@ -55,7 +55,7 @@ export const eventBeer: EventBeerService = {
 
     const data = await res.json();
 
-    checkTokenExpired(res.status, data.error)
+    checkTokenExpired(res.status, data.error);
 
     if (!res.ok) {
       return { success: false, error: data.error };
@@ -87,7 +87,7 @@ export const eventBeer: EventBeerService = {
 
     const data = await response.json();
 
-    checkTokenExpired(response.status, data.error)
+    checkTokenExpired(response.status, data.error);
 
     if (!response.ok) {
       return { success: false, error: data.error };
@@ -121,7 +121,7 @@ export const eventBeer: EventBeerService = {
 
     const data = await response.json();
 
-    checkTokenExpired(response.status, data.error)
+    checkTokenExpired(response.status, data.error);
 
     if (!response.ok) {
       return { success: false, error: data.error };
@@ -141,7 +141,7 @@ export const eventBeer: EventBeerService = {
 
     const data = await response.json();
 
-    checkTokenExpired(response.status, data.error)
+    checkTokenExpired(response.status, data.error);
 
     if (!response.ok) {
       return { success: false, error: data.error };

@@ -47,7 +47,10 @@ describe('eventBeer service', () => {
     });
 
     it('returns success if fetch is ok', async () => {
-      mockFetch.mockResolvedValueOnce({ ok: true });
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({}),
+      });
       const result = await eventBeer.addBeerToEvent('1', '2');
       expect(result.success).toBe(true);
     });

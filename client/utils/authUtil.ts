@@ -5,4 +5,4 @@ export const checkTokenExpired = (statusCode: number, error: string) => {
     throw new Error('Token expired');
   }
   return false;
-}
+};
