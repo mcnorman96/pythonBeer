@@ -63,3 +63,29 @@ class EventParticipantService:
         users = [dict(row) for row in result.mappings()]
         logging.info(f"Fetched {len(users)} users for event {event_id}")
         return users
+
+    @staticmethod
+    def delete_all_participants_in_event(event_id: int) -> bool:
+        logging.info(f"Deleted event participants in event {event_id}")
+        EventParticipants = EventParticipantORM.query.filter_by(event_id=event_id).all()
+        if EventParticipants:
+            for participant in EventParticipants:
+                db.session.delete(participant)
+            db.session.commit()
+            logging.info(f"Deleted event participants in event {event_id}")
+            return True
+        
+        logging.warning(f"Event {event_id} not found for deletion")
+        return False
+    
+    @staticmethod
+    def delete(eventParticipant_id: int) -> bool:
+        EventParticipant = EventParticipantORM.query.get(eventParticipant_id=eventParticipant_id)
+        if EventParticipant:
+            db.session.delete(EventParticipant)
+            db.session.commit()
+            logging.info(f"Deleted event participant in event {eventParticipant_id}")
+            return True
+        
+        logging.warning(f"Event {eventParticipant_id} not found for deletion")
+        return False
