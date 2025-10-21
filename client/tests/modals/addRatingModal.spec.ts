@@ -14,6 +14,20 @@ globalThis.watch = (source: any, cb: (newValue: any, oldValue: any) => void) => 
 
 describe('addRatingModal.vue', () => {
   it('renders the modal', () => {
+    // Mock service methods
+    const mockGetRating = vi.fn().mockResolvedValue({
+      success: true,
+      response: {
+        taste: 0,
+        aftertaste: 0,
+        smell: 0,
+        design: 0,
+        score: 0,
+      },
+    });
+
+    beerService.ratings.getRating = mockGetRating;
+
     const wrapper = mount(addRatingModal, {
       props: {
         beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' },
@@ -23,6 +37,20 @@ describe('addRatingModal.vue', () => {
   });
 
   it('emits close event when close button is clicked', async () => {
+    // Mock service methods
+    const mockGetRating = vi.fn().mockResolvedValue({
+      success: true,
+      response: {
+        taste: 0,
+        aftertaste: 0,
+        smell: 0,
+        design: 0,
+        score: 0,
+      },
+    });
+
+    beerService.ratings.getRating = mockGetRating;
+
     const wrapper = mount(addRatingModal, {
       props: {
         beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' },
@@ -34,6 +62,20 @@ describe('addRatingModal.vue', () => {
   });
 
   it('has inputs for all rating fields', () => {
+    // Mock service methods
+    const mockGetRating = vi.fn().mockResolvedValue({
+      success: true,
+      response: {
+        taste: 0,
+        aftertaste: 0,
+        smell: 0,
+        design: 0,
+        score: 0,
+      },
+    });
+
+    beerService.ratings.getRating = mockGetRating;
+
     const wrapper = mount(addRatingModal, {
       props: {
         beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' },
