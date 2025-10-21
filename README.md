@@ -75,12 +75,31 @@ This project uses Socket.IO to enable real-time interactions:
    ```
 
 ## Docker
+To run the whole project with docker:
+```bash
+docker-compose up --build
+docker compose exec api python -m seeds.populate-test-data
+```
+client available at: http://localhost:8100
 
 To run the backend with Docker:
 ```bash
 cd api
 docker-compose up --build
-docker compose exec web python -m seeds.populate-test-data
+docker compose exec api python -m seeds.populate-test-data
+```
+
+To run the frontend with Docker:
+Production build: 
+```bash
+cd client
+docker-compose up --build
+```
+
+Development build:
+```bash
+cd client
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
 
 ## Testing
@@ -120,9 +139,6 @@ Attach participants to event to showcase who has joined that event
 - Make an Ios app
 Host a webbrowser through an app for users to easier rate beers for events
 
-- Implement husky
-Make hooks for optimizing the code before committing
-
 - Admin Dashboard
 Manage users, events, and beers with analytics and moderation tools.
 
@@ -130,13 +146,8 @@ Manage users, events, and beers with analytics and moderation tools.
 Use Swagger/OpenAPI for backend API docs ✅
 Need to make DOCS for all endpoints
 
-- Check if token has expired
-
 - End-to-End Tests
 Add Cypress UI testing.
-
-- Dockerize Client
-Add Docker support for frontend for easier deployment.
 
 - Internationalization (i18n)
 Support multiple languages.

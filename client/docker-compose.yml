@@ -1,0 +1,6 @@
+services:
+  client-prod:
+    build:
+      context: .
+    ports:
+      - "8100:8100"

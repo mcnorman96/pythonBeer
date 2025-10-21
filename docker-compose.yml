@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - ./api/.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./api:/app
+  
+  api:
+    build:
+      context: ./api
+      dockerfile: dockerfile
+    volumes:
+      - ./api:/app   
+    ports:
+      - "8000:5000"
+    env_file:
+      - ./api/.env
+    depends_on:
+      - db
+
+  client:
+    build:
+      context: ./client
+      dockerfile: dockerfile
+    ports:
+      - "8100:8100"
+    env_file:
+      - ./client/.env
+
+volumes:
+  mysql_data:
