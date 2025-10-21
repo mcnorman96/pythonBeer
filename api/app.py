@@ -36,9 +36,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 migrate.init_app(app, db)
 
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-socketio.init_app(app, cors_allowed_origins="*")
-
 # Import routes
 from routes.auth import auth_bp
 from routes.beer import beer_bp
@@ -77,7 +74,8 @@ def send_openapi():
 def index():
     return "Beer event rating API is running!"
 
-
+CORS(app, resources={r"/*": {"origins": "*"}})
+socketio.init_app(app, cors_allowed_origins="*")
 
 if __name__ == "__main__":
     import sys

@@ -2,9 +2,9 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import BeerCard from '~/components/beerCard.vue';
-import AddRatingModal from '~/components/modals/AddRatingModal.vue';
-import AddBeerModal from '~/components/modals/AddBeerModal.vue';
-import ViewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
+import AddRatingModal from '~/components/modals/addRatingModal.vue';
+import AddBeerModal from '~/components/modals/addBeerModal.vue';
+import ViewRatingsModal from '~/components/modals/viewRatingsModal.vue';
 import EditEventModal from '~/components/modals/editEventModal.vue';
 import EditBeerModal from '~/components/modals/editBeerModal.vue';
 import type { Beer, ResponseTypeBeers, Event } from '~/types/types';

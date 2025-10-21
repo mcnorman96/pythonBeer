@@ -57,7 +57,7 @@ describe('Event.vue', () => {
     const link = wrapper.find('a');
     expect(link.text()).toContain('Test Event');
     expect(link.text()).toContain('An awesome event');
-    expect(link.text()).toContain('Active');
+    expect(link.text()).toContain('Ended');
 
     const expectedDate = new Date(event.start_date).toLocaleDateString();
     expect(link.text()).toContain(expectedDate);
