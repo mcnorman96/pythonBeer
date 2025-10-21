@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: ./dockerfile.dev
     ports:
-      - "3000:3000"
-      - "24678:24678"
+      - '3000:3000'
+      - '24678:24678'
     volumes:
       - .:/src
       - node_modules:/src/node_modules

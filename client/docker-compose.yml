@@ -3,4 +3,4 @@ services:
     build:
       context: .
     ports:
-      - "8100:8100"
+      - '8100:8100'
