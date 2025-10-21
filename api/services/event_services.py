@@ -5,6 +5,7 @@ from pydantic import ValidationError
 from models.event import Event as EventORM
 from schemas.event import EventsSchema
 from services.event_beer_services import EventBeersService
+from services.event_participant_service import EventParticipantService
 from utils.utils import get_logger
 from socketio_instance import socketio
 
@@ -90,7 +91,8 @@ class EventService:
         if event:
             # Deleting the Event Beers
             EventBeersService.deleteAllEventBeersForEvent(id)
-
+            EventParticipantService.delete_all_participants_in_event(id);
+            
             # Deleting the event
             db.session.delete(event)
             db.session.commit()
