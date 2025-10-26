@@ -114,6 +114,7 @@ onUnmounted(() => {
         </select>
         <Button
           edit
+          name="editEvent"
           :class="'ml-2 px-4 py-2 bg-zinc-800 text-white rounded'"
           @click="openModal('editEvent')"
           >Edit event</Button
@@ -133,6 +134,7 @@ onUnmounted(() => {
     <div class="text-center" v-if="event_beers.length === 0">No beers in this event yet.</div>
     <Button
       color="yellow"
+      name="addBeer"
       v-if="!event_ended"
       :class="'mt-5 ml-auto block'"
       @click="openModal('addBeer')"

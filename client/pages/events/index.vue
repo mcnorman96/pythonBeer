@@ -65,7 +65,9 @@ onUnmounted(() => {
 
 <template>
   <h1 class="text-center">Events</h1>
-  <Button color="yellow" class="text-center m-auto block" @click="openModal">New Event</Button>
+  <Button color="yellow" name="newEvent" class="text-center m-auto block" @click="openModal"
+    >New Event</Button
+  >
   <div v-if="error" class="max-w-screen-md m-auto pt-5">{{ error }}</div>
   <div v-else-if="pending" class="max-w-screen-md m-auto pt-5">Loading...</div>
   <div class="max-w-screen-md m-auto pt-5" v-if="events.length < 1">No events to show</div>
@@ -86,11 +88,23 @@ onUnmounted(() => {
       <Button close @click="closeModal" class="absolute top-2 right-2"></Button>
       <h2 class="text-xl mb-4">Add New Event</h2>
       <label class="block mb-2">Name</label>
-      <input v-model="eventName" class="border p-2 w-full mb-4" placeholder="Event name" />
+      <input
+        v-model="eventName"
+        name="eventName"
+        class="border p-2 w-full mb-4"
+        placeholder="Event name"
+      />
       <label class="block mb-2">Description</label>
-      <input v-model="eventDescription" class="border p-2 w-full mb-4" placeholder="Description" />
+      <input
+        v-model="eventDescription"
+        name="eventDescription"
+        class="border p-2 w-full mb-4"
+        placeholder="Description"
+      />
       <div class="flex justify-end space-x-2">
-        <Button @click="saveEvent" color="yellow" class="w-full">Save Event</Button>
+        <Button @click="saveEvent" name="saveEvent" color="yellow" class="w-full"
+          >Save Event</Button
+        >
       </div>
       <div v-if="errorMsg" class="text-red-500 mt-2">{{ errorMsg }}</div>
     </div>

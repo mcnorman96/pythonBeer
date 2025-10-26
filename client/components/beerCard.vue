@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import RatingCircle from './ratingCircle.vue';
+import RatingCircle from '~/components/ui/ratingCircle.vue';
 import { computed } from 'vue';
 import type { Beer } from '~/types/types';
 import Button from './ui/Button.vue';
@@ -46,15 +46,21 @@ const average_score = computed(() => props.beer.average_score || 0);
         <RatingCircle :rating="average_score" name="Score" />
       </div>
       <div v-if="props.buttonsAvailable" class="flex md:w-max ml-auto mt-5">
-        <Button edit @click="emit('edit-beer', props.beer)" class="edit-beer w-1/2 md:w-auto"
+        <Button
+          edit
+          name="editBeer"
+          @click="emit('edit-beer', props.beer)"
+          class="edit-beer w-1/2 md:w-auto"
           >Edit Beer</Button
         >
         <Button
+          name="viewRatings"
           @click="emit('view-ratings', props.beer)"
           :class="'view-ratings ml-5 w-1/2 md:w-auto'"
           >View ratings</Button
         >
         <Button
+          name="addRating"
           @click="emit('add-rating', props.beer)"
           color="yellow"
           :class="'add-rating ml-5 w-1/2 md:w-auto'"

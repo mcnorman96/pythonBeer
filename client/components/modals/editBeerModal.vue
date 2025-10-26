@@ -94,8 +94,10 @@ const handleDeleteBeerFromEvent = () => {
       <label class="block mb-2">Type</label>
       <input name="type" v-model="beerType" class="border p-2 w-full mb-4" placeholder="Type" />
 
-      <Button @click="updateBeer" color="yellow" :class="'w-full mb-2'">Update Beer</Button>
-      <Button delete @click="handleDeleteBeerFromEvent" class="w-full"
+      <Button name="updateBeer" @click="updateBeer" color="yellow" :class="'w-full mb-2'"
+        >Update Beer</Button
+      >
+      <Button name="deleteBeer" delete @click="handleDeleteBeerFromEvent" class="w-full"
         >Delete beer from event</Button
       >
 

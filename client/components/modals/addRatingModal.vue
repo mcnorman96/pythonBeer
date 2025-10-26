@@ -110,6 +110,7 @@ const handleClose = () => {
       <div class="mb-4">
         <label class="block mb-2">Taste</label>
         <input
+          name="taste"
           v-model="taste"
           type="number"
           min="0"
@@ -121,6 +122,7 @@ const handleClose = () => {
         <div v-if="errors.taste" class="text-red-500 text-xs mb-2">{{ errors.taste }}</div>
         <label class="block mb-2">Aftertaste</label>
         <input
+          name="aftertaste"
           v-model="aftertaste"
           type="number"
           min="0"
@@ -134,6 +136,7 @@ const handleClose = () => {
         </div>
         <label class="block mb-2">Smell</label>
         <input
+          name="smell"
           v-model="smell"
           type="number"
           min="0"
@@ -145,6 +148,7 @@ const handleClose = () => {
         <div v-if="errors.smell" class="text-red-500 text-xs mb-2">{{ errors.smell }}</div>
         <label class="block mb-2">Design</label>
         <input
+          name="design"
           v-model="design"
           type="number"
           min="0"
@@ -156,6 +160,7 @@ const handleClose = () => {
         <div v-if="errors.design" class="text-red-500 text-xs mb-2">{{ errors.design }}</div>
         <label class="block mb-2">Total score</label>
         <input
+          name="score"
           v-model="total_score"
           type="number"
           min="0"
@@ -169,7 +174,9 @@ const handleClose = () => {
         </div>
       </div>
       <div class="flex justify-end space-x-2">
-        <Button color="yellow" @click="handleSave" class="w-full savebtn">Save</Button>
+        <Button name="saveRating" color="yellow" @click="handleSave" class="w-full savebtn"
+          >Save</Button
+        >
       </div>
       <div v-if="errorMsg" class="mt-4 text-red-500">
         {{ errorMsg }}
