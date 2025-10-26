@@ -29,7 +29,7 @@ function toggleMobileMenu() {
       <div class="logo absolute left-0 top-1/2 -translate-y-1/2 px-5">
         <a href="/events" class="flex items-center">
           <img src="/img/beer.svg" />
-          <div class="ml-3 text-2xl mt-1">BAJER KLUBBEN</div>
+          <div class="ml-3 text-2xl mt-1">Beer rating</div>
         </a>
       </div>
       <!-- Desktop menu -->

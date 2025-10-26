@@ -66,10 +66,13 @@ onUnmounted(() => {
 <template>
   <h1 class="text-center">Events</h1>
   <Button color="yellow" class="text-center m-auto block" @click="openModal">New Event</Button>
-  <div v-if="error">{{ error }}</div>
-  <div v-else-if="pending">Loading...</div>
+  <div v-if="error" class="max-w-screen-md m-auto pt-5">{{ error }}</div>
+  <div v-else-if="pending" class="max-w-screen-md m-auto pt-5">Loading...</div>
+  <div class="max-w-screen-md m-auto pt-5" v-if="events.length < 1">
+    No events to show
+  </div>
   <div v-else class="max-w-screen-md m-auto">
-    <div class="eventbody pt-2">
+    <div class="eventbody pt-5">
       <div v-for="event in events" :key="event.id">
         <Event :event="event" />
       </div>

@@ -11,6 +11,12 @@ const error = ref<string>('');
 
 const handleRegister = async () => {
   error.value = '';
+
+  if (!username.value || !password.value) {
+    error.value = 'Username, Password and Email is required';
+    return;
+  }
+
   try {
     const response = await authService.registerUser({
       username: username.value,
@@ -37,12 +43,18 @@ const handleRegister = async () => {
       <form @submit.prevent="handleRegister">
         <div class="mb-4">
           <label class="block mb-2">Username</label>
-          <input v-model="username" class="border p-2 w-full" placeholder="Username" />
+          <input 
+            v-model="username" 
+            name="username"
+            class="border p-2 w-full" 
+            placeholder="Username" 
+          />
         </div>
         <div class="mb-4">
           <label class="block mb-2">Password</label>
           <input
             v-model="password"
+            name="password"
             type="password"
             class="border p-2 w-full"
             placeholder="Password"
@@ -50,7 +62,13 @@ const handleRegister = async () => {
         </div>
         <div class="mb-4">
           <label class="block mb-2">Email</label>
-          <input v-model="email" type="email" class="border p-2 w-full" placeholder="Email" />
+          <input 
+            v-model="email" 
+            name="email"
+            type="email" 
+            class="border p-2 w-full" 
+            placeholder="Email" 
+          />
         </div>
         <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
         <div v-if="success" class="text-green-500 mb-4">{{ success }}</div>
