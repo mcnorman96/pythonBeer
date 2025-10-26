@@ -77,8 +77,8 @@ def test_all_events_no_events(client, mocker):
 
     response = client.get("/events/")
 
-    assert response.status_code == 400
-    assert response.get_json()["error"] == "No events found"
+    assert response.status_code == 200
+    assert response.get_json()["response"] == []
 
 
 def test_get_event_by_id_success(client, mocker):
