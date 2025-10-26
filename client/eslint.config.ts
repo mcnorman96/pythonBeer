@@ -5,7 +5,7 @@ import pluginVue from 'eslint-plugin-vue';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
-  globalIgnores(['tests/', '.nuxt/', '.output']),
+  globalIgnores(['tests/', '.nuxt/', '.output', 'cypress.config.ts']),
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,vue}'],
     plugins: { js },

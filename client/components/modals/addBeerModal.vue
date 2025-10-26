@@ -95,6 +95,12 @@ const addExistingBeerToEvent = async (beerId: number) => {
   }
   handleClose();
 };
+
+const handleBlur = () => {
+  setTimeout(() => {
+    showDropdown.value = false;
+  }, 200);
+};
 </script>
 
 <template>
@@ -111,7 +117,7 @@ const addExistingBeerToEvent = async (beerId: number) => {
           class="border p-2 w-full mb-2"
           placeholder="Search for beer..."
           @focus="showDropdown = filteredBeers.length > 0"
-          @blur="() => setTimeout(() => (showDropdown = false), 200)"
+          @blur="handleBlur"
         />
         <ul
           v-if="showDropdown"
@@ -153,11 +159,14 @@ const addExistingBeerToEvent = async (beerId: number) => {
         />
         <label class="block mb-2">Type</label>
         <input name="type" v-model="beerType" class="border p-2 w-full mb-4" placeholder="Type" />
-        <Button @click="saveBeer" color="yellow" :class="'px-4 py-2 rounded w-full mb-2'"
+        <Button
+          name="saveBeer"
+          @click="saveBeer"
+          color="yellow"
+          :class="'px-4 py-2 rounded w-full mb-2'"
           >Save New Beer</Button
         >
       </div>
-
       <div v-if="error" class="text-red-500 mt-2">{{ error }}</div>
     </div>
   </div>

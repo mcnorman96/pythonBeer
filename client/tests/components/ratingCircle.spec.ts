@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import RatingCircle from '~/components/ratingCircle.vue';
+import RatingCircle from '~/components/ui/ratingCircle.vue';
 
 describe('RatingCircle.vue', () => {
   it('renders the name prop', () => {

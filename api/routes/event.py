@@ -35,9 +35,6 @@ def new_events():
 def all_events():
     try:
         events = EventService.get_all()
-        if not events:
-            return jsonify({"error": "No events found"}), 400
-
         return jsonify({"response": events}), 200
 
     except Exception as e:

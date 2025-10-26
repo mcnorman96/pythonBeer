@@ -58,6 +58,7 @@ class EventBeersService:
         deleted = EventBeerORM.query.filter_by(event_id=event_id, beer_id=beer_id).delete()
         db.session.commit()
         logging.info(f"Deleted {deleted} EventBeer(s) for event_id={event_id}, beer_id={beer_id}")
+        EventBeersService.updated_beer_in_event(event_id)
 
     @staticmethod
     def deleteAllEventBeersForEvent(event_id: int) -> None:
