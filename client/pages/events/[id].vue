@@ -100,8 +100,6 @@ onUnmounted(() => {
   socket.off('event_updated');
   socket.off('beer_updated');
 });
-
-
 </script>
 
 <template>
@@ -148,14 +146,8 @@ onUnmounted(() => {
     :beer="modalState.beer"
     @close="closeModal"
   />
-  <EditEventModal
-    v-if="modalState.type === 'editEvent'"
-    @close="closeModal"
-  />
-  <AddBeerModal
-    v-if="modalState.type === 'addBeer'"
-    @close="closeModal"
-  />
+  <EditEventModal v-if="modalState.type === 'editEvent'" @close="closeModal" />
+  <AddBeerModal v-if="modalState.type === 'addBeer'" @close="closeModal" />
   <AddRatingModal
     v-if="modalState.type === 'addRating'"
     :beer="modalState.beer"

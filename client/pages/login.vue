@@ -13,7 +13,7 @@ const router = useRouter();
 
 const handleLogin = async () => {
   error.value = '';
-  
+
   if (!username.value || !password.value) {
     error.value = 'Username and password is required';
     return;
@@ -49,11 +49,11 @@ const handleLogin = async () => {
       <form @submit.prevent="handleLogin">
         <div class="mb-4">
           <label class="block mb-2">Username</label>
-          <input 
+          <input
             v-model="username"
             name="username"
-            class="border p-2 w-full" 
-            placeholder="Username" 
+            class="border p-2 w-full"
+            placeholder="Username"
           />
         </div>
         <div class="mb-4">

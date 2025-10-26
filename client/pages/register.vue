@@ -43,11 +43,11 @@ const handleRegister = async () => {
       <form @submit.prevent="handleRegister">
         <div class="mb-4">
           <label class="block mb-2">Username</label>
-          <input 
-            v-model="username" 
+          <input
+            v-model="username"
             name="username"
-            class="border p-2 w-full" 
-            placeholder="Username" 
+            class="border p-2 w-full"
+            placeholder="Username"
           />
         </div>
         <div class="mb-4">
@@ -62,12 +62,12 @@ const handleRegister = async () => {
         </div>
         <div class="mb-4">
           <label class="block mb-2">Email</label>
-          <input 
-            v-model="email" 
+          <input
+            v-model="email"
             name="email"
-            type="email" 
-            class="border p-2 w-full" 
-            placeholder="Email" 
+            type="email"
+            class="border p-2 w-full"
+            placeholder="Email"
           />
         </div>
         <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
