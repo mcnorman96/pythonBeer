@@ -55,6 +55,26 @@ class UserService:
         users = UserORM.query.all()
         logging.info(f"Fetched {len(users)} users")
         return users
+    
+    @staticmethod
+    def update(id: int, username: str, email: str) -> bool:
+        user = UserORM.query.get(id)
+        if user:
+            try:
+                validated_user = UserSchema(
+                    username=username, email=email, password=user.password
+                )
+            except ValidationError as e:
+                logging.error(f"Invalid data: {e}")
+                raise ValueError(f"Invalid data: {e}")
+
+            user.username = validated_user.username
+            user.email = validated_user.email
+            db.session.commit()
+            logging.info(f"Updated user {id} with username '{username}' and email '{email}'")
+            return True
+        logging.warning(f"User {id} not found for update")
+        return False
 
     @staticmethod
     def delete(user_id: int) -> bool:

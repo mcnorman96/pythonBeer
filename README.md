@@ -128,10 +128,6 @@ MIT
 
 # Great ideas for improvements
 
-- Profile page
-See all your own favorite beers by what you rated the highest 
-Change your username, password and email
-
 - Extend User/participants
 Being able to choose an image as profile or use default ones
 Attach participants to event to showcase who has joined that event
@@ -142,12 +138,5 @@ Host a webbrowser through an app for users to easier rate beers for events
 - Admin Dashboard
 Manage users, events, and beers with analytics and moderation tools.
 
-- API Documentation
-Use Swagger/OpenAPI for backend API docs ✅
-Need to make DOCS for all endpoints
-
 - Internationalization (i18n)
 Support multiple languages.
-
-- Automated Dependency Updates
-Use Renovate or Dependabot.

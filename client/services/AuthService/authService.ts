@@ -1,5 +1,6 @@
 import { API_URL } from '../vars';
-
+import type { FetchResult } from '~/types/types';
+import { checkTokenExpired } from '@/utils/authUtil';
 export interface RegisterUserData {
   username: string;
   password: string;
@@ -15,6 +16,8 @@ export interface AuthService {
   registerUser: (userData: RegisterUserData) => Promise<Response>;
   login: (credentials: LoginCredentials) => Promise<Response>;
   logout: () => Promise<Response>;
+  getUser: () => Promise<FetchResult<RegisterUserData>>;
+  updateUser: (userData: RegisterUserData) => Promise<FetchResult<RegisterUserData>>;
 }
 
 export const authService: AuthService = {
@@ -51,5 +54,46 @@ export const authService: AuthService = {
       method: 'POST',
     });
     return response;
+  },
+
+  async getUser(): Promise<FetchResult<RegisterUserData>> {
+    const res = await fetch(`${API_URL}/auth/user`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    const data = await res.json();
+
+    checkTokenExpired(res.status, data.error);
+
+    if (!res.ok) {
+      return { success: false, error: data.error };
+    }
+
+    return { success: true, response: data.response };
+  },
+
+  async updateUser(userData: RegisterUserData): Promise<FetchResult<RegisterUserData>> {
+    const res = await fetch(`${API_URL}/auth/user`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const data = await res.json();
+
+    checkTokenExpired(res.status, data.error);
+
+    if (!res.ok) {
+      return { success: false, error: data.error };
+    }
+
+    return { success: true, response: data.response };
   },
 };

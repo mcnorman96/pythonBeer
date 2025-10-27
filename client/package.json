@@ -10,9 +10,10 @@
     "postinstall": "nuxt prepare",
     "test": "vitest",
     "coverage": "vitest run --coverage",
+    "test:e2e": "cypress run",
     "format": "prettier --write .",
     "lint-fix": "npx eslint . --fix",
-    "pre-commit": "npm run coverage && npm run lint-fix && npm run format"
+    "pre-commit": "npm run coverage && npm run test:e2e && npm run lint-fix && npm run format"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",
