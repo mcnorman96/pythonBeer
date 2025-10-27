@@ -3,7 +3,7 @@ from db import db
 from werkzeug.security import check_password_hash
 from models.user import User
 from services.user_services import UserService
-from utils.utils import get_json_data, get_logger, validate_fields, handle_exceptions
+from utils.utils import get_json_data, get_logger, validate_fields, handle_exceptions, get_valid_user_id
 import jwt
 import datetime
 import os
@@ -70,6 +70,51 @@ def login_user():
             algorithm="HS256",
         )
         return jsonify({"token": token}), 200
+
+    except Exception as e:
+        return handle_exceptions(e)
+
+
+@auth_bp.route("/user", methods=["GET"])
+def get_user():
+    try:
+        user_id = get_valid_user_id()
+        user = db.session.query(User).filter_by(id=user_id).first()
+
+        if not user:
+            return jsonify({"error": "Error fetching userdata"});
+        return jsonify({"response": user.to_dict()})
+
+    except Exception as e:
+        return handle_exceptions(e)
+    
+@auth_bp.route("/user", methods=["PUT"])
+def update_user():
+    try:
+        user_id = get_valid_user_id()  # Ensure user is authenticated
+        data = get_json_data()
+        valid, msg = validate_fields(data, ["username", "email"])
+        if not valid:
+            return jsonify({"error": msg}), 400
+
+        updated_user = UserService.update(
+            id=user_id,
+            username=data.get("username"),
+            email=data.get("email"),
+        )
+
+        if not updated_user:
+            return jsonify({"error": "Error updating user"});
+
+        return (
+            jsonify(
+                {
+                    "message": "User updated successfully",
+                    "response": updated_user,
+                }
+            ),
+            200,
+        )
 
     except Exception as e:
         return handle_exceptions(e)

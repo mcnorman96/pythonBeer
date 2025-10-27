@@ -27,3 +27,5 @@ logs
 coverage/
 .nyc_output/
 coverage-final.json
+
+cypress/screenshots

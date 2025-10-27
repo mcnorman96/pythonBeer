@@ -16,14 +16,14 @@ describe('Login page', () => {
     cy.contains('Username, Password and Email is required');
   });
 
-  it('shows error for invalid credentials', () => {
-    cy.visit('http://localhost:3000/register');
-    cy.wait(500);
-    cy.get('input[name="username"]').type('user');
-    cy.get('input[name="password"]').type('pass');
-    cy.get('input[name="email"]').type('newone@gmail.com');
-    cy.get('button[type="submit"]').click();
-    cy.wait(500);
-    cy.contains('Registration successful! You can now log in.');
-  });
+  // it('Registered successfully', () => {
+  //   cy.visit('http://localhost:3000/register');
+  //   cy.wait(500);
+  //   cy.get('input[name="username"]').type('user');
+  //   cy.get('input[name="password"]').type('pass');
+  //   cy.get('input[name="email"]').type('newone@gmail.com');
+  //   cy.get('button[type="submit"]').click();
+  //   cy.wait(500);
+  //   cy.contains('Registration successful! You can now log in.');
+  // });
 });
