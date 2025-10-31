@@ -2,6 +2,8 @@
 import type { Event, Beer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const props = defineProps<{
   event: Event | null;
@@ -34,7 +36,7 @@ const getTrophy = (position: number) => {
 
 <template>
   <NuxtLink
-    :to="{ name: 'events-id', params: { id: event.id } }"
+    :to="`/events/${event.id}`"
     class="mt-5 flex flex-wrap justify-between bg-white border-gray-400 border-solid shadow-md rounded-2xl p-6 hover:shadow-lg transition"
     style="border-width: 0.5px"
   >
@@ -46,7 +48,7 @@ const getTrophy = (position: number) => {
             'status text-xs ' + (event_status === 'Active' ? 'text-green-600' : 'text-red-600')
           "
         >
-          {{ event_status }}
+          {{ t(event_status) }}
         </div>
       </div>
       <div class="name font-bold">

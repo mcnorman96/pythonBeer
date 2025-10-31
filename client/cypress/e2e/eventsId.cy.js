@@ -81,7 +81,6 @@ describe('Events Id page', () => {
 
   it('loads successfully', () => {
     cy.contains(eventName);
-    cy.contains(eventName);
     cy.get(editButton);
     cy.get(addBeerButton);
   });
@@ -139,11 +138,11 @@ describe('Events Id page', () => {
     cy.get('button[name=saveRating]').click();
     cy.wait(500);
 
-    cy.get('text[name=Taste]').should('contain', '5');
-    cy.get('text[name=Aftertaste]').should('contain', '5');
-    cy.get('text[name=Smell]').should('contain', '5');
-    cy.get('text[name=Design]').should('contain', '5');
-    cy.get('text[name=Score]').should('contain', '5');
+    cy.get('text[name=taste]').should('contain', '5');
+    cy.get('text[name=aftertaste]').should('contain', '5');
+    cy.get('text[name=smell]').should('contain', '5');
+    cy.get('text[name=design]').should('contain', '5');
+    cy.get('text[name=score]').should('contain', '5');
   });
 
   it('View ratings', () => {
@@ -151,11 +150,11 @@ describe('Events Id page', () => {
     cy.wait(500);
 
     cy.contains('alice');
-    cy.get('text[name=Taste]').should('contain', '5');
-    cy.get('text[name=Aftertaste]').should('contain', '5');
-    cy.get('text[name=Smell]').should('contain', '5');
-    cy.get('text[name=Design]').should('contain', '5');
-    cy.get('text[name=Score]').should('contain', '5');
+    cy.get('text[name=taste]').should('contain', '5');
+    cy.get('text[name=aftertaste]').should('contain', '5');
+    cy.get('text[name=smell]').should('contain', '5');
+    cy.get('text[name=design]').should('contain', '5');
+    cy.get('text[name=score]').should('contain', '5');
   });
 
   it('Edit beer info', () => {

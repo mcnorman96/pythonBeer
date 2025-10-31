@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
 const props = defineProps<{
   rating: number;
   name: string;
@@ -8,7 +11,7 @@ const props = defineProps<{
 <template>
   <div class="text-center w-12 md:w-20">
     <div class="name text-xs md:text-sm mb-2">
-      {{ props.name }}
+      {{ t(props.name) }}
     </div>
     <div class="rating-circle m-auto relative w-7 h-7 md:w-10 md:h-10">
       <svg viewBox="0 0 36 36" class="w-full h-full">

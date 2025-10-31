@@ -1,5 +1,11 @@
 import { mount } from '@vue/test-utils';
 import BeerCard from '~/components/beerCard.vue';
+import { createI18n } from 'vue-i18n';
+import en from '~/i18n/locales/en.json';
+const i18n = createI18n({
+  locale: 'en',
+  messages: { en },
+});
 
 // Custom stub for RatingCircle to show the name prop
 const ratingCircleStub = {
@@ -25,6 +31,7 @@ describe('BeerCard.vue', () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: true },
       global: {
+        plugins: [i18n],
         stubs: { RatingCircle: ratingCircleStub },
       },
     });
@@ -38,20 +45,22 @@ describe('BeerCard.vue', () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: true },
       global: {
+        plugins: [i18n],
         stubs: { RatingCircle: ratingCircleStub },
       },
     });
-    expect(wrapper.text()).toContain('Taste');
-    expect(wrapper.text()).toContain('Aftertaste');
-    expect(wrapper.text()).toContain('Smell');
-    expect(wrapper.text()).toContain('Design');
-    expect(wrapper.text()).toContain('Score');
+    expect(wrapper.text()).toContain('taste');
+    expect(wrapper.text()).toContain('aftertaste');
+    expect(wrapper.text()).toContain('smell');
+    expect(wrapper.text()).toContain('design');
+    expect(wrapper.text()).toContain('score');
   });
 
   it('emits view-ratings event when view ratings button is clicked', async () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: true },
       global: {
+        plugins: [i18n],
         stubs: { RatingCircle: ratingCircleStub },
       },
     });
@@ -65,6 +74,7 @@ describe('BeerCard.vue', () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: true },
       global: {
+        plugins: [i18n],
         stubs: { RatingCircle: ratingCircleStub },
       },
     });
@@ -78,6 +88,7 @@ describe('BeerCard.vue', () => {
     const wrapper = mount(BeerCard, {
       props: { beer, buttonsAvailable: false },
       global: {
+        plugins: [i18n],
         stubs: { RatingCircle: ratingCircleStub },
       },
     });

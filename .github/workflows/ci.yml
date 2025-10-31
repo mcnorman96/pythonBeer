@@ -41,8 +41,10 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run tests with coverage
-        run: npm run coverage # or npm run test -- --coverage
+        run: npm run coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           files: client/coverage/lcov.info
+      - name: Run e2e tests
+        run: npm run test:e2e

@@ -2,6 +2,10 @@
 import { ref } from 'vue';
 import { authService } from '~/services/AuthService/authService';
 import Button from '~/components/ui/Button.vue';
+import TextInput from '~/components/ui/TextInput.vue';
+import StatusMessage from '~/components/ui/StatusMessage.vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const username = ref<string>('');
 const password = ref<string>('');
@@ -39,40 +43,13 @@ const handleRegister = async () => {
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="bg-white p-8 rounded shadow-md w-96">
-      <h2 class="text-2xl mb-6 text-center">Register</h2>
+      <h2 class="text-2xl mb-6 text-center">{{ t('register') }}</h2>
       <form @submit.prevent="handleRegister">
-        <div class="mb-4">
-          <label class="block mb-2">Username</label>
-          <input
-            v-model="username"
-            name="username"
-            class="border p-2 w-full"
-            placeholder="Username"
-          />
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Password</label>
-          <input
-            v-model="password"
-            name="password"
-            type="password"
-            class="border p-2 w-full"
-            placeholder="Password"
-          />
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Email</label>
-          <input
-            v-model="email"
-            name="email"
-            type="email"
-            class="border p-2 w-full"
-            placeholder="Email"
-          />
-        </div>
-        <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
-        <div v-if="success" class="text-green-500 mb-4">{{ success }}</div>
-        <Button type="submit" color="yellow" class="w-full">Register</Button>
+        <TextInput v-model="username" name="username" title="username" />
+        <TextInput v-model="password" name="password" type="password" title="password" />
+        <TextInput v-model="email" name="email" type="email" title="email" />
+        <StatusMessage :error="error" :success="success" />
+        <Button type="submit" color="yellow" class="w-full">{{ t('register') }}</Button>
       </form>
     </div>
   </div>

@@ -2,6 +2,12 @@ import { mount, flushPromises } from '@vue/test-utils';
 import viewRatingsModal from '~/components/modals/viewRatingsModal.vue';
 import beerService from '@/services/BeerService/beerService';
 import { vi } from 'vitest';
+import { createI18n } from 'vue-i18n';
+import en from '~/i18n/locales/en.json';
+const i18n = createI18n({
+  locale: 'en',
+  messages: { en },
+});
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({ params: { id: '1' } }),
@@ -26,6 +32,7 @@ describe('viewRatingsModal.vue', () => {
       },
       {
         global: {
+          plugins: [i18n],
           components: {
             RatingCircle: {
               template: '<div><slot></slot> {{ name }}</div>',

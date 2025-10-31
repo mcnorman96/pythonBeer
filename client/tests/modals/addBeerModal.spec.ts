@@ -3,6 +3,12 @@ import AddBeerModal from '~/components/modals/addBeerModal.vue';
 import { flushPromises } from '@vue/test-utils';
 import beerService from '@/services/BeerService/beerService';
 import { vi } from 'vitest';
+import { createI18n } from 'vue-i18n';
+import en from '~/i18n/locales/en.json';
+const i18n = createI18n({
+  locale: 'en',
+  messages: { en },
+});
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({ params: { id: '1' } }),
@@ -12,12 +18,20 @@ globalThis.useFetch = async () => ({ data: { value: [] }, error: null, pending: 
 
 describe('AddBeerModal.vue', () => {
   it('renders the modal', () => {
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('emits close event when close button is clicked', async () => {
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     const closeBtn = wrapper.find('.close-button');
     if (closeBtn.exists()) {
       await closeBtn.trigger('click');
@@ -29,31 +43,51 @@ describe('AddBeerModal.vue', () => {
   });
 
   it('has an input for beer search', () => {
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     const searchInput = wrapper.find('input[name="beerSearch"]');
     expect(searchInput.exists()).toBe(true);
   });
 
   it('has an input for beer name', () => {
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     const nameInput = wrapper.find('input[name="name"]');
     expect(nameInput.exists()).toBe(true);
   });
 
   it('has an input for brewery', () => {
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     const breweryInput = wrapper.find('input[name="brewery"]');
     expect(breweryInput.exists()).toBe(true);
   });
 
   it('has an input for description', () => {
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     const descriptionInput = wrapper.find('input[name="description"]');
     expect(descriptionInput.exists()).toBe(true);
   });
 
   it('has an input for type', () => {
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     const typeInput = wrapper.find('input[name="type"]');
     expect(typeInput.exists()).toBe(true);
   });
@@ -105,7 +139,11 @@ describe('AddBeerModal.vue', () => {
     });
     beerService.eventBeer.newBeer = newBeerMock;
 
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
 
     wrapper.vm.beerName = 'Test Beer';
     wrapper.vm.beerDescription = 'Test Description';
@@ -158,7 +196,11 @@ describe('AddBeerModal.vue', () => {
     beerService.eventBeer.newBeer = newBeerMock;
     beerService.eventBeer.addBeerToEvent = addBeerToEventMock;
 
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     wrapper.vm.beerName = ''; // Missing name
     wrapper.vm.beerDescription = 'Test Description';
     wrapper.vm.beerBrewery = 'Test Brewery';
@@ -175,7 +217,11 @@ describe('AddBeerModal.vue', () => {
   });
 
   it('validates required fields before saving', async () => {
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
 
     // Leave all fields empty
     wrapper.vm.beerName = '';
@@ -197,7 +243,11 @@ describe('AddBeerModal.vue', () => {
     const addBeerToEventMock = vi.fn().mockResolvedValue({ success: true });
     beerService.eventBeer.addBeerToEvent = addBeerToEventMock;
 
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     wrapper.vm.beerName = 'Existing Beer';
     wrapper.vm.beerDescription = 'Test Description';
     wrapper.vm.beerBrewery = 'Test Brewery';

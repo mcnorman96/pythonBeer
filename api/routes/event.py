@@ -14,7 +14,7 @@ event_bp = Blueprint("events", __name__)
 
 
 @event_bp.route("/new", methods=["POST"])
-def new_events():
+def new_event():
     try:
         get_valid_user_id()  # Ensure user is authenticated
         data = get_json_data()
@@ -25,7 +25,7 @@ def new_events():
         name = data.get("name")
         description = data.get("description")
         EventService.create(name, description)
-        return jsonify({"message": "Events created successfully"}), 201
+        return jsonify({"message": "event.created"}), 201
 
     except Exception as e:
         return handle_exceptions(e)
@@ -46,7 +46,7 @@ def get_event_by_id(event_id):
     try:
         event = EventService.get_by_id(event_id)
         if not event:
-            return jsonify({"error": "Event not found"}), 404
+            return jsonify({"error": "event.not.found"}), 404
 
         return jsonify({"response": event}), 200
 
@@ -68,12 +68,12 @@ def update_event(event_id):
         updated_event = EventService.update(event_id, name, description)
 
         if not updated_event:
-            return jsonify({"error": "Event not found"}), 404
+            return jsonify({"error": "event.not.found"}), 404
 
         return (
             jsonify(
                 {
-                    "message": "Event updated successfully",
+                    "message": "event.updated",
                     "response": updated_event,
                 }
             ),
@@ -90,9 +90,9 @@ def delete_event(event_id):
         get_valid_user_id()  # Ensure user is authenticated
         deleted = EventService.delete(event_id)
         if not deleted:
-            return jsonify({"error": "Event not found"}), 404
+            return jsonify({"error": "event.not.found"}), 404
 
-        return jsonify({"message": "Event deleted successfully"}), 200
+        return jsonify({"message": "event.deleted"}), 200
 
     except Exception as e:
         return handle_exceptions(e)

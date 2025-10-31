@@ -39,6 +39,7 @@ function toggleMobileMenu() {
       >
         <NuxtLink :class="menuItemsClass" to="/events">Events</NuxtLink>
         <NuxtLink :class="menuItemsClass" to="/toplist">Toplist</NuxtLink>
+        <NuxtLink :class="menuItemsClass" to="/profile">Profile</NuxtLink>
         <NuxtLink @click="logout" to="/login" :class="menuItemsClass">Log out</NuxtLink>
       </div>
       <client-only>
@@ -76,6 +77,12 @@ function toggleMobileMenu() {
             to="/toplist"
             @click="showMobileMenu = false"
             >Toplist</NuxtLink
+          >
+          <NuxtLink
+            :class="menuItemsClass + ' block py-2'"
+            to="/profile"
+            @click="showMobileMenu = false"
+            >Profile</NuxtLink
           >
           <NuxtLink
             :class="menuItemsClass + ' block py-2'"

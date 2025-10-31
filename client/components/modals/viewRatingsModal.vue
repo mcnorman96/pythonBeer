@@ -3,7 +3,7 @@ import beerService from '~/services/BeerService/beerService';
 import type { Beer } from '~/types/types';
 import Button from '~/components/ui/Button.vue';
 import { useRoute } from 'vue-router';
-import RatingCircle from '~/components/ui/ratingCircle.vue';
+import RatingCircle from '~/components/ui/RatingCircle.vue';
 
 const props = defineProps<{ beer: Beer }>();
 const emit = defineEmits<{ (e: 'close'): void }>();

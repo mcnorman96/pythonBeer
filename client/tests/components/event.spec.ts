@@ -2,7 +2,12 @@ import { mount, flushPromises } from '@vue/test-utils';
 import EventCard from '~/components/event.vue';
 import beerService from '@/services/BeerService/beerService';
 import { ref, onMounted } from 'vue';
-
+import { createI18n } from 'vue-i18n';
+import en from '~/i18n/locales/en.json';
+const i18n = createI18n({
+  locale: 'en',
+  messages: { en },
+});
 (globalThis as any).ref = ref;
 (globalThis as any).onMounted = onMounted;
 
@@ -25,8 +30,8 @@ describe('Event.vue', () => {
     const wrapper = mount(EventCard, {
       props: { event: customEvent },
       global: {
+        plugins: [i18n],
         stubs: {
-          // Properly stub NuxtLink
           NuxtLink: {
             name: 'NuxtLink',
             props: ['to'],
@@ -36,7 +41,6 @@ describe('Event.vue', () => {
       },
     });
 
-    // wait for any async operations inside the component
     await flushPromises();
 
     return wrapper;
@@ -104,10 +108,6 @@ describe('Event.vue', () => {
 
     expect(link.exists()).toBe(true);
 
-    // Updated assertion for named route object
-    expect(link.props('to')).toEqual({
-      name: 'events-id',
-      params: { id: `${event.id}` }, // convert to string if needed
-    });
+    expect(link.props('to')).toEqual('/events/1');
   });
 });

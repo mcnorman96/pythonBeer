@@ -3,6 +3,12 @@ import addRatingModal from '~/components/modals/addRatingModal.vue';
 import { flushPromises } from '@vue/test-utils';
 import beerService from '@/services/BeerService/beerService';
 import { vi } from 'vitest';
+import { createI18n } from 'vue-i18n';
+import en from '~/i18n/locales/en.json';
+const i18n = createI18n({
+  locale: 'en',
+  messages: { en },
+});
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({ params: { id: '1' } }),
@@ -31,6 +37,9 @@ describe('addRatingModal.vue', () => {
     const wrapper = mount(addRatingModal, {
       props: {
         beer: { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' },
+      },
+      global: {
+        plugins: [i18n],
       },
     });
     expect(wrapper.exists()).toBe(true);

@@ -26,7 +26,7 @@ def register_user():
             password=data.get("password"),
             email=data.get("email"),
         )
-        return jsonify({"message": "User registered", "user_id": user.id}), 201
+        return jsonify({"message": "user.registered", "user_id": user.id}), 201
 
     except Exception as e:
         return handle_exceptions(e)
@@ -36,7 +36,7 @@ def register_user():
 @auth_bp.route("/logout", methods=["POST"])
 def logout_user():
     session.clear()  # Clears all session data
-    return jsonify({"message": "Logged out successfully!"}), 200
+    return jsonify({"message": "logged.out"}), 200
 
 
 # LOGIN
@@ -55,7 +55,7 @@ def login_user():
 
         # wrong user or password
         if not user or not check_password_hash(user.password, password):
-            return jsonify({"error": "Incorrect username or password"}), 401
+            return jsonify({"error": "incorrect.login"}), 401
 
         # Login logic
         session["loggedin"] = True
@@ -82,7 +82,7 @@ def get_user():
         user = db.session.query(User).filter_by(id=user_id).first()
 
         if not user:
-            return jsonify({"error": "Error fetching userdata"});
+            return jsonify({"error": "error.fetching.user"});
         return jsonify({"response": user.to_dict()})
 
     except Exception as e:
@@ -104,12 +104,12 @@ def update_user():
         )
 
         if not updated_user:
-            return jsonify({"error": "Error updating user"});
+            return jsonify({"error": "error.updating.user"});
 
         return (
             jsonify(
                 {
-                    "message": "User updated successfully",
+                    "message": "user.updated",
                     "response": updated_user,
                 }
             ),

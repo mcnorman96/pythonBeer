@@ -28,7 +28,7 @@ def new_beer():
 
         return (
             jsonify(
-                {"message": "Beer created successfully", "response": beer.to_dict()}
+                {"message": "beer.created", "response": beer.to_dict()}
             ),
             201,
         )
@@ -54,7 +54,7 @@ def update_beer():
 
         return (
             jsonify(
-                {"message": "Beer updated successfully", "response": beer.to_dict()}
+                {"message": "beer.updated", "response": beer.to_dict()}
             ),
             200,
         )
