@@ -4,7 +4,7 @@ const { t } = useI18n();
 import RatingCircle from '~/components/ui/RatingCircle.vue';
 import { computed } from 'vue';
 import type { Beer } from '~/types/types';
-import Button from '~/components/ui/Button.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
 
 const props = defineProps<{
   beer: Beer;
@@ -48,25 +48,25 @@ const average_score = computed(() => props.beer.average_score || 0);
         <RatingCircle :rating="average_score" name="score" />
       </div>
       <div v-if="props.buttonsAvailable" class="flex md:w-max ml-auto mt-5">
-        <Button
+        <BaseButton
           edit
           name="editBeer"
           @click="emit('edit-beer', props.beer)"
           class="edit-beer w-1/2 md:w-auto"
-          >{{ t('edit.beer') }}</Button
+          >{{ t('edit.beer') }}</BaseButton
         >
-        <Button
+        <BaseButton
           name="viewRatings"
           @click="emit('view-ratings', props.beer)"
           :class="'view-ratings ml-5 w-1/2 md:w-auto'"
-          >{{ t('view.ratings') }}</Button
+          >{{ t('view.ratings') }}</BaseButton
         >
-        <Button
+        <BaseButton
           name="addRating"
           @click="emit('add-rating', props.beer)"
           color="yellow"
           :class="'add-rating ml-5 w-1/2 md:w-auto'"
-          >{{ t('add.rating') }}</Button
+          >{{ t('add.rating') }}</BaseButton
         >
       </div>
     </div>

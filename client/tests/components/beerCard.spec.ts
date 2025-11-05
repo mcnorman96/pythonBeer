@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import BeerCard from '~/components/beerCard.vue';
+import BeerCard from '~/components/BeerCard.vue';
 import { createI18n } from 'vue-i18n';
 import en from '~/i18n/locales/en.json';
 const i18n = createI18n({

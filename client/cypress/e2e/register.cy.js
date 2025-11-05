@@ -13,7 +13,7 @@ describe('Login page', () => {
     cy.wait(500);
     cy.get('button[type="submit"]').click();
     cy.wait(1500);
-    cy.contains('Username, Password and Email is required');
+    cy.contains('Username, password, and email must be provided');
   });
 
   // it('Registered successfully', () => {

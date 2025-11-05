@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BeerCard from '~/components/beerCard.vue';
+import BeerCard from '~/components/BeerCard.vue';
 import List from '~/components/ui/List.vue';
 import beerService from '~/services/BeerService/beerService';
 import { useI18n } from 'vue-i18n';

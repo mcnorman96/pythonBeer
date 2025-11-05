@@ -1,20 +1,38 @@
 <script setup lang="ts">
+import baseModal from '~/layouts/BaseModal.vue';
 import beerService from '~/services/BeerService/beerService';
-import type { Beer } from '~/types/types';
-import Button from '~/components/ui/Button.vue';
+import type { Beer, Rating } from '~/types/types';
+import List from '~/components/ui/List.vue';
 import { useRoute } from 'vue-router';
 import RatingCircle from '~/components/ui/RatingCircle.vue';
+import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const props = defineProps<{ beer: Beer }>();
 const emit = defineEmits<{ (e: 'close'): void }>();
 const route = useRoute();
 const eventId = route.params.id;
 
-const {
-  data: ratings,
-  error,
-  pending,
-} = await beerService.ratings.getAllRatingsForBeer(eventId as string, props.beer.id);
+const beer_ratings = ref<Rating[]>([]);
+const ratings_pending = ref<Rating>(false);
+
+onMounted(async () => {
+  ratings_pending.value = true;
+
+  const { data: ratings } = await beerService.ratings.getAllRatingsForBeer(
+    eventId as string,
+    props.beer.id
+  );
+
+  if (ratings?.value?.response) {
+    beer_ratings.value = ratings.value.response;
+  } else {
+    console.error('No ratings fetched');
+  }
+
+  ratings_pending.value = false;
+});
 
 const handleClose = () => {
   emit('close');
@@ -22,37 +40,31 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div
-      class="bg-white p-6 rounded shadow-lg w-[500px] max-w-full max-h-[80vh] overflow-auto relative m-2"
+  <baseModal :handleClose="handleClose">
+    <h2 class="text-xl mb-4">{{ t('ratings.for') }} {{ props.beer.name }}</h2>
+    <List
+      :items="beer_ratings || []"
+      :pending="ratings_pending"
+      loadingText="loading"
+      emptyText="no.ratings"
+      class="mb-5"
     >
-      <Button close @click="handleClose" :class="'absolute top-2 right-2'"></Button>
-      <h2 class="text-xl mb-4">Ratings for {{ props.beer.name }}</h2>
-      <div v-if="pending" class="mb-4">Loading ratings...</div>
-      <div v-else-if="error" class="mb-4 text-red-500">
-        Error loading ratings: {{ error.message }}
-      </div>
-      <div v-else-if="(ratings && ratings.response.length === 0) || !ratings" class="mb-4">
-        No ratings available.
-      </div>
-      <div v-else class="">
-        <div v-for="rating in ratings.response" :key="rating.id" class="mb-2">
-          <div class="flex justify-between py-5 border-t border-t-black">
-            <div class="name mr-3 capitalize">
-              {{ rating.username }}
-            </div>
-            <div class="rightside">
-              <div class="flex -mr-3 md:-mr-6">
-                <RatingCircle :rating="rating.taste" name="Taste" />
-                <RatingCircle :rating="rating.aftertaste" name="Aftertaste" />
-                <RatingCircle :rating="rating.smell" name="Smell" />
-                <RatingCircle :rating="rating.design" name="Design" />
-                <RatingCircle :rating="rating.score" name="Score" />
-              </div>
+      <template #default="{ item }">
+        <div v-if="item" class="flex justify-between py-5 border-t border-t-black">
+          <div class="name mr-3 capitalize">
+            {{ item.username }}
+          </div>
+          <div class="rightside">
+            <div class="flex -mr-3 md:-mr-6">
+              <RatingCircle :rating="item.taste" name="taste" />
+              <RatingCircle :rating="item.aftertaste" name="aftertaste" />
+              <RatingCircle :rating="item.smell" name="smell" />
+              <RatingCircle :rating="item.design" name="design" />
+              <RatingCircle :rating="item.score" name="score" />
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </template>
+    </List>
+  </baseModal>
 </template>

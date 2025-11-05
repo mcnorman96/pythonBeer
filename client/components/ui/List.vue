@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
-import type { Event, Beer } from '~/types/types';
+import type { Event, Beer, Rating } from '~/types/types';
 
 defineProps<{
-  items: Array<Event | Beer>;
+  items: Array<Event | Beer | Rating>;
   pending?: boolean;
   loadingText?: string;
   emptyText?: string;
 }>();
 
-const itemKey = (item: Event | Beer) => {
+const itemKey = (item: Event | Beer | Rating) => {
   // Default key: item.id or item.name or index
   return item.id ?? item.name ?? JSON.stringify(item);
 };
@@ -23,7 +23,7 @@ const itemKey = (item: Event | Beer) => {
     <div v-else-if="!items || items.length < 1">{{ t(emptyText) }}</div>
     <div v-else>
       <div v-for="item in items" :key="itemKey(item)">
-        <slot :item="item" />
+        <slot v-if="item" :item="item" :other="item" />
       </div>
     </div>
     <slot name="extra" />

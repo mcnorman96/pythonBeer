@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { authService } from '~/services/AuthService/authService';
-import Button from '~/components/ui/Button.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
 import TextInput from '~/components/ui/TextInput.vue';
 import StatusMessage from '~/components/ui/StatusMessage.vue';
 import { useI18n } from 'vue-i18n';
@@ -17,7 +17,7 @@ const handleRegister = async () => {
   error.value = '';
 
   if (!username.value || !password.value) {
-    error.value = 'Username, Password and Email is required';
+    error.value = t('register.not.all.fields.provided');
     return;
   }
 
@@ -49,7 +49,7 @@ const handleRegister = async () => {
         <TextInput v-model="password" name="password" type="password" title="password" />
         <TextInput v-model="email" name="email" type="email" title="email" />
         <StatusMessage :error="error" :success="success" />
-        <Button type="submit" color="yellow" class="w-full">{{ t('register') }}</Button>
+        <BaseButton type="submit" color="yellow" class="w-full">{{ t('register') }}</BaseButton>
       </form>
     </div>
   </div>

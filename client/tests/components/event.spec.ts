@@ -1,5 +1,5 @@
 import { mount, flushPromises } from '@vue/test-utils';
-import EventCard from '~/components/event.vue';
+import EventCard from '~/components/Event.vue';
 import beerService from '@/services/BeerService/beerService';
 import { ref, onMounted } from 'vue';
 import { createI18n } from 'vue-i18n';

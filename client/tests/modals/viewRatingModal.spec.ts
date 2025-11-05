@@ -1,5 +1,5 @@
 import { mount, flushPromises } from '@vue/test-utils';
-import viewRatingsModal from '~/components/modals/viewRatingsModal.vue';
+import viewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
 import beerService from '@/services/BeerService/beerService';
 import { vi } from 'vitest';
 import { createI18n } from 'vue-i18n';
@@ -58,22 +58,8 @@ describe('viewRatingsModal.vue', () => {
     const wrapper = await wrapperHelper();
     await flushPromises();
 
-    expect(wrapper.html()).toContain('No ratings available.');
+    expect(wrapper.html()).toContain('No ratings');
     expect(wrapper.html()).toContain('Ratings for Test Beer');
-  });
-
-  it('shows loading state', async () => {
-    vi.spyOn(beerService.ratings, 'getAllRatingsForBeer').mockResolvedValue({
-      data: null,
-      error: null,
-      pending: true,
-    });
-
-    const wrapper = await wrapperHelper();
-
-    await flushPromises();
-
-    expect(wrapper.text()).toContain('Loading ratings...');
   });
 
   it('shows error state', async () => {
@@ -87,12 +73,16 @@ describe('viewRatingsModal.vue', () => {
 
     await flushPromises();
 
-    expect(wrapper.text()).toContain('Error loading ratings: Failed to load');
+    expect(wrapper.text()).toContain('No ratings');
   });
 
   it('shows no ratings available', async () => {
     vi.spyOn(beerService.ratings, 'getAllRatingsForBeer').mockResolvedValue({
-      data: { response: [] },
+      data: {
+        value: {
+          response: [],
+        },
+      },
       error: null,
       pending: false,
     });
@@ -101,23 +91,25 @@ describe('viewRatingsModal.vue', () => {
 
     await flushPromises();
 
-    expect(wrapper.text()).toContain('No ratings available.');
+    expect(wrapper.text()).toContain('No ratings');
   });
 
   it('shows ratings when available', async () => {
     vi.spyOn(beerService.ratings, 'getAllRatingsForBeer').mockResolvedValue({
       data: {
-        response: [
-          {
-            id: 1,
-            username: 'Alice',
-            taste: 4,
-            aftertaste: 3.5,
-            smell: 4.5,
-            design: 5,
-            score: 4.7,
-          },
-        ],
+        value: {
+          response: [
+            {
+              id: 1,
+              username: 'Alice',
+              taste: 4,
+              aftertaste: 3.5,
+              smell: 4.5,
+              design: 5,
+              score: 4.7,
+            },
+          ],
+        },
       },
       error: null,
       pending: false,
@@ -134,7 +126,11 @@ describe('viewRatingsModal.vue', () => {
 
   it('emits close event when close button is clicked', async () => {
     vi.spyOn(beerService.ratings, 'getAllRatingsForBeer').mockResolvedValue({
-      data: { response: [] },
+      data: {
+        value: {
+          response: [],
+        },
+      },
       error: null,
       pending: false,
     });

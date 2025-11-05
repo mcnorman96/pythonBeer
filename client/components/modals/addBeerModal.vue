@@ -2,11 +2,15 @@
 import { ref, watch } from 'vue';
 import type { Beer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
-import Button from '~/components/ui/Button.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
+import baseModal from '~/layouts/BaseModal.vue';
+import TextInput from '~/components/ui/TextInput.vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const route = useRoute();
-const eventId: string = route.params.id;
+const eventId: string | string[] = route.params.id;
 const emit = defineEmits<{ (e: 'close'): void; (e: 'save'): void }>();
 
 const beerName = ref<string>('');
@@ -47,7 +51,7 @@ const handleClose = () => {
 const saveBeer = async () => {
   try {
     if (!beerName.value || !beerDescription.value || !beerBrewery.value || !beerType.value) {
-      error.value = 'All fields are required to create a new beer.';
+      error.value = t('all.fields.required.create.beer');
       console.error('All fields are required to create a new beer.');
       return;
     }
@@ -60,7 +64,7 @@ const saveBeer = async () => {
     });
 
     if (!createBeer.success || !createBeer.response) {
-      error.value = 'Failed to create beer.';
+      error.value = t('error.create.beer');
       console.error('Failed to create beer:', createBeer.error);
       return;
     }
@@ -72,10 +76,11 @@ const saveBeer = async () => {
     );
 
     if (!addBeerToEvent.success) {
+      error.value = t('error.adding.beer.to.event');
       console.error(addBeerToEvent.error);
     }
   } catch (error) {
-    error.value = 'An error occurred while creating or adding the beer.';
+    error.value = t('error.create.beer');
     console.error('Error creating or adding beer:', error);
   }
 
@@ -104,70 +109,47 @@ const handleBlur = () => {
 </script>
 
 <template>
-  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="bg-white p-6 rounded shadow-lg w-96 relative m-2 max-h-[80vh] overflow-y-auto">
-      <Button close @click="handleClose" :class="'rounded absolute top-2 right-2'"></Button>
-      <h2 class="text-xl mb-4">Add Beer to Event</h2>
-
-      <div class="mb-6 relative">
-        <h3 class="font-semibold mb-2">Add Existing Beer</h3>
-        <input
-          name="beerSearch"
-          v-model="beerSearch"
-          class="border p-2 w-full mb-2"
-          placeholder="Search for beer..."
-          @focus="showDropdown = filteredBeers.length > 0"
-          @blur="handleBlur"
-        />
-        <ul
-          v-if="showDropdown"
-          class="absolute left-0 right-0 bg-white border rounded shadow z-10 max-h-48 overflow-auto"
+  <baseModal :handleClose="handleClose">
+    <h2 class="text-xl mb-4">{{ t('add.beer.to.event') }}</h2>
+    <div class="mb-6 relative">
+      <h3 class="font-semibold mb-2">{{ t('add.existing.beer') }}</h3>
+      <input
+        name="beerSearch"
+        v-model="beerSearch"
+        class="border p-2 w-full mb-2"
+        :placeholder="t('search.beer')"
+        @focus="showDropdown = filteredBeers.length > 0"
+        @blur="handleBlur"
+      />
+      <ul
+        v-if="showDropdown"
+        class="absolute left-0 right-0 bg-white border rounded shadow z-10 max-h-48 overflow-auto"
+      >
+        <li
+          v-for="beer in filteredBeers"
+          :key="beer.id"
+          @mousedown.prevent="addExistingBeerToEvent(beer.id)"
+          class="px-4 py-2 cursor-pointer hover:bg-gray-100"
         >
-          <li
-            v-for="beer in filteredBeers"
-            :key="beer.id"
-            @mousedown.prevent="addExistingBeerToEvent(beer.id)"
-            class="px-4 py-2 cursor-pointer hover:bg-gray-100"
-          >
-            {{ beer.name }}
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="font-semibold mb-2">Add New Beer</h3>
-        <label class="block mb-2">Name</label>
-        <input
-          name="name"
-          v-model="beerName"
-          class="border p-2 w-full mb-2"
-          placeholder="Beer name"
-        />
-        <label class="block mb-2">Description</label>
-        <input
-          name="description"
-          v-model="beerDescription"
-          class="border p-2 w-full mb-2"
-          placeholder="Description"
-        />
-        <label class="block mb-2">Brewery</label>
-        <input
-          name="brewery"
-          v-model="beerBrewery"
-          class="border p-2 w-full mb-2"
-          placeholder="Brewery"
-        />
-        <label class="block mb-2">Type</label>
-        <input name="type" v-model="beerType" class="border p-2 w-full mb-4" placeholder="Type" />
-        <Button
-          name="saveBeer"
-          @click="saveBeer"
-          color="yellow"
-          :class="'px-4 py-2 rounded w-full mb-2'"
-          >Save New Beer</Button
-        >
-      </div>
-      <div v-if="error" class="text-red-500 mt-2">{{ error }}</div>
+          {{ beer.name }}
+        </li>
+      </ul>
     </div>
-  </div>
+
+    <div>
+      <h3 class="font-semibold mb-2">{{ t('add.new.beer') }}</h3>
+      <TextInput v-model="beerName" name="name" title="name" />
+      <TextInput v-model="beerDescription" name="description" title="description" />
+      <TextInput v-model="beerBrewery" name="brewery" title="brewery" />
+      <TextInput v-model="beerType" name="type" title="type" />
+      <BaseButton
+        name="saveBeer"
+        @click="saveBeer"
+        color="yellow"
+        :class="'px-4 py-2 rounded w-full mb-2'"
+        >{{ t('save.new.beer') }}</BaseButton
+      >
+    </div>
+    <div v-if="error" class="text-red-500 mt-2">{{ error }}</div>
+  </baseModal>
 </template>

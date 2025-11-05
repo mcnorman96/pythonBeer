@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import Button from '~/components/ui/Button.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
 import { authService } from '~/services/AuthService/authService';
 import TextInput from '~/components/ui/TextInput.vue';
 import StatusMessage from '~/components/ui/StatusMessage.vue';
@@ -51,7 +51,7 @@ const handleSave = async () => {
       <img src="/img/user.png" alt="profile" class="w-1/2 m-auto" />
     </div>
 
-    <Button type="submit" color="yellow" class="ml-auto mt-5">{{ t('save') }}</Button>
+    <BaseButton type="submit" color="yellow" class="ml-auto mt-5">{{ t('save') }}</BaseButton>
     <StatusMessage class="text-right w-full" :error="errorMsg" :success="successMsg" />
   </form>
 </template>

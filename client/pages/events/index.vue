@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import beerService from '~/services/BeerService/beerService';
 import { ref, onMounted, onUnmounted } from 'vue';
-import Event from '~/components/event.vue';
-import Button from '~/components/ui/Button.vue';
+import Event from '~/components/Event.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
 import { socket } from '~/services/vars.ts';
 import List from '~/components/ui/List.vue';
 import TextInput from '~/components/ui/TextInput.vue';
@@ -70,9 +70,9 @@ onUnmounted(() => {
 
 <template>
   <h1 class="text-center">{{ t('events') }}</h1>
-  <Button color="yellow" name="newEvent" class="text-center m-auto block" @click="openModal">
+  <BaseButton color="yellow" name="newEvent" class="text-center m-auto block" @click="openModal">
     {{ t('new.event') }}
-  </Button>
+  </BaseButton>
 
   <List
     :items="events || []"
@@ -91,14 +91,14 @@ onUnmounted(() => {
     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
   >
     <form @submit.prevent="saveEvent" class="bg-white p-6 rounded shadow-lg w-96 relative">
-      <Button close @click="closeModal" class="absolute top-2 right-2"></Button>
+      <BaseButton close @click="closeModal" class="absolute top-2 right-2"></BaseButton>
       <h2 class="text-xl mb-4">{{ t('add.new.event') }}</h2>
-      <TextInput v-model="eventName" name="eventName" title="eventName" />
-      <TextInput v-model="eventDescription" name="eventDescription" title="eventDescription" />
+      <TextInput v-model="eventName" name="eventName" title="event.name" />
+      <TextInput v-model="eventDescription" name="eventDescription" title="event.description" />
       <div class="flex justify-end space-x-2">
-        <Button type="submit" name="saveEvent" color="yellow" class="w-full">
+        <BaseButton type="submit" name="saveEvent" color="yellow" class="w-full">
           {{ t('save.event') }}
-        </Button>
+        </BaseButton>
       </div>
       <StatusMessage :error="errorMsg" />
     </form>

@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import AddBeerModal from '~/components/modals/addBeerModal.vue';
+import AddBeerModal from '~/components/modals/AddBeerModal.vue';
 import { flushPromises } from '@vue/test-utils';
 import beerService from '@/services/BeerService/beerService';
 import { vi } from 'vitest';
@@ -104,7 +104,11 @@ describe('AddBeerModal.vue', () => {
     beerService.eventBeer.addBeerToEvent = addBeerToEventMock;
 
     // Mount component
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
 
     // Set input values
     wrapper.vm.beerName = 'Test Beer';
@@ -173,7 +177,11 @@ describe('AddBeerModal.vue', () => {
     beerService.eventBeer.newBeer = newBeerMock;
     beerService.eventBeer.addBeerToEvent = addBeerToEventMock;
 
-    const wrapper = mount(AddBeerModal);
+    const wrapper = mount(AddBeerModal, {
+      global: {
+        plugins: [i18n],
+      },
+    });
     wrapper.vm.beerName = 'Test Beer';
     wrapper.vm.beerDescription = 'Test Description';
     wrapper.vm.beerBrewery = 'Test Brewery';

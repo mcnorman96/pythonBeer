@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { useAuth } from '~/composables/useAuth';
 import { ref, onMounted, watch } from 'vue';
-import Button from '~/components/ui/Button.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
 const menuItemsClass = 'px-5';
 const isLoggedIn = ref(false);
 const showMobileMenu = ref(false);
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+// const { locale } = useI18n();
 
 const { isAuthenticated, logout, checkAuth } = useAuth();
 
@@ -37,21 +40,27 @@ function toggleMobileMenu() {
         v-if="isLoggedIn"
         class="middle-menu absolute right-0 top-1/2 -translate-y-1/2 flex hidden md:block"
       >
-        <NuxtLink :class="menuItemsClass" to="/events">Events</NuxtLink>
-        <NuxtLink :class="menuItemsClass" to="/toplist">Toplist</NuxtLink>
-        <NuxtLink :class="menuItemsClass" to="/profile">Profile</NuxtLink>
-        <NuxtLink @click="logout" to="/login" :class="menuItemsClass">Log out</NuxtLink>
+        <NuxtLink :class="menuItemsClass" to="/events">{{ t('menu.events') }}</NuxtLink>
+        <NuxtLink :class="menuItemsClass" to="/toplist">{{ t('menu.toplist') }}</NuxtLink>
+        <NuxtLink :class="menuItemsClass" to="/profile">{{ t('menu.profile') }}</NuxtLink>
+        <!-- <select :class="menuItemsClass" class="bg-transparent" v-model="locale">
+          <option value="en">{{ t('english') }}</option>
+          <option value="dk">{{ t('danish') }}</option>
+        </select> -->
+        <NuxtLink @click="logout" to="/login" :class="menuItemsClass">{{
+          t('menu.logout')
+        }}</NuxtLink>
       </div>
       <client-only>
         <div class="right-menu absolute right-0 top-1/2 -translate-y-1/2 flex" v-if="!isLoggedIn">
-          <NuxtLink :class="menuItemsClass" to="/login">Login</NuxtLink>
-          <NuxtLink :class="menuItemsClass" to="/register">Register</NuxtLink>
+          <NuxtLink :class="menuItemsClass" to="/login">{{ t('menu.login') }}</NuxtLink>
+          <NuxtLink :class="menuItemsClass" to="/register">{{ t('menu.register') }}</NuxtLink>
         </div>
       </client-only>
 
       <!-- Mobile hamburger -->
       <div v-if="isLoggedIn" class="absolute right-0 top-1/2 -translate-y-1/2 md:hidden">
-        <Button @click="toggleMobileMenu" :class="'focus:outline-none'">
+        <BaseButton @click="toggleMobileMenu" :class="'focus:outline-none'">
           <svg
             class="w-8 h-8"
             fill="none"
@@ -61,7 +70,7 @@ function toggleMobileMenu() {
           >
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
-        </Button>
+        </BaseButton>
         <div
           v-if="showMobileMenu"
           class="absolute bg-zinc-800 text-white rounded shadow-lg mt-2 right-0 z-50 w-max"
@@ -70,25 +79,25 @@ function toggleMobileMenu() {
             :class="menuItemsClass + ' block py-2'"
             to="/events"
             @click="showMobileMenu = false"
-            >Events</NuxtLink
+            >{{ t('menu.events') }}</NuxtLink
           >
           <NuxtLink
             :class="menuItemsClass + ' block py-2'"
             to="/toplist"
             @click="showMobileMenu = false"
-            >Toplist</NuxtLink
+            >{{ t('menu.toplist') }}</NuxtLink
           >
           <NuxtLink
             :class="menuItemsClass + ' block py-2'"
             to="/profile"
             @click="showMobileMenu = false"
-            >Profile</NuxtLink
+            >{{ t('menu.profile') }}</NuxtLink
           >
           <NuxtLink
             :class="menuItemsClass + ' block py-2'"
             to="/login"
             @click="showMobileMenu = false && logout()"
-            >Log out</NuxtLink
+            >{{ t('menu.logout') }}</NuxtLink
           >
         </div>
       </div>

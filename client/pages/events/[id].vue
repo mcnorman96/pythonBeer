@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import BeerCard from '~/components/beerCard.vue';
-import AddRatingModal from '~/components/modals/addRatingModal.vue';
-import AddBeerModal from '~/components/modals/addBeerModal.vue';
-import ViewRatingsModal from '~/components/modals/viewRatingsModal.vue';
-import EditEventModal from '~/components/modals/editEventModal.vue';
-import EditBeerModal from '~/components/modals/editBeerModal.vue';
+import BeerCard from '~/components/BeerCard.vue';
+import AddRatingModal from '~/components/modals/AddRatingModal.vue';
+import AddBeerModal from '~/components/modals/AddBeerModal.vue';
+import ViewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
+import EditEventModal from '~/components/modals/EditEventModal.vue';
+import EditBeerModal from '~/components/modals/EditBeerModal.vue';
 import type { Beer, ResponseTypeBeers, Event } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import { onMounted, onUnmounted } from 'vue';
 import { socket } from '~/services/vars';
-import Button from '~/components/ui/Button.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
 import { useModalManager } from '~/composables/useModalManager';
 import List from '~/components/ui/List.vue';
 import { useI18n } from 'vue-i18n';
@@ -122,14 +122,14 @@ onUnmounted(() => {
           <option value="new">{{ t('newest') }}</option>
           <option value="top">{{ t('top.rated') }}</option>
         </select>
-        <Button
+        <BaseButton
           edit
           name="editEvent"
           :class="'ml-2 px-4 py-2 bg-zinc-800 text-white rounded'"
           @click="openModal('editEvent')"
         >
           {{ t('edit.event') }}
-        </Button>
+        </BaseButton>
       </div>
     </template>
     <template #default="{ item }">
@@ -142,7 +142,7 @@ onUnmounted(() => {
       />
     </template>
     <template #extra>
-      <Button
+      <BaseButton
         color="yellow"
         name="addBeer"
         v-if="!event_ended"
@@ -150,7 +150,7 @@ onUnmounted(() => {
         @click="openModal('addBeer')"
       >
         {{ t('add.beer.to.event') }}
-      </Button>
+      </BaseButton>
     </template>
   </List>
 

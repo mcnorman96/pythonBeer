@@ -58,9 +58,10 @@ describe('Events page', () => {
 
   it('New event modal opens', () => {
     cy.get('button[name="newEvent"]').click();
+    cy.wait(500);
     cy.contains('Add new event');
-    cy.contains('Name');
-    cy.contains('Description');
+    cy.contains('Event name');
+    cy.contains('Event description');
   });
 
   it('Adding new event', () => {
