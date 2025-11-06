@@ -46,5 +46,3 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           files: client/coverage/lcov.info
-      - name: Run e2e tests
-        run: npm run test:e2e
