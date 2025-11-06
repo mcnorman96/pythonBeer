@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue';
 import type { Beer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import BaseButton from '~/components/ui/BaseButton.vue';
-import TextInput from '~/components/ui/TextInput.vue';
+import BaseInput from '~/components/ui/BaseInput.vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
@@ -72,10 +72,10 @@ const handleDeleteBeerFromEvent = () => {
   <baseModal :handleClose="handleClose">
     <h2 class="text-xl mb-4">{{ t('update.beer') }}</h2>
 
-    <TextInput v-model="beerName" name="name" title="name" />
-    <TextInput v-model="beerDescription" name="description" title="description" />
-    <TextInput v-model="beerBrewery" name="brewery" title="brewery" />
-    <TextInput v-model="beerType" name="type" title="type" />
+    <BaseInput v-model="beerName" name="name" title="name" />
+    <BaseInput v-model="beerDescription" name="description" title="description" />
+    <BaseInput v-model="beerBrewery" name="brewery" title="brewery" />
+    <BaseInput v-model="beerType" name="type" title="type" />
 
     <BaseButton name="updateBeer" @click="updateBeer" color="yellow" :class="'w-full mb-2'">{{
       t('update.beer')

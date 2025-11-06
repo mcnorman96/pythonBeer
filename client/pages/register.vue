@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { authService } from '~/services/AuthService/authService';
 import BaseButton from '~/components/ui/BaseButton.vue';
-import TextInput from '~/components/ui/TextInput.vue';
+import BaseInput from '~/components/ui/BaseInput.vue';
 import StatusMessage from '~/components/ui/StatusMessage.vue';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
@@ -45,9 +45,9 @@ const handleRegister = async () => {
     <div class="bg-white p-8 rounded shadow-md w-96">
       <h2 class="text-2xl mb-6 text-center">{{ t('register') }}</h2>
       <form @submit.prevent="handleRegister">
-        <TextInput v-model="username" name="username" title="username" />
-        <TextInput v-model="password" name="password" type="password" title="password" />
-        <TextInput v-model="email" name="email" type="email" title="email" />
+        <BaseInput v-model="username" name="username" title="username" />
+        <BaseInput v-model="password" name="password" type="password" title="password" />
+        <BaseInput v-model="email" name="email" type="email" title="email" />
         <StatusMessage :error="error" :success="success" />
         <BaseButton type="submit" color="yellow" class="w-full">{{ t('register') }}</BaseButton>
       </form>

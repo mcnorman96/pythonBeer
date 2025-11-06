@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import baseModal from '~/layouts/BaseModal.vue';
 import BaseButton from '~/components/ui/BaseButton.vue';
-import TextInput from '~/components/ui/TextInput.vue';
+import BaseInput from '~/components/ui/BaseInput.vue';
 import beerService from '~/services/BeerService/beerService';
 import { useRoute, useRouter } from 'vue-router';
 import { ref } from 'vue';
@@ -52,8 +52,8 @@ const deleteEvent = async () => {
 <template>
   <baseModal :handleClose="handleClose">
     <h2 class="text-xl mb-4">{{ t('edit.event') }}</h2>
-    <TextInput v-model="eventName" name="name" title="name" />
-    <TextInput v-model="eventDescription" name="description" title="description" />
+    <BaseInput v-model="eventName" name="name" title="name" />
+    <BaseInput v-model="eventDescription" name="description" title="description" />
     <BaseButton
       name="updateEvent"
       @click="updateEvent"

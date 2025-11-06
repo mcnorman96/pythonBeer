@@ -4,7 +4,7 @@ import { ref, onMounted, watch } from 'vue';
 import beerService from '~/services/BeerService/beerService';
 import type { Beer, Rating } from '~/types/types';
 import BaseButton from '~/components/ui/BaseButton.vue';
-import TextInput from '~/components/ui/TextInput.vue';
+import BaseInput from '~/components/ui/BaseInput.vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
@@ -106,19 +106,19 @@ const handleClose = () => {
   <baseModal :handleClose="handleClose">
     <h2 class="text-xl mb-4">{{ t('rate') }} {{ props.beer.name }}</h2>
     <div class="mb-4">
-      <TextInput v-model="taste" name="taste" title="taste" type="number" />
+      <BaseInput v-model="taste" name="taste" title="taste" type="number" />
       <div v-if="errors.taste" class="text-red-500 text-xs mb-2">{{ errors.taste }}</div>
 
-      <TextInput v-model="aftertaste" name="aftertaste" title="aftertaste" type="number" />
+      <BaseInput v-model="aftertaste" name="aftertaste" title="aftertaste" type="number" />
       <div v-if="errors.aftertaste" class="text-red-500 text-xs mb-2">{{ errors.aftertaste }}</div>
 
-      <TextInput v-model="smell" name="smell" title="smell" type="number" />
+      <BaseInput v-model="smell" name="smell" title="smell" type="number" />
       <div v-if="errors.smell" class="text-red-500 text-xs mb-2">{{ errors.smell }}</div>
 
-      <TextInput v-model="design" name="design" title="design" type="number" />
+      <BaseInput v-model="design" name="design" title="design" type="number" />
       <div v-if="errors.design" class="text-red-500 text-xs mb-2">{{ errors.design }}</div>
 
-      <TextInput v-model="total_score" name="score" title="score" type="number" />
+      <BaseInput v-model="total_score" name="score" title="score" type="number" />
       <div v-if="errors.total_score" class="text-red-500 text-xs mb-2">
         {{ errors.total_score }}
       </div>
