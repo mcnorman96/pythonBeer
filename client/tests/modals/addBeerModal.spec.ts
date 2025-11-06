@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils';
-import AddBeerModal from '~/components/modals/AddBeerModal.vue';
+import AddBeerModal from '@/components/modals/AddBeerModal.vue';
 import { flushPromises } from '@vue/test-utils';
 import beerService from '@/services/BeerService/beerService';
 import { vi } from 'vitest';
 import { createI18n } from 'vue-i18n';
-import en from '~/i18n/locales/en.json';
+import en from '@/i18n/locales/en.json';
 const i18n = createI18n({
   locale: 'en',
   messages: { en },
@@ -37,7 +37,6 @@ describe('AddBeerModal.vue', () => {
       await closeBtn.trigger('click');
       expect(wrapper.emitted('close')).toBeTruthy();
     } else {
-      // If your close button uses a different selector, update this test
       expect(true).toBe(true);
     }
   });
@@ -93,7 +92,6 @@ describe('AddBeerModal.vue', () => {
   });
 
   it('calls beerService and handleClose on successful save', async () => {
-    // Mock service methods
     const newBeerMock = vi.fn().mockResolvedValue({
       success: true,
       response: { id: 123 },
@@ -117,14 +115,11 @@ describe('AddBeerModal.vue', () => {
     wrapper.vm.beerType = 'Test Type';
     wrapper.vm.eventId = '1';
 
-    // Spy on handleClose
     const handleCloseSpy = vi.spyOn(wrapper.vm, 'handleClose');
 
-    // Call saveBeer
     await wrapper.vm.saveBeer();
     await flushPromises();
 
-    // Assertions
     expect(newBeerMock).toHaveBeenCalledWith({
       name: 'Test Beer',
       description: 'Test Description',
@@ -209,7 +204,7 @@ describe('AddBeerModal.vue', () => {
         plugins: [i18n],
       },
     });
-    wrapper.vm.beerName = ''; // Missing name
+    wrapper.vm.beerName = '';
     wrapper.vm.beerDescription = 'Test Description';
     wrapper.vm.beerBrewery = 'Test Brewery';
     wrapper.vm.beerType = 'Test Type';
@@ -231,7 +226,6 @@ describe('AddBeerModal.vue', () => {
       },
     });
 
-    // Leave all fields empty
     wrapper.vm.beerName = '';
     wrapper.vm.beerDescription = '';
     wrapper.vm.beerBrewery = '';

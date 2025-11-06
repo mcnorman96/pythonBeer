@@ -1,9 +1,9 @@
 import { mount, flushPromises } from '@vue/test-utils';
-import viewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
+import viewRatingsModal from '@/components/modals/ViewRatingsModal.vue';
 import beerService from '@/services/BeerService/beerService';
 import { vi } from 'vitest';
 import { createI18n } from 'vue-i18n';
-import en from '~/i18n/locales/en.json';
+import en from '@/i18n/locales/en.json';
 const i18n = createI18n({
   locale: 'en',
   messages: { en },
@@ -13,14 +13,12 @@ vi.mock('vue-router', () => ({
   useRoute: () => ({ params: { id: '1' } }),
 }));
 
-// Mock Nuxt auto-import composables globally
 globalThis.useFetch = async () => ({ data: { value: [] }, error: null, pending: false });
 globalThis.onMounted = (fn: () => void) => fn();
 
 describe('viewRatingsModal.vue', () => {
   const beer = { id: 1, name: 'Test Beer', brewery: 'Test Brewery', description: '', type: '' };
 
-  // Helps initialize the modal
   const wrapperHelper = async () => {
     return await mount(
       {
@@ -45,7 +43,6 @@ describe('viewRatingsModal.vue', () => {
   };
 
   beforeEach(() => {
-    // Reset all mocks before each test
     vi.resetAllMocks();
   });
 

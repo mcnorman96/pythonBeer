@@ -2,10 +2,7 @@
 import BaseButton from '~/components/ui/BaseButton.vue';
 
 defineProps<{
-  handleClose: {
-    type: void;
-    default: null;
-  };
+  handleClose: void;
 }>();
 </script>
 

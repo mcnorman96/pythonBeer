@@ -1,9 +1,9 @@
 import { mount, flushPromises } from '@vue/test-utils';
-import EventCard from '~/components/Event.vue';
+import EventCard from '@/components/Event.vue';
 import beerService from '@/services/BeerService/beerService';
 import { ref, onMounted } from 'vue';
 import { createI18n } from 'vue-i18n';
-import en from '~/i18n/locales/en.json';
+import en from '@/i18n/locales/en.json';
 const i18n = createI18n({
   locale: 'en',
   messages: { en },
