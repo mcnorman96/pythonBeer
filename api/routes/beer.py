@@ -83,7 +83,7 @@ def search_beers():
         search_query = request.args.get("s", "")
 
         if not search_query:
-            return jsonify({"message": "No search query provided"}), 400
+            return jsonify({"message": "no.search.query"}), 400
 
         beers = BeerService.search_by_name(search_query)
         if not beers:

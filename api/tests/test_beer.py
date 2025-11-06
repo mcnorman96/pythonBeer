@@ -40,7 +40,7 @@ def test_new_beer_success(client, mocker):
         },
     )
     assert response.status_code == 201
-    assert response.get_json()["message"] == "Beer created successfully"
+    assert response.get_json()["message"] == "beer.created"
 
 
 def test_new_beer_missing_fields(client, mocker):

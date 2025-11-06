@@ -32,7 +32,7 @@ def test_new_event_participant_success(client, mocker):
     response = client.post("/events/2/participants/new")
 
     assert response.status_code == 201
-    assert response.get_json()["message"] == "Event participant created successfully"
+    assert response.get_json()["message"] == "participant.added.to.event"
 
 
 def test_new_event_participant_unauthorized(client, mocker):
@@ -69,4 +69,4 @@ def test_all_event_participant_no_participants(client, mocker):
     response = client.get("/events/2/participants/")
 
     assert response.status_code == 400
-    assert response.get_json()["error"] == "No event participant found"
+    assert response.get_json()["error"] == "no.event.participants"
