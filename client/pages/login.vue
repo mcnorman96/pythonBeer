@@ -3,7 +3,11 @@ import { ref } from 'vue';
 import { useAuth } from '~/composables/useAuth';
 import { useRouter } from 'vue-router';
 import { authService } from '~/services/AuthService/authService';
-import Button from '~/components/ui/Button.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
+import TextInput from '~/components/ui/TextInput.vue';
+import StatusMessage from '~/components/ui/StatusMessage.vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const username = ref<string>('');
 const password = ref<string>('');
@@ -13,6 +17,8 @@ const router = useRouter();
 
 const handleLogin = async () => {
   error.value = '';
+
+  console.log(username, password);
 
   if (!username.value || !password.value) {
     error.value = 'Username and password is required';
@@ -45,29 +51,12 @@ const handleLogin = async () => {
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="bg-white p-8 rounded shadow-md w-96">
-      <h2 class="text-2xl mb-6 text-center">Login</h2>
+      <h2 class="text-2xl mb-6 text-center">{{ t('login') }}</h2>
       <form @submit.prevent="handleLogin">
-        <div class="mb-4">
-          <label class="block mb-2">Username</label>
-          <input
-            v-model="username"
-            name="username"
-            class="border p-2 w-full"
-            placeholder="Username"
-          />
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Password</label>
-          <input
-            v-model="password"
-            name="password"
-            type="password"
-            class="border p-2 w-full"
-            placeholder="Password"
-          />
-        </div>
-        <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
-        <Button color="yellow" type="submit" class="w-full">Login</Button>
+        <TextInput v-model="username" name="username" title="username" />
+        <TextInput v-model="password" type="password" name="password" title="password" />
+        <StatusMessage :error="error" />
+        <BaseButton color="yellow" type="submit" class="w-full">{{ t('login') }}</BaseButton>
       </form>
     </div>
   </div>

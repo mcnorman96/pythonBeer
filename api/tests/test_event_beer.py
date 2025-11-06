@@ -36,7 +36,7 @@ def test_new_event_beer_success(client, mocker):
 
     response = client.post("/events/2/beers", json={"beer_id": 3})
     assert response.status_code == 201
-    assert response.get_json()["message"] == "Event beer created successfully"
+    assert response.get_json()["message"] == "beer.added.to.event"
 
 
 def test_new_event_beer_missing_fields(client, mocker):

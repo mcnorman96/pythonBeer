@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, toRefs } from 'vue';
+import { computed, toRefs, defineProps } from 'vue';
 
 const props = defineProps({
   color: {
     type: String,
-    default: 'default', // 'default', 'yellow', 'close', etc.
+    default: 'default',
   },
   edit: {
     type: Boolean,

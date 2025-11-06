@@ -36,7 +36,7 @@ def new_ratings():
         RatingsService.create(
             event_id, user_id, beer_id, taste, aftertaste, smell, design, score
         )
-        return jsonify({"message": "Rating created successfully"}), 201
+        return jsonify({"message": "rating.created"}), 201
 
     except Exception as e:
         return handle_exceptions(e)
@@ -55,7 +55,7 @@ def get_ratings():
 
         getRating = RatingsService.getRating(event_id, user_id, beer_id)
         if not getRating:
-            return jsonify({"error": "No rating found"}), 400
+            return jsonify({"error": "rating.not.found"}), 400
 
         return jsonify({"response": getRating}), 200
 
@@ -87,7 +87,7 @@ def all_ratings():
     try:
         ratings = RatingsService.get_all()
         if not ratings:
-            return jsonify({"error": "No ratings found"}), 400
+            return jsonify({"error": "ratings.not.found"}), 400
 
         return jsonify({"response": ratings}), 200
 
@@ -100,7 +100,7 @@ def toplist():
     try:
         ratings = RatingsService.get_toplist()
         if not ratings:
-            return jsonify({"error": "No ratings found"}), 400
+            return jsonify({"error": "ratings.not.found"}), 400
 
         return jsonify({"response": ratings}), 200
 

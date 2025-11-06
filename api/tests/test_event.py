@@ -37,7 +37,7 @@ def test_new_event_success(client, mocker):
         "/events/new", json={"name": "Test Event", "description": "A test event"}
     )
     assert response.status_code == 201
-    assert response.get_json()["message"] == "Events created successfully"
+    assert response.get_json()["message"] == "event.created"
 
 
 def test_new_event_missing_fields(client, mocker):
@@ -99,7 +99,7 @@ def test_get_event_by_id_not_found(client, mocker):
     response = client.get("/events/999")
 
     assert response.status_code == 404
-    assert response.get_json()["error"] == "Event not found"
+    assert response.get_json()["error"] == "event.not.found"
 
 
 def test_get_event_by_id_error(client, mocker):

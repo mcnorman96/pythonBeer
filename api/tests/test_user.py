@@ -33,7 +33,7 @@ def test_register_success(client, mocker):
         },
     )
     assert response.status_code == 201
-    assert response.get_json()["message"] == "User registered"
+    assert response.get_json()["message"] == "user.registered"
     assert response.get_json()["user_id"] == 123
 
 
@@ -72,7 +72,7 @@ def test_logout_success(client):
         sess["loggedin"] = True
     response = client.post("/auth/logout")
     assert response.status_code == 200
-    assert response.get_json()["message"] == "Logged out successfully!"
+    assert response.get_json()["message"] == "logged.out"
 
 
 ## LOGIN TESTS

@@ -24,10 +24,10 @@ def new_event_beer(event_id):
 
         beer_id = data.get("beer_id")
         if not event_id or not beer_id:
-            return jsonify({"error": "Please fill out all fields."}), 400
+            return jsonify({"error": "unfulfilled.fields"}), 400
 
         EventBeersService.create(event_id, beer_id)
-        return jsonify({"message": "Event beer created successfully"}), 201
+        return jsonify({"message": "beer.added.to.event"}), 201
 
     except Exception as e:
         return handle_exceptions(e)
@@ -38,10 +38,10 @@ def delete_event_beer(event_id, beer_id):
     try:
         get_valid_user_id()  # Ensure user is authenticated
         if not event_id or not beer_id:
-            return jsonify({"error": "Please fill out all fields."}), 400
+            return jsonify({"error": "unfulfilled.fields"}), 400
 
         EventBeersService.deleteSingleEventBeerForEvent(event_id, beer_id)
-        return jsonify({"message": "Event beer deleted successfully"}), 201
+        return jsonify({"message": "beer.deleted.from.event"}), 201
 
     except Exception as e:
         return handle_exceptions(e)

@@ -3,3 +3,9 @@ __pycache__
 /routes/__pycache__
 /models/__pycache__
 .env
+
+.coverage
+coverage.xml
+htmlcov/
+*.cover
+*.coverage

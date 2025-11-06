@@ -28,7 +28,7 @@ def new_beer():
 
         return (
             jsonify(
-                {"message": "Beer created successfully", "response": beer.to_dict()}
+                {"message": "beer.created", "response": beer.to_dict()}
             ),
             201,
         )
@@ -54,7 +54,7 @@ def update_beer():
 
         return (
             jsonify(
-                {"message": "Beer updated successfully", "response": beer.to_dict()}
+                {"message": "beer.updated", "response": beer.to_dict()}
             ),
             200,
         )
@@ -83,7 +83,7 @@ def search_beers():
         search_query = request.args.get("s", "")
 
         if not search_query:
-            return jsonify({"message": "No search query provided"}), 400
+            return jsonify({"message": "no.search.query"}), 400
 
         beers = BeerService.search_by_name(search_query)
         if not beers:

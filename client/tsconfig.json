@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "~/types/*": ["types/*"]
+      "~/types/*": ["types/*"],
+      "~/*": ["./*"]
     },
     "types": ["vitest/globals"],
     "strict": true,

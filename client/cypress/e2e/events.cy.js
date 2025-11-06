@@ -53,18 +53,20 @@ describe('Events page', () => {
 
   it('loads successfully', () => {
     cy.contains('Events');
-    cy.contains('New Event');
+    cy.contains('New event');
   });
 
   it('New event modal opens', () => {
     cy.get('button[name="newEvent"]').click();
-    cy.contains('Add New Event');
-    cy.contains('Name');
-    cy.contains('Description');
+    cy.wait(500);
+    cy.contains('Add new event');
+    cy.contains('Event name');
+    cy.contains('Event description');
   });
 
   it('Adding new event', () => {
     cy.get('button[name="newEvent"]').click();
+    cy.wait(500);
     cy.get('input[name=eventName]').type('Marcus new event');
     cy.get('input[name=eventDescription]').type('This is a new event');
     cy.get('button[name=saveEvent]').click();
@@ -75,6 +77,7 @@ describe('Events page', () => {
 
   it('Clicking on event brings you to the single event page', () => {
     cy.get('button[name="newEvent"]').click();
+    cy.wait(500);
     cy.get('input[name=eventName]').type('Marcus new event');
     cy.get('input[name=eventDescription]').type('This is a new event');
     cy.get('button[name=saveEvent]').click();

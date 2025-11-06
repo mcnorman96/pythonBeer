@@ -10,12 +10,14 @@
     "postinstall": "nuxt prepare",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "test:e2e": "cypress run",
+    "test:e2e": "start-server-and-test dev http://localhost:3000 cy:run",
+    "cy:run": "cypress run",
     "format": "prettier --write .",
     "lint-fix": "npx eslint . --fix",
     "pre-commit": "npm run coverage && npm run test:e2e && npm run lint-fix && npm run format"
   },
   "dependencies": {
+    "@nuxtjs/i18n": "^10.1.2",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "nuxt": "^3.12.4",
     "socket.io-client": "^4.8.1",
@@ -39,6 +41,7 @@
     "jest": "^30.2.0",
     "jsdom": "^27.0.0",
     "prettier": "^3.6.2",
+    "start-server-and-test": "^2.1.2",
     "typescript-eslint": "^8.46.0",
     "vitest": "^3.2.4"
   }

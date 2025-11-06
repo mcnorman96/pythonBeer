@@ -72,7 +72,7 @@ def test_new_rating_success(client, mocker):
         },
     )
     assert response.status_code == 201
-    assert response.get_json()["message"] == "Rating created successfully"
+    assert response.get_json()["message"] == "rating.created"
 
 
 def test_new_rating_missing_fields(client, mocker):
@@ -138,7 +138,7 @@ def test_get_rating_by_id_not_found(client, mocker):
     )
 
     assert response.status_code == 400
-    assert response.get_json()["error"] == "No rating found"
+    assert response.get_json()["error"] == "rating.not.found"
 
 
 def test_get_rating_by_id_unauthorized(client, mocker):
@@ -227,7 +227,7 @@ def test_toplist_no_ratings(client, mocker):
     response = client.get("/ratings/toplist")
 
     assert response.status_code == 400
-    assert response.get_json()["error"] == "No ratings found"
+    assert response.get_json()["error"] == "ratings.not.found"
 
 
 def test_toplist_error(client, mocker):

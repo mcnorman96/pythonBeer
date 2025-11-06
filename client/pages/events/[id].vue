@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import BeerCard from '~/components/beerCard.vue';
-import AddRatingModal from '~/components/modals/addRatingModal.vue';
-import AddBeerModal from '~/components/modals/addBeerModal.vue';
-import ViewRatingsModal from '~/components/modals/viewRatingsModal.vue';
-import EditEventModal from '~/components/modals/editEventModal.vue';
-import EditBeerModal from '~/components/modals/editBeerModal.vue';
+import BeerCard from '~/components/BeerCard.vue';
+import AddRatingModal from '~/components/modals/AddRatingModal.vue';
+import AddBeerModal from '~/components/modals/AddBeerModal.vue';
+import ViewRatingsModal from '~/components/modals/ViewRatingsModal.vue';
+import EditEventModal from '~/components/modals/EditEventModal.vue';
+import EditBeerModal from '~/components/modals/EditBeerModal.vue';
 import type { Beer, ResponseTypeBeers, Event } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import { onMounted, onUnmounted } from 'vue';
 import { socket } from '~/services/vars';
-import Button from '~/components/ui/Button.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
 import { useModalManager } from '~/composables/useModalManager';
+import List from '~/components/ui/List.vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const route = useRoute();
 const eventId = route.params.id;
@@ -105,42 +108,51 @@ onUnmounted(() => {
 <template>
   <h1 class="text-center">{{ event_data?.name }}</h1>
   <p class="text-center mb-5">{{ event_data?.description }}</p>
-  <div class="beerContainer max-w-3xl m-auto mb-5">
-    <div v-if="event_beers">
+
+  <List
+    :items="event_beers || []"
+    :pending="beersPending"
+    loadingText="loading"
+    emptyText="no.beers.rated"
+    class="beerContainer mb-5"
+  >
+    <template #sorting>
       <div class="flex justify-between mb-4">
         <select class="p-2 border border-gray-300 rounded" v-model="sortOption">
-          <option value="new">Newest</option>
-          <option value="top">Top Rated</option>
+          <option value="new">{{ t('newest') }}</option>
+          <option value="top">{{ t('top.rated') }}</option>
         </select>
-        <Button
+        <BaseButton
           edit
           name="editEvent"
           :class="'ml-2 px-4 py-2 bg-zinc-800 text-white rounded'"
           @click="openModal('editEvent')"
-          >Edit event</Button
         >
+          {{ t('edit.event') }}
+        </BaseButton>
       </div>
-      <div v-for="beer in event_beers" :key="beer.id">
-        <BeerCard
-          :buttonsAvailable="event_ended ? false : true"
-          :beer="beer"
-          @add-rating="() => openModal('addRating', beer)"
-          @view-ratings="() => openModal('viewRatings', beer)"
-          @edit-beer="() => openModal('editBeer', beer)"
-        />
-      </div>
-    </div>
-    <div v-if="beersPending" class="text-center">Loading beers...</div>
-    <div class="text-center" v-if="event_beers.length === 0">No beers in this event yet.</div>
-    <Button
-      color="yellow"
-      name="addBeer"
-      v-if="!event_ended"
-      :class="'mt-5 ml-auto block'"
-      @click="openModal('addBeer')"
-      >Add Beer to Event</Button
-    >
-  </div>
+    </template>
+    <template #default="{ item }">
+      <BeerCard
+        :buttonsAvailable="event_ended ? false : true"
+        :beer="item"
+        @add-rating="() => openModal('addRating', item)"
+        @view-ratings="() => openModal('viewRatings', item)"
+        @edit-beer="() => openModal('editBeer', item)"
+      />
+    </template>
+    <template #extra>
+      <BaseButton
+        color="yellow"
+        name="addBeer"
+        v-if="!event_ended"
+        :class="'mt-5 ml-auto block'"
+        @click="openModal('addBeer')"
+      >
+        {{ t('add.beer.to.event') }}
+      </BaseButton>
+    </template>
+  </List>
 
   <!-- Modals -->
   <EditBeerModal

@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import Button from '~/components/ui/Button.vue';
+import BaseButton from '~/components/ui/BaseButton.vue';
 import { authService } from '~/services/AuthService/authService';
+import TextInput from '~/components/ui/TextInput.vue';
+import StatusMessage from '~/components/ui/StatusMessage.vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const username = ref<string>('');
 const email = ref<string>('');
@@ -36,41 +40,18 @@ const handleSave = async () => {
 </script>
 
 <template>
-  <h1 class="text-center">Profile</h1>
-  <div class="profileContainer max-w-3xl m-auto flex flex-wrap">
+  <h1 class="text-center">{{ t('profile') }}</h1>
+  <form @submit.prevent="handleSave" class="profileContainer max-w-3xl m-auto flex flex-wrap">
     <div class="w-full md:w-1/2">
-      <label class="block mb-2">Username</label>
-      <input
-        name="username"
-        v-model="username"
-        class="border p-2 w-full mb-2"
-        placeholder="Username"
-      />
-
-      <label class="block mb-2">Email</label>
-      <input
-        name="email"
-        type="email"
-        v-model="email"
-        class="border p-2 w-full mb-2"
-        placeholder="Email"
-      />
-
-      <!-- <label class="block mb-2">Password</label>
-      <input
-        name="password"
-        type="password"
-        v-model="password"
-        class="border p-2 w-full mb-2"
-        placeholder="Password"
-      /> -->
+      <TextInput v-model="username" name="username" title="username" />
+      <TextInput v-model="email" name="email" type="email" title="email" />
     </div>
 
     <div class="w-full md:w-1/2">
       <img src="/img/user.png" alt="profile" class="w-1/2 m-auto" />
     </div>
-    <Button color="yellow" class="ml-auto mt-5" @click="handleSave"> Save </Button>
-    <div v-if="errorMsg" class="text-red-500 mb-4 w-full text-right">{{ errorMsg }}</div>
-    <div v-if="successMsg" class="text-green-500 mb-4 w-full text-right">{{ successMsg }}</div>
-  </div>
+
+    <BaseButton type="submit" color="yellow" class="ml-auto mt-5">{{ t('save') }}</BaseButton>
+    <StatusMessage class="text-right w-full" :error="errorMsg" :success="successMsg" />
+  </form>
 </template>

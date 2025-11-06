@@ -12,7 +12,7 @@ def new_event_participant(event_id):
     try:
         user_id = get_valid_user_id()  # Ensure user is authenticated
         EventParticipantService.create(event_id, user_id)
-        return jsonify({"message": "Event participant created successfully"}), 201
+        return jsonify({"message": "participant.added.to.event"}), 201
 
     except Exception as e:
         return handle_exceptions(e)
@@ -23,7 +23,7 @@ def all_event_participant(event_id):
     try:
         eventParticipants = EventParticipantService.get_all_users_in_event(event_id)
         if not eventParticipants:
-            return jsonify({"error": "No event participant found"}), 400
+            return jsonify({"error": "no.event.participants"}), 400
 
         return jsonify({"response": eventParticipants}), 200
 
