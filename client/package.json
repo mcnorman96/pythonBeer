@@ -19,7 +19,7 @@
   "dependencies": {
     "@nuxtjs/i18n": "^10.1.2",
     "@nuxtjs/tailwindcss": "^6.12.1",
-    "nuxt": "^3.12.4",
+    "nuxt": "^4.2.0",
     "socket.io-client": "^4.8.1",
     "vue": "latest"
   },
