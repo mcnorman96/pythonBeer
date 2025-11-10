@@ -75,3 +75,29 @@ export type FetchResult<T> = {
   error?: string | null;
   response?: T;
 };
+
+export type FetchMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+export interface fetchHelperType {
+  path: string;
+  method?: FetchMethod;
+  body?: object | string | null;
+  checkToken?: boolean;
+}
+
+export interface fetchingOptionsType {
+  method: FetchMethod;
+  headers: HeadersInit;
+  body?: string;
+}
+
+export interface RegisterUserData {
+  username: string;
+  password: string;
+  email: string;
+}
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}

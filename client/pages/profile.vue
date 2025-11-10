@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import BaseButton from '~/components/ui/BaseButton.vue';
 import { authService } from '~/services/AuthService/authService';
-import TextInput from '~/components/ui/TextInput.vue';
+import BaseInput from '~/components/ui/BaseInput.vue';
 import StatusMessage from '~/components/ui/StatusMessage.vue';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
@@ -43,8 +43,8 @@ const handleSave = async () => {
   <h1 class="text-center">{{ t('profile') }}</h1>
   <form @submit.prevent="handleSave" class="profileContainer max-w-3xl m-auto flex flex-wrap">
     <div class="w-full md:w-1/2">
-      <TextInput v-model="username" name="username" title="username" />
-      <TextInput v-model="email" name="email" type="email" title="email" />
+      <BaseInput v-model="username" name="username" title="username" />
+      <BaseInput v-model="email" name="email" type="email" title="email" />
     </div>
 
     <div class="w-full md:w-1/2">

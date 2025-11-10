@@ -4,7 +4,7 @@ import { useAuth } from '~/composables/useAuth';
 import { useRouter } from 'vue-router';
 import { authService } from '~/services/AuthService/authService';
 import BaseButton from '~/components/ui/BaseButton.vue';
-import TextInput from '~/components/ui/TextInput.vue';
+import BaseInput from '~/components/ui/BaseInput.vue';
 import StatusMessage from '~/components/ui/StatusMessage.vue';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
@@ -31,12 +31,14 @@ const handleLogin = async () => {
       password: password.value,
     });
 
-    if (!response.ok) {
+    console.log('response', response);
+
+    if (!response.success) {
       throw new Error('Login failed');
     }
-    const data = await response.json();
-    if (data.token) {
-      login(data.token);
+
+    if (response?.response?.token) {
+      login(response?.response?.token);
       router.push('/');
     } else {
       error.value = 'Invalid credentials';
@@ -53,8 +55,8 @@ const handleLogin = async () => {
     <div class="bg-white p-8 rounded shadow-md w-96">
       <h2 class="text-2xl mb-6 text-center">{{ t('login') }}</h2>
       <form @submit.prevent="handleLogin">
-        <TextInput v-model="username" name="username" title="username" />
-        <TextInput v-model="password" type="password" name="password" title="password" />
+        <BaseInput v-model="username" name="username" title="username" />
+        <BaseInput v-model="password" type="password" name="password" title="password" />
         <StatusMessage :error="error" />
         <BaseButton color="yellow" type="submit" class="w-full">{{ t('login') }}</BaseButton>
       </form>

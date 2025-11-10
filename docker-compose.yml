@@ -13,7 +13,7 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     volumes:
       - ./api:/app   
     ports:
@@ -26,7 +26,7 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8100:8100"
     env_file:

@@ -78,5 +78,7 @@
   "update.event": "Update event",
   "delete.event": "Delete event",
   "english": "English",
-  "danish": "Danish"
+  "danish": "Danish",
+  "registration.failed": "Registration failed",
+  "registration.successful": "Registration successful!"
 }

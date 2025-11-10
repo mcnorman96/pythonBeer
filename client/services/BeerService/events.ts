@@ -1,6 +1,6 @@
 import type { UseFetchResult } from '@/types/types';
 import { API_URL } from '../vars';
-import { checkTokenExpired } from '@/utils/authUtil';
+import { fetchHelper } from '../fetchHelper';
 export interface EventsService {
   createEvent: (eventData: {
     name: string;
@@ -26,40 +26,19 @@ export const events: EventsService = {
       return { success: false, error: 'All fields are required' };
     }
 
-    const res = await fetch(`${API_URL}/events/new`, {
+    const response = await fetchHelper({
+      path: `${API_URL}/events/new`,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify(eventData),
+      body: eventData,
     });
-
-    const data = await res.json();
-
-    checkTokenExpired(res.status, data.error);
-
-    if (!res.ok) {
-      return { success: false, error: data.error };
-    }
-
-    return { success: true, response: data };
+    return response;
   },
 
   async getEvents(): Promise<{ success: boolean; error?: string; response?: Event[] }> {
-    const res = await fetch(`${API_URL}/events`, {
-      method: 'GET',
+    const response = await fetchHelper({
+      path: `${API_URL}/events/`,
     });
-
-    const data = await res.json();
-
-    checkTokenExpired(res.status, data.error);
-
-    if (!res.ok) {
-      return { success: false, error: data.error };
-    }
-
-    return { success: true, response: data.response || [] };
+    return response;
   },
 
   async getEventById(eventId: string): Promise<UseFetchResult<Event>> {
@@ -78,42 +57,21 @@ export const events: EventsService = {
       return { success: false, error: 'All fields are required' };
     }
 
-    const res = await fetch(`${API_URL}/events/${eventId}`, {
+    const response = await fetchHelper({
+      path: `${API_URL}/events/${eventId}`,
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify(eventData),
+      body: eventData,
     });
-
-    const data = await res.json();
-
-    checkTokenExpired(res.status, data.error);
-
-    if (!res.ok) {
-      return { success: false, error: data.error };
-    }
-    return { success: true, response: data };
+    return response;
   },
 
   async deleteEvent(
     eventId: string
   ): Promise<{ success: boolean; error?: string; response?: string }> {
-    const res = await fetch(`${API_URL}/events/${eventId}`, {
+    const response = await fetchHelper({
+      path: `${API_URL}/events/${eventId}`,
       method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     });
-
-    const data = await res.json();
-
-    checkTokenExpired(res.status, data.error);
-
-    if (!res.ok) {
-      return { success: false, error: data.error };
-    }
-    return { success: true, response: data.message };
+    return response;
   },
 };

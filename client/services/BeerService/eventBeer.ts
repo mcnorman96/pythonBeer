@@ -1,6 +1,6 @@
 import type { Beer, FetchResult, UseFetchResult } from '~/types/types';
 import { API_URL } from '../vars';
-import { checkTokenExpired } from '@/utils/authUtil';
+import { fetchHelper } from '../fetchHelper';
 
 export interface EventBeerService {
   newBeer: (beer: Beer) => Promise<FetchResult<Beer>>;
@@ -20,47 +20,25 @@ export const eventBeer: EventBeerService = {
         error: 'All fields are required',
       };
     }
-    const res = await fetch(`${API_URL}/beer/new`, {
+
+    const response = await fetchHelper({
+      path: `${API_URL}/beer/new`,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify(beer),
+      body: beer,
     });
-
-    const data = await res.json();
-
-    checkTokenExpired(res.status, data.error);
-
-    if (!res.ok) {
-      return { success: false, error: data.error };
-    }
-
-    return { success: true, response: data.response };
+    return response;
   },
 
   async addBeerToEvent(eventId: string, beerId: string): Promise<FetchResult<Beer>> {
     if (!eventId || !beerId) {
       return { success: false, error: 'Event ID and Beer ID are required' };
     }
-    const res = await fetch(`${API_URL}/events/${eventId}/beers`, {
+    const response = await fetchHelper({
+      path: `${API_URL}/events/${eventId}/beers`,
       method: 'POST',
-      body: JSON.stringify({ beer_id: beerId }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+      body: { beer_id: beerId },
     });
-
-    const data = await res.json();
-
-    checkTokenExpired(res.status, data.error);
-
-    if (!res.ok) {
-      return { success: false, error: data.error };
-    }
-    return { success: true };
+    return response;
   },
 
   async searchBeer(query: string): Promise<UseFetchResult<Beer>> {
@@ -79,21 +57,10 @@ export const eventBeer: EventBeerService = {
   },
 
   async toplistBeersInEvent(eventId: string): Promise<FetchResult<Beer[]>> {
-    const response = await fetch(`${API_URL}/ratings/toplist/${eventId}`);
-
-    if (response.status === 204) {
-      return { success: true, response: [] };
-    }
-
-    const data = await response.json();
-
-    checkTokenExpired(response.status, data.error);
-
-    if (!response.ok) {
-      return { success: false, error: data.error };
-    }
-
-    return { success: true, response: data.response };
+    const response = await fetchHelper({
+      path: `${API_URL}/ratings/toplist/${eventId}`,
+    });
+    return response;
   },
 
   async toplist(): Promise<UseFetchResult<Beer[]>> {
@@ -110,43 +77,19 @@ export const eventBeer: EventBeerService = {
   },
 
   async updateBeer(beer: Beer): Promise<FetchResult<null>> {
-    const response = await await fetch(`${API_URL}/beer/update`, {
+    const response = await fetchHelper({
+      path: `${API_URL}/beer/update`,
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify(beer),
+      body: beer,
     });
-
-    const data = await response.json();
-
-    checkTokenExpired(response.status, data.error);
-
-    if (!response.ok) {
-      return { success: false, error: data.error };
-    }
-
-    return { success: true };
+    return response;
   },
 
   async deleteBeerFromEvent(beer_id: string, event_id: string): Promise<FetchResult<null>> {
-    const response = await await fetch(`${API_URL}/events/${event_id}/beers/${beer_id}`, {
+    const response = await fetchHelper({
+      path: `${API_URL}/events/${event_id}/beers/${beer_id}`,
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     });
-
-    const data = await response.json();
-
-    checkTokenExpired(response.status, data.error);
-
-    if (!response.ok) {
-      return { success: false, error: data.error };
-    }
-
-    return { success: true };
+    return response;
   },
 };

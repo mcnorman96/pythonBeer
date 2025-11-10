@@ -4,7 +4,7 @@ import type { Beer } from '~/types/types';
 import beerService from '~/services/BeerService/beerService';
 import BaseButton from '~/components/ui/BaseButton.vue';
 import baseModal from '~/layouts/BaseModal.vue';
-import TextInput from '~/components/ui/TextInput.vue';
+import BaseInput from '~/components/ui/BaseInput.vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
@@ -138,10 +138,10 @@ const handleBlur = () => {
 
     <div>
       <h3 class="font-semibold mb-2">{{ t('add.new.beer') }}</h3>
-      <TextInput v-model="beerName" name="name" title="name" />
-      <TextInput v-model="beerDescription" name="description" title="description" />
-      <TextInput v-model="beerBrewery" name="brewery" title="brewery" />
-      <TextInput v-model="beerType" name="type" title="type" />
+      <BaseInput v-model="beerName" name="name" title="name" />
+      <BaseInput v-model="beerDescription" name="description" title="description" />
+      <BaseInput v-model="beerBrewery" name="brewery" title="brewery" />
+      <BaseInput v-model="beerType" name="type" title="type" />
       <BaseButton
         name="saveBeer"
         @click="saveBeer"

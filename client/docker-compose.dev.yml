@@ -4,7 +4,7 @@ services:
   client-dev:
     build:
       context: .
-      dockerfile: ./dockerfile.dev
+      dockerfile: ./Dockerfile.dev
     ports:
       - '3000:3000'
       - '24678:24678'

@@ -16,15 +16,17 @@ describe('authService', () => {
     });
 
     it('calls fetch with correct params and returns response', async () => {
-      const mockResponse = { ok: true };
-      mockFetch.mockResolvedValueOnce(mockResponse);
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
       const userData = { username: 'user', password: 'pass', email: 'test@test.com' };
       const response = await authService.registerUser(userData);
       expect(mockFetch).toHaveBeenCalledWith(
         expect.stringContaining('/auth/register'),
         expect.objectContaining({ method: 'POST' })
       );
-      expect(response).toBe(mockResponse);
+      expect(response.success).toBe(true);
     });
   });
 
@@ -36,28 +38,33 @@ describe('authService', () => {
     });
 
     it('calls fetch with correct params and returns response', async () => {
-      const mockResponse = { ok: true };
-      mockFetch.mockResolvedValueOnce(mockResponse);
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true, response: { token: 'tokenkey' } }),
+      });
       const credentials = { username: 'user', password: 'pass' };
       const response = await authService.login(credentials);
       expect(mockFetch).toHaveBeenCalledWith(
         expect.stringContaining('/auth/login'),
         expect.objectContaining({ method: 'POST' })
       );
-      expect(response).toBe(mockResponse);
+      expect(response.success).toBe(true);
+      expect(response.response.token).containSubset('tokenkey');
     });
   });
 
   describe('logout', () => {
     it('calls fetch with correct params and returns response', async () => {
-      const mockResponse = { ok: true };
-      mockFetch.mockResolvedValueOnce(mockResponse);
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
       const response = await authService.logout();
       expect(mockFetch).toHaveBeenCalledWith(
         expect.stringContaining('/auth/logout'),
         expect.objectContaining({ method: 'POST' })
       );
-      expect(response).toBe(mockResponse);
+      expect(response.success).toBe(true);
     });
   });
 });

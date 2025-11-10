@@ -34,7 +34,7 @@ def test_register_success(client, mocker):
     )
     assert response.status_code == 201
     assert response.get_json()["message"] == "user.registered"
-    assert response.get_json()["user_id"] == 123
+    assert response.get_json()["response"] == 123
 
 
 def test_register_missing_fields(client, mocker):
@@ -45,7 +45,6 @@ def test_register_missing_fields(client, mocker):
         "/auth/register",
         json={
             "username": "newuser"
-            # missing password and email
         },
     )
     assert response.status_code == 400
@@ -95,14 +94,16 @@ def test_login_success(client, mocker):
     mocker.patch("routes.auth.db.session.query", return_value=mock_query)
     mocker.patch(
         "routes.auth.check_password_hash", return_value=True
-    )  # <-- Add this line
+    )
 
     response = client.post(
         "/auth/login", json={"username": "user", "password": "hashed_pw"}
     )
-    assert response.status_code == 200
-    assert "token" in response.get_json()
+    json_data = response.get_json()
 
+    assert response.status_code == 200
+    assert "response" in json_data
+    assert "token" in json_data["response"]
 
 def test_login_missing_fields(client):
     response = client.post("/auth/login", json={"username": "user"})
@@ -111,12 +112,14 @@ def test_login_missing_fields(client):
 
 
 def test_login_incorrect_credentials(client, mocker):
-    mocker.patch(
-        "routes.auth.db.session.query",
-        return_value=mocker.Mock(
-            filter_by=lambda **kwargs: mocker.Mock(first=lambda: None)
-        ),
-    )
+    mock_filter = mocker.Mock()
+    mock_filter.first.return_value = None
+
+    mock_query = mocker.Mock()
+    mock_query.filter_by.return_value = mock_filter
+
+    mocker.patch("routes.auth.db.session.query", return_value=mock_query)
+
     response = client.post(
         "/auth/login", json={"username": "user", "password": "wrong"}
     )
