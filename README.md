@@ -21,7 +21,7 @@ This project uses Socket.IO to enable real-time interactions:
 
 ## Project Structure
 
-- `api/` — Python backend (FastAPI/Flask style)
+- `api/` — Python backend (Flask)
   - Models, routes, schemas, services, and database setup
   - Alembic migrations for schema changes
   - Seed scripts for test data
