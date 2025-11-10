@@ -1,6 +1,6 @@
-import type { Rating, UseFetchResult } from '@/types/types';
+import type { FetchResult, Rating, UseFetchResult } from '@/types/types';
 import { API_URL } from '../vars';
-import { checkTokenExpired } from '@/utils/authUtil';
+import { fetchHelper } from '../fetchHelper';
 export interface RatingsService {
   addRating: (ratingData: {
     event_id: string;
@@ -10,11 +10,8 @@ export interface RatingsService {
     smell: number;
     design: number;
     score: number;
-  }) => Promise<{ success: boolean; error?: string; message?: string }>;
-  getRating: (
-    eventId: string,
-    beerId: string
-  ) => Promise<{ success: boolean; error?: string; response?: Rating }>;
+  }) => Promise<FetchResult<string>>;
+  getRating: (eventId: string, beerId: string) => Promise<FetchResult<Rating>>;
   getAllRatingsForBeer: (
     eventId: string,
     beerId: string
@@ -42,50 +39,25 @@ export const ratings: RatingsService = {
     ) {
       return { success: false, error: 'All fields are required' };
     }
-    const res = await fetch(`${API_URL}/ratings/new`, {
+
+    const response = await fetchHelper({
+      path: `${API_URL}/ratings/new`,
       method: 'POST',
-      body: JSON.stringify(ratingData),
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'content-type': 'application/json',
-      },
+      body: ratingData,
     });
-
-    const data = await res.json();
-
-    checkTokenExpired(res.status, data.error);
-
-    if (!res.ok) {
-      return { success: false, error: data.error };
-    }
-
-    return { success: true, message: 'Rating added successfully' };
+    return response;
   },
 
-  async getRating(
-    eventId: string,
-    beerId: string
-  ): Promise<{ success: boolean; error?: string; response?: Rating }> {
+  async getRating(eventId: string, beerId: string): Promise<FetchResult<Rating>> {
     if (!eventId || !beerId) {
       return { success: false, error: 'Event ID and Beer ID are required' };
     }
-    const res = await fetch(`${API_URL}/ratings/getRating?event_id=${eventId}&beer_id=${beerId}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'content-type': 'application/json',
-      },
+
+    const response = await fetchHelper({
+      path: `${API_URL}/ratings/getRating?event_id=${eventId}&beer_id=${beerId}`,
     });
 
-    const data = await res.json();
-
-    checkTokenExpired(res.status, data.error);
-
-    if (!res.ok) {
-      return { success: false, error: data.error };
-    }
-
-    return { success: true, response: data };
+    return response;
   },
 
   async getAllRatingsForBeer(

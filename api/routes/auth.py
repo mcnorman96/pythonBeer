@@ -26,7 +26,7 @@ def register_user():
             password=data.get("password"),
             email=data.get("email"),
         )
-        return jsonify({"message": "user.registered", "user_id": user.id}), 201
+        return jsonify({"message": "user.registered", "response": user.id}), 201
 
     except Exception as e:
         return handle_exceptions(e)
@@ -69,7 +69,7 @@ def login_user():
             os.getenv("SECRET_KEY_AUTH", ""),
             algorithm="HS256",
         )
-        return jsonify({"token": token}), 200
+        return jsonify({"response":{ "token": token }}), 200
 
     except Exception as e:
         return handle_exceptions(e)

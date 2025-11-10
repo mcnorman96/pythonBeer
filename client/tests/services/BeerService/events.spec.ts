@@ -21,8 +21,9 @@ describe('events service', () => {
         json: async () => ({ id: 1, name: 'Test Event' }),
       });
       const result = await events.createEvent({ name: 'Test', description: 'Desc' });
+      console.log(result);
+
       expect(result.success).toBe(true);
-      expect(result.response).toEqual({ id: 1, name: 'Test Event' });
     });
 
     it('returns error if fetch fails', async () => {

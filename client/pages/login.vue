@@ -31,12 +31,14 @@ const handleLogin = async () => {
       password: password.value,
     });
 
-    if (!response.ok) {
+    console.log('response', response);
+
+    if (!response.success) {
       throw new Error('Login failed');
     }
-    const data = await response.json();
-    if (data.token) {
-      login(data.token);
+
+    if (response?.response?.token) {
+      login(response?.response?.token);
       router.push('/');
     } else {
       error.value = 'Invalid credentials';

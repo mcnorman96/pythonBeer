@@ -28,14 +28,14 @@ const handleRegister = async () => {
       email: email.value,
     });
 
-    if (!response.ok) {
-      throw new Error('Registration failed');
+    if (!response.success) {
+      throw new Error(t('Registration failed'));
     }
 
     success.value = 'Registration successful! You can now log in.';
   } catch (e) {
     console.error('Registration failed', e);
-    error.value = 'Registration failed';
+    error.value = t('Registration failed');
   }
 };
 </script>

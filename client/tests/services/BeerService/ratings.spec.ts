@@ -73,9 +73,14 @@ describe('ratings service', () => {
     it('returns success and response if fetch is ok', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ id: 1, score: 5 }),
+        json: async () => ({
+          success: true,
+          response: { id: 1, score: 5 },
+        }),
       });
       const result = await ratings.getRating('1', '2');
+      console.log(result);
+
       expect(result.success).toBe(true);
       expect(result.response).toEqual({ id: 1, score: 5 });
     });
